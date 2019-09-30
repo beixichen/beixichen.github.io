@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-03-23T06:47:36.859Z</updated>
+  <updated>2019-09-30T11:49:46.570Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MySQL中char和varchar的区别</title>
+    <link href="http://yoursite.com/2019/09/26/%E6%95%B0%E6%8D%AE%E5%BA%93char%EF%BC%8Cvarchar/"/>
+    <id>http://yoursite.com/2019/09/26/数据库char，varchar/</id>
+    <published>2019-09-26T08:42:03.093Z</published>
+    <updated>2019-09-30T11:49:46.570Z</updated>
+    
+    <content type="html"><![CDATA[<p>mysql varchar 、char<br><a id="more"></a></p><h1 id="mysql中char和varchar"><a href="#mysql中char和varchar" class="headerlink" title="mysql中char和varchar"></a>mysql中char和varchar</h1><p>char长度不变，长度不足时会补空格，取出数据时也会有空格需要进行trim，存取效率要高，英文1字节，汉字2字节</p><p>varchar 长度不定，如果长度不足，长度会自动转换，更节省空间，英文汉字都是2字节</p>]]></content>
+    
+    <summary type="html">
+    
+      varchar，char
+    
+    </summary>
+    
+      <category term="数据库" scheme="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello Hexo</title>
