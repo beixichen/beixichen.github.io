@@ -8,15 +8,15 @@
     </url>
     
     <url>
-        <loc>http://yoursite.com/categories/</loc>
-        <lastmod>2019-08-17T12:53:29.728Z</lastmod>
+        <loc>http://yoursite.com/about/</loc>
+        <lastmod>2019-09-30T15:49:12.582Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>http://yoursite.com/about/</loc>
-        <lastmod>2019-08-17T12:15:59.577Z</lastmod>
+        <loc>http://yoursite.com/categories/</loc>
+        <lastmod>2019-08-17T12:53:29.728Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
