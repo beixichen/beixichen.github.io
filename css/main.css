@@ -1319,6 +1319,14 @@ pre .javascript .function {
 article:last-child .post-eof {
   display: none;
 }
+.posts-expand {
+  padding-top: 21px;
+}
+@media (max-width: 767px) {
+  .posts-expand {
+    margin: 0 20px;
+  }
+}
 @media (min-width: 992px) {
   .post-body {
     text-align: justify;
@@ -1674,7 +1682,7 @@ article:last-child .post-eof {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #d7f47f;
+  background: #134ab6;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
