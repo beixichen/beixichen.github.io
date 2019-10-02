@@ -40,7 +40,7 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[MySQL中char和varchar的区别]]></title>
+    <title><![CDATA[【MySQL】char和varchar的区别]]></title>
     <url>%2F2019%2F09%2F26%2F%E6%95%B0%E6%8D%AE%E5%BA%93%2Fmysql%E4%B8%ADchar%EF%BC%8Cvarchar%2F</url>
     <content type="text"><![CDATA[MySQL中char和varcharchar长度不变，长度不足时会补空格，取出数据时也会有空格需要进行trim，存取效率要高，英文1字节，汉字2字节 varchar 长度不定，如果长度不足，长度会自动转换，更节省空间，英文汉字都是2字节]]></content>
       <categories>
