@@ -175,22 +175,22 @@ h6 {
   padding: 0;
 }
 h1 {
-  font-size: 1.75em;
-}
-h2 {
   font-size: 1.625em;
 }
-h3 {
-  font-size: 1.5em;
-}
-h4 {
+h2 {
   font-size: 1.375em;
 }
+h3 {
+  font-size: 1.125em;
+}
+h4 {
+  font-size: 0.875em;
+}
 h5 {
-  font-size: 1.25em;
+  font-size: 0.625em;
 }
 h6 {
-  font-size: 1.125em;
+  font-size: 0.375em;
 }
 p {
   margin: 0 0 20px 0;
@@ -1539,7 +1539,8 @@ article:last-child .post-eof {
 .posts-expand .post-title {
   overflow-wrap: break-word;
   word-wrap: break-word;
-  font-weight: 400;
+  font-weight: bolder;
+  font-size: 1.69em;
   margin: initial;
   text-align: center;
 }
@@ -1682,7 +1683,7 @@ article:last-child .post-eof {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #b9bd1c;
+  background: #3ddadb;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
