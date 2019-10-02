@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[【Spring学习笔记3】Spring动态代理]]></title>
+    <url>%2F2019%2F10%2F02%2FSpring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%2Fproxy-study%2F</url>
+    <content type="text"><![CDATA[动态代理： 特点：字节码随用随创建，随用随加载 作用：不修改源码的基础上对方法增强 分类： 基于接口的动态代理 基于子类的动态代理 基于子类的动态代理： 涉及的类：Enhancer 提供者：第三方cglib库 如何创建代理对象： 使用Enhancer类中的create方法 创建代理对象的要求： 被代理类不能是最终类 create方法的参数： Class：字节码 它是用于指定被代理对象的字节码。 callback：用于提供增强的代码 它是让我们写如何代理。我们一般都是些一个该接口的实现类，通常情况下都是匿名内部类，但不是必须的。 此接口的实现类都是谁用谁写。 我们一般写的都是该接口的子接口实现类：MethodInterceptor 通过接口实现动态代理123456789101112131415161718192021222324252627IProducer proxyProducer = (IProducer) Proxy.newProxyInstance(producer.getClass().getClassLoader(),producer.getClass().getInterfaces(),new InvocationHandler() &#123; /** * 作用：执行被代理对象的任何接口方法都会经过该方法 * 方法参数的含义 * @param proxy 代理对象的引用 * @param method 当前执行的方法 * @param args 当前执行方法所需的参数 * @return 和被代理对象方法有相同的返回值 * @throws Throwable */ @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123; //提供增强的代码 Object returnValue = null; //1.获取方法执行的参数 Float money = (Float)args[0]; //2.判断当前方法是不是销售 if("saleProduct".equals(method.getName())) &#123; returnValue = method.invoke(producer, money*0.8f); &#125; return returnValue; &#125;&#125;);proxyProducer.saleProduct(10000f); 通过cglib实现动态代理1234567891011121314151617181920212223242526Producer cglibProducer = (Producer)Enhancer.create(producer.getClass(), new MethodInterceptor() &#123; /** * 执行北地阿里对象的任何方法都会经过该方法 * @param proxy * @param method * @param args * 以上三个参数和基于接口的动态代理中invoke方法的参数是一样的 * @param methodProxy ：当前执行方法的代理对象 * @return * @throws Throwable */ @Override public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable &#123; //提供增强的代码 Object returnValue = null; //1.获取方法执行的参数 Float money = (Float)args[0]; //2.判断当前方法是不是销售 if("saleProduct".equals(method.getName())) &#123; returnValue = method.invoke(producer, money*0.8f); &#125; return returnValue; &#125;&#125;);cglibProducer.saleProduct(12000f);]]></content>
+      <categories>
+        <category>Java</category>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【Spring学习笔记2】常用的各种注解及替代xml配置的作用]]></title>
     <url>%2F2019%2F10%2F02%2FSpring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%2FSpring-study2%2F</url>
     <content type="text"><![CDATA[123&lt;bean id="" class="" scope="" init-method="" destroy-method=""&gt; &lt;property name="" value="" | ref=""&gt;&lt;/property&gt; &lt;/bean&gt; 用于创建对象 他们的作用就和在XML配置文件中编写一个标签实现的功能是一样的Component: 作用：用于把当前类对象存入spring容器中 属性： value：用于指定bean的id。当我们不写时，它的默认值是当前类名，且首字母改小写。Controller：一般用在表现层Service：一般用在业务层Repository：一般用在持久层以上三个注解他们的作用和属性与Component是一模一样。他们三个是spring框架为我们提供明确的三层使用的注解，使我们的三层对象更加清晰 用于注入数据 他们的作用就和在xml配置文件中的bean标签中写一个标签的作用是一样的@Autowired: 作用：自动按照类型注入。只要容器中有唯一的一个bean对象类型和要注入的变量类型匹配，就可以注入成功 如果ioc容器中没有任何bean的类型和要注入的变量类型匹配，则报错。 如果Ioc容器中有多个类型匹配时： 出现位置： 可以是变量上，也可以是方法上 细节： 在使用注解注入时，set方法就不是必须的了。@Qualifier: 作用：在按照类中注入的基础之上再按照名称注入。它在给类成员注入时不能单独使用（需要和Autowired一起使用）。但是在给方法参数注入时可以 属性：value：用于指定注入bean的id。 @Resource 作用：直接按照bean的id注入。它可以独立使用属性： name：用于指定bean的id。以上三个注入都只能注入其他bean类型的数据，而基本类型和String类型无法使用上述注解实现。 另外，集合类型的注入只能通过XML来实现。@Value 作用：用于注入基本类型和String类型的数据 属性： value：用于指定数据的值。它可以使用spring中SpEL(也就是spring的el表达式） SpEL的写法：${表达式} 用于改变作用范围 他们的作用就和在bean标签中使用scope属性实现的功能是一样的 @Scope 作用：用于指定bean的作用范围 属性： value：指定范围的取值。常用取值：singleton prototype 和生命周期相关 他们的作用就和在bean标签中使用init-method和destroy-methode的作用是一样的 @PreDestroy 作用：用于指定销毁方法 @PostConstruct 作用：用于指定初始化方法 配置类里面常用的注解 @Configuration 作用：指定当前类是一个配置类 细节：当配置类为AnnotationConfigApplicationContext对象创建的参数时，该注解可以不写。@ComponentScan 作用：用于通过注解指定spring在创建容器时要扫描的包 属性： value：它和basePackages的作用是一样的，都是用于指定创建容器时要扫描的包。 我们使用此注解就等同于在xml中配置了:&lt;context:component-scan base-package=&quot;com.example&quot;&gt;&lt;/context:component-scan&gt;@Bean 作用：用于把当前方法的返回值作为bean对象存入spring的ioc容器中 属性: name:用于指定bean的id。当不写时，默认值是当前方法的名称 细节： 当我们使用注解配置方法时，如果方法有参数，spring框架会去容器中查找有没有可用的bean对象。 查找的方式和Autowired注解的作用是一样的@Import 作用：用于导入其他的配置类 属性： value：用于指定其他配置类的字节码。 当我们使用Import的注解之后，有Import注解的类就父配置类，而导入的都是子配置类@PropertySource 作用：用于指定properties文件的位置 属性： value：指定文件的名称和路径。 关键字：classpath，表示类路径下]]></content>
       <categories>
-        <category>java</category>
-        <category>spring</category>
+        <category>Java</category>
+        <category>Spring</category>
       </categories>
       <tags>
-        <tag>java</tag>
-        <tag>spring</tag>
+        <tag>Java</tag>
+        <tag>Spring</tag>
       </tags>
   </entry>
   <entry>
@@ -18,12 +31,12 @@
     <url>%2F2019%2F10%2F02%2FSpring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%2FSpring-study1%2F</url>
     <content type="text"><![CDATA[Spring 是什么分层的轻量型开源框架，以 IoC（Inverse Of Control：反转控制）和 AOP（Aspect Oriented Programming：面向切面编程）为内核 优势 方便解耦，简化开发通过 Spring提供的 IoC容器，可以将对象间的依赖关系交由 Spring进行控制，避免硬编码所造成的过度程序耦合。用户也不必再为单例模式类、属性文件解析等这些很底层的需求编写代码，可以更专注于上层的应用。 AOP 编程的支持通过 Spring的 AOP 功能，方便进行面向切面的编程，许多不容易用传统OOP 实现的功能可以通过 AOP 轻松应付。 声明式事务的支持可以将我们从单调烦闷的事务管理代码中解脱出来，通过声明式方式灵活的进行事务的管理，提高开发效率和质量。 方便集成各种优秀框架Spring可以降低各种框架的使用难度， 提供了对各种优秀框架 （Struts、 Hibernate、 Hessian、 Quartz等）的直接支持。 IOC控制反转，将主动创建对象的权利交给Spring框架来管理(在当前类需要用到其他类的对象，由Spring创建，只需要在配置文件中声明依赖关系的维护)目的：降低耦合内部通过工厂模式进行Bean的创建，通过一个Map进行Bean的管理 依赖注入能注入的数据：有三类 基本类型和String其他bean类型（在配置文件中或者注解配置过的bean）复杂类型/集合类型 注入的方式：有三种 第一种：使用构造函数提供第二种：set方法注入第三种：使用注解注入 构造函数注入 使用的标签:constructor-arg标签中的属性type：用于指定要注入的数据的数据类型，该数据类型也是构造函数中某个或某些参数的类型index：用于指定要注入的数据给构造函数中指定索引位置的参数赋值。索引的位置是从0开始name：用于指定给构造函数中指定名称的参数赋值 常用的 =============以上三个用于指定给构造函数中哪个参数赋值value：用于提供基本类型和String类型的数据ref：用于指定其他的bean类型数据。它指的就是在spring的Ioc核心容器中出现过的bean对象优势：在获取bean对象时，注入数据是必须的操作，否则对象无法创建成功。弊端：改变了bean对象的实例化方式，使我们在创建对象时，如果用不到这些数据，也必须提供。1234567 &lt;bean id="" class=""&gt; &lt;constructor-arg name="name" value=""&gt;&lt;/constructor-arg&gt; &lt;constructor-arg name="birthday" ref="now"&gt;&lt;/constructor-arg&gt; &lt;/bean&gt; &lt;!-- 配置一个日期对象 --&gt;&lt;bean id="now" class="java.util.Date"&gt;&lt;/bean&gt; Set方法注入 标签：property出现的位置：bean标签的内部标签的属性 name：用于指定注入时所调用的set方法名称 value：用于提供基本类型和String类型的数据 ref：用于指定其他的bean类型数据。它指的就是在spring的Ioc核心容器中出现过的bean对象优势： 创建对象时没有明确的限制，可以直接使用默认构造函数弊端： 如果有某个成员必须有值，则获取对象是有可能set方法没有执行。1234567891011121314&lt;bean id="" class=""&gt;&lt;!--用于给List结构集合注入的标签： list array set用于给Map结构集合注入的标签: map props结构相同，标签可以互换--&gt; &lt;property name="myList"&gt; &lt;array&gt; &lt;value&gt;AAA&lt;/value&gt; &lt;value&gt;BBB&lt;/value&gt; &lt;value&gt;CCC&lt;/value&gt; &lt;/array&gt; &lt;/property&gt;&lt;/bean&gt; 接口注入ApplicationContext的三个常用实现类 ClassPathXmlApplicationContext：它可以加载类路径下的配置文件，要求配置文件必须在类路径 下。不在的话，加载不了。(更常用) FileSystemXmlApplicationContext：它可以加载磁盘任意路径下的配置文件(必须有访问权限） AnnotationConfigApplicationContext：它是用于读取注解创建容器的 ApplicationContext和BeanFactory的区别 BeanFactory： Spring最底层的接口，各种Bean的定义，配置初始化，实例化，控制bean的生命周期 使用延迟加载，读取配置文件时不会创建对象，使用时才会创建 ApplicationContext： BeanFactory的派生，可进行更多的扩展，继承messagesource 支持国际化，统一资源文件访 问，同时加载多个配置文件，载入多个上下文使每个上下文专注特定层次容器启动时，读取配 置文件后一次性创建所有的Bean，有利于发现配置错误，但占用过多的内存空间 区别：BeanFactory 通常以编程方式创建，ApplicationContext 以声明方式创建BeanFactory 延迟加载(创建多例对象使用)，ApplicationContext 立即加载(创建单例对象使用) 都支持BeanPostProcessor、BeanFactoryPostProcess，BeanFactory需要手动注册，applicationContext自动注册 Spring对Bean的管理细节创建Bean的三种方式： 使用默认构造函数创建，在Spring的配置文件中使用bean标签，配以id和class属性之后，且没有其他属性和标签时,采用的就是默认构造函数创建bean对象.此时如果类中没有默认构造函数，则对象无法创建。 1&lt;bean id="" class=""&gt;&lt;/bean&gt; 使用普通工厂中的方法创建对象（使用某个类中的方法创建对象，并存入spring容器） 1&lt;bean id="" factory-bean="" factory-method="" &gt;&lt;/bean&gt; 使用工厂中的静态方法创建对象（使用某个类中的静态方法创建对象，并存入spring容器) 1&lt;bean id="" class="" factory-method="" &gt;&lt;/bean&gt; bean标签的scope属性： 作用：用于指定bean的作用范围 取值： 常用的就是单例的和多例的singleton：单例的（默认值）prototype：多例的request：作用于web应用的请求范围session：作用于web应用的会话范围global-session：作用于集群环境的会话范围（全局会话范围），当不是集群环境时，它就是session bean对象的生命周期单例对象出生：当容器创建时对象出生（解析完配置文件，立即创建）活着：只要容器还在，对象一直活着死亡：容器销毁，对象消亡总结：单例对象的生命周期和容器相同多例对象出生：当我们使用对象时spring框架为我们创建（使用时创建，延迟创建）活着：对象只要是在使用过程中就一直活着。死亡：当对象长时间不用，且没有别的对象引用时，由Java的垃圾回收器回收 PS.解耦的思路： 第一步：使用反射来创建对象，而避免使用new关键字。 第二步：通过读取配置文件来获取要创建的对象全限定类名。]]></content>
       <categories>
-        <category>java</category>
-        <category>spring</category>
+        <category>Java</category>
+        <category>Spring</category>
       </categories>
       <tags>
-        <tag>java</tag>
-        <tag>spring</tag>
+        <tag>Java</tag>
+        <tag>Spring</tag>
       </tags>
   </entry>
   <entry>
