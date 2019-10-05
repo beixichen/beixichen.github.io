@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-10-02T15:21:12.000Z</updated>
+  <updated>2019-10-05T12:09:44.154Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,58 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【Java】Serializable</title>
+    <link href="http://yoursite.com/2019/10/05/Java-Serializable/"/>
+    <id>http://yoursite.com/2019/10/05/Java-Serializable/</id>
+    <published>2019-10-05T11:39:56.000Z</published>
+    <updated>2019-10-05T12:09:44.154Z</updated>
+    
+    <content type="html"><![CDATA[<p>Java序列化，将Java对象转换为字节数组，便于存储传输<br>   反序列化，将字节数组转换为Java对象</p><ol><li>如果一个类能够序列化，他的子类能够序列化</li><li>如果子类实现了Serializable接口，父类没有实现，父类不能被序列化，子类可以</li><li>由static修饰的类的成员，transient修饰的对象代表对象的临时数据，不能被序列化</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Java序列化，将Java对象转换为字节数组，便于存储传输&lt;br&gt;   反序列化，将字节数组转换为Java对象&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;如果一个类能够序列化，他的子类能够序列化&lt;/li&gt;
+&lt;li&gt;如果子类实现了Serializable接口，父类没有实现，父类不能被序列化，
+      
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Java】基本类型和包装类型</title>
+    <link href="http://yoursite.com/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B/"/>
+    <id>http://yoursite.com/2019/10/05/Java基本知识/基本类型和包装类型/</id>
+    <published>2019-10-05T11:38:11.000Z</published>
+    <updated>2019-10-05T12:09:53.209Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="基本类型和包装类型"><a href="#基本类型和包装类型" class="headerlink" title="基本类型和包装类型"></a>基本类型和包装类型</h2><ol><li>包装类型可以为null，基本类型不可以，如果数据库查询为null，但是使用基本类型接收，要进行自动拆箱，Integer转为int，抛出空指针异常</li></ol><a id="more"></a><ol><li><p>包装类型可以用于泛型，基本类型不可以</p></li><li><p>基本类型存在栈中，包装类型存储的是堆中的引用，基本类型更加高效</p></li><li><p>两个包装类型的(equals)值可能相同，但是(==)不是同一对象</p></li><li><p>当需要进行自动装箱时，如果数字在-128到127之间，会直接使用缓存中的对象，而不是重新创建一个对象<br>由基本类型如：int转换为包装类型Integer 自动装箱，Integer.ValueOf()<br>由包装类型如：Integer转为基本类型int     自动装箱，Integer.intValue()</p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;基本类型和包装类型&quot;&gt;&lt;a href=&quot;#基本类型和包装类型&quot; class=&quot;headerlink&quot; title=&quot;基本类型和包装类型&quot;&gt;&lt;/a&gt;基本类型和包装类型&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;包装类型可以为null，基本类型不可以，如果数据库查询为null，但是使用基本类型接收，要进行自动拆箱，Integer转为int，抛出空指针异常&lt;/li&gt;
+&lt;/ol&gt;
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>【Spring学习笔记3】Spring动态代理</title>
