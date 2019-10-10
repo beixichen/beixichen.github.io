@@ -8,8 +8,40 @@
     </url>
 
     <url>
+        <loc>http://yoursite.com/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/</loc>
+        <lastmod>2019-10-10T12:22:41.034Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/2018/03/23/hello-world/</loc>
+        <lastmod>2019-10-10T12:22:33.913Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://yoursite.com/2019/10/10/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E7%B4%A2%E5%BC%95/</loc>
-        <lastmod>2019-10-10T12:04:13.107Z</lastmod>
+        <lastmod>2019-10-10T12:21:54.730Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/2019/09/26/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql%E4%B8%ADchar%EF%BC%8Cvarchar/</loc>
+        <lastmod>2019-10-10T12:20:14.059Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadPool/</loc>
+        <lastmod>2019-10-10T12:20:05.739Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -24,24 +56,8 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadPool/</loc>
-        <lastmod>2019-10-10T11:59:59.631Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://yoursite.com/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-Serializable/</loc>
         <lastmod>2019-10-10T11:24:45.414Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/</loc>
-        <lastmod>2019-10-10T11:24:29.415Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -64,24 +80,8 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/09/26/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql%E4%B8%ADchar%EF%BC%8Cvarchar/</loc>
-        <lastmod>2019-10-02T15:49:44.311Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/</loc>
         <lastmod>2019-10-02T15:49:27.616Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/2018/03/23/hello-world/</loc>
-        <lastmod>2019-10-02T15:29:58.639Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
