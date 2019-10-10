@@ -53,15 +53,19 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Tags">
-<meta property="og:url" content="http://yoursite.com/tags/index.html">
+  <meta name="description" content="ThreadLocal解决多线程环境成员变量的问题，与线程同步机制不同，线程同步是多个线程共享同一个变量，而ThreadLocal是每一个线程床架一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Java】ThreadLocal">
+<meta property="og:url" content="http://yoursite.com/2019/10/09/Java基本知识/ThreadLocal/index.html">
 <meta property="og:site_name" content="贝西晨的Blog呀">
+<meta property="og:description" content="ThreadLocal解决多线程环境成员变量的问题，与线程同步机制不同，线程同步是多个线程共享同一个变量，而ThreadLocal是每一个线程床架一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-30T17:13:28.738Z">
+<meta property="og:updated_time" content="2019-10-10T12:00:12.866Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tags">
-  <link rel="canonical" href="http://yoursite.com/tags/">
+<meta name="twitter:title" content="【Java】ThreadLocal">
+<meta name="twitter:description" content="ThreadLocal解决多线程环境成员变量的问题，与线程同步机制不同，线程同步是多个线程共享同一个变量，而ThreadLocal是每一个线程床架一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程">
+  <link rel="canonical" href="http://yoursite.com/2019/10/09/Java基本知识/ThreadLocal/">
 
 
 <script id="page-configurations">
@@ -69,13 +73,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
-    isPage: true,
+    isPost: true,
+    isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>Tags | 贝西晨的Blog呀</title>
+  <title>【Java】ThreadLocal | 贝西晨的Blog呀</title>
   
 
 
@@ -211,24 +215,6 @@
 
     
 
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-  
-
 </nav>
   <div class="site-search">
     <div class="popup search-popup">
@@ -268,35 +254,133 @@
             
 
   <div id="posts" class="posts-expand">
-    
-    
-    
-    <div class="post-block page">
-      
-      
-      
-      
-      <div class="post-body">
-        
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-              目前共计 8 个标签
-            </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/Java/" style="font-size: 30px; color: #5c2223">Java</a> <a href="/tags/MySQL/" style="font-size: 18px; color: #bf8e94">MySQL</a> <a href="/tags/Spring/" style="font-size: 24px; color: #8e585c">Spring</a> <a href="/tags/Web/" style="font-size: 12px; color: #f1c4cd">Web</a> <a href="/tags/hexo/" style="font-size: 12px; color: #f1c4cd">hexo</a> <a href="/tags/java/" style="font-size: 12px; color: #f1c4cd">java</a>
-            </div>
-          </div>
-        
-      </div>
-      
-      
-      
-    </div>
-    
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/09/Java基本知识/ThreadLocal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beixichen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xixi.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="贝西晨的Blog呀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">【Java】ThreadLocal
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-09 19:10:38" itemprop="dateCreated datePublished" datetime="2019-10-09T19:10:38+08:00">2019-10-09</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-10 20:00:12" itemprop="dateModified" datetime="2019-10-10T20:00:12+08:00">2019-10-10</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
 
     
     
     
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>ThreadLocal解决多线程环境成员变量的问题，<font color="red">与线程同步机制不同，线程同步是多个线程共享同一个变量，</font><font color="green">而ThreadLocal是每一个线程床架一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程</font></p><a id="more"></a>
+<p>get()：返回此线程局部变量的当前线程副本中的值。<br>initialValue()：返回此线程局部变量的当前线程的“初始值”。<br>remove()：移除此线程局部变量当前线程的值。<br>set(T value)：将此线程局部变量的当前线程副本中的值设置为指定值。</p>
+<p>ThreadLocal内部还有一个静态内部类ThreadLocalMap，该内部类才是实现线程隔离机制的关键，get()、set()、remove()都是基于该内部类操作。ThreadLocalMap提供了一种用键值对方式存储每一个线程的变量副本的方法，key为当前ThreadLocal对象，value则是对应线程的变量副本。 对于ThreadLocal需要注意的有两点：<br>ThreadLocal实例本身是不存储值，它只是提供了一个在当前线程中找到副本值得key。<br>是ThreadLocal包含在Thread中，而不是Thread包含在ThreadLocal中，有些小伙伴会弄错他们的关系。</p>
+<p>ThreadLocal并不是为线程保存对象的副本，它仅仅只起到一个索引的作用。它的主要木得视为每一个线程隔离一个类的实例，这个实例的作用范围仅限于线程内部。</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Java/" rel="tag"># Java</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/05/Java基本知识/Java-Serializable/" rel="next" title="【Java】Serializable">
+                  <i class="fa fa-chevron-left"></i> 【Java】Serializable
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/10/09/Java基本知识/ThreadPool/" rel="prev" title="【Java】ThreadPool">
+                  【Java】ThreadPool <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
   </div>
 
 

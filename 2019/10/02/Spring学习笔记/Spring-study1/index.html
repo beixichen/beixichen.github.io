@@ -61,7 +61,7 @@
 <meta property="og:site_name" content="贝西晨的Blog呀">
 <meta property="og:description" content="Spring 是什么分层的轻量型开源框架，以 IoC（Inverse Of Control：反转控制）和 AOP（Aspect Oriented Programming：面向切面编程）为内核">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-02T15:49:20.458Z">
+<meta property="og:updated_time" content="2019-10-09T12:36:57.047Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Spring学习笔记1】IOC的创建和Bean的管理">
 <meta name="twitter:description" content="Spring 是什么分层的轻量型开源框架，以 IoC（Inverse Of Control：反转控制）和 AOP（Aspect Oriented Programming：面向切面编程）为内核">
@@ -287,11 +287,19 @@
                 
               
 
-              <time title="创建时间：2019-10-02 19:19:16 / 修改时间：23:49:20" itemprop="dateCreated datePublished" datetime="2019-10-02T19:19:16+08:00">2019-10-02</time>
+              <time title="创建时间：2019-10-02 19:19:16" itemprop="dateCreated datePublished" datetime="2019-10-02T19:19:16+08:00">2019-10-02</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-09 20:36:57" itemprop="dateModified" datetime="2019-10-09T20:36:57+08:00">2019-10-09</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -333,7 +341,7 @@
 <li>声明式事务的支持<br>可以将我们从单调烦闷的事务管理代码中解脱出来，通过声明式方式灵活的进行事务的管理，<br>提高开发效率和质量。</li>
 <li>方便集成各种优秀框架<br>Spring可以降低各种框架的使用难度， 提供了对各种优秀框架 （Struts、 Hibernate、 Hessian、 Quartz<br>等）的直接支持。</li>
 </ol>
-<h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><p>控制反转，将主动创建对象的权利交给Spring框架来管理<br>(在当前类需要用到其他类的对象，由Spring创建，只需要在配置文件中声明依赖关系的维护)<br>目的：降低耦合<br>内部通过工厂模式进行Bean的创建，通过一个Map进行Bean的管理</p>
+<h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><p>控制反转，将主动创建对象的权利交给Spring框架来管理<br>(在当前类需要用到其他类的对象，由Spring创建，只需要在配置文件中声明依赖关系的维护，不用考虑对象是如何创建出来的)<br>目的：降低耦合<br>内部通过工厂模式进行Bean的创建，通过一个Map进行Bean的管理</p>
 <h2 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h2><p>能注入的数据：有三类</p>
 <blockquote>
 <p>基本类型和String<br>其他bean类型（在配置文件中或者注解配置过的bean）<br>复杂类型/集合类型</p>
@@ -377,6 +385,38 @@
 <div class="note info">
             <p><strong>bean对象的生命周期</strong><br>单例对象</p><blockquote><p>出生：当容器创建时对象出生（解析完配置文件，立即创建）<br>活着：只要容器还在，对象一直活着<br>死亡：容器销毁，对象消亡<br>总结：单例对象的生命周期和容器相同</p></blockquote><p>多例对象</p><blockquote><p>出生：当我们使用对象时spring框架为我们创建（使用时创建，延迟创建）<br>活着：对象只要是在使用过程中就一直活着。<br>死亡：当对象长时间不用，且没有别的对象引用时，由Java的垃圾回收器回收</p></blockquote>
           </div>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>将与业务逻辑无关的代码如日志，权限控制分离，减少系统重复代码，降低耦合，便于扩展和维护</p>
+<p>基于动态代理，如果代理对象实现了某个接口，则使用JDK的动态代理创建代理对象</p>
+<p>如果代理对象没有试下接口的对象，就使用CGlib动态代理生成一个被代理对象的子类作为代理</p>
+<h3 id="Spring-AOP和AspectJ-AOP"><a href="#Spring-AOP和AspectJ-AOP" class="headerlink" title="Spring AOP和AspectJ AOP"></a>Spring AOP和AspectJ AOP</h3><table>
+<thead>
+<tr>
+<th>SpringAOP</th>
+<th>运行时增强</th>
+<th>AspectJ</th>
+<th>编译时增强</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>基于代理</td>
+<td></td>
+<td>基于字节码操作</td>
+</tr>
+<tr>
+<td></td>
+<td>性能一般</td>
+<td></td>
+<td>性能更好</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <p>PS.<br>解耦的思路：<br>    第一步：使用反射来创建对象，而避免使用new关键字。<br>    第二步：通过读取配置文件来获取要创建的对象全限定类名。</p>
 
     </div>
@@ -466,7 +506,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-是什么"><span class="nav-number">1.</span> <span class="nav-text">Spring 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优势"><span class="nav-number">2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IOC"><span class="nav-number">3.</span> <span class="nav-text">IOC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖注入"><span class="nav-number">4.</span> <span class="nav-text">依赖注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数注入"><span class="nav-number">4.1.</span> <span class="nav-text">构造函数注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set方法注入"><span class="nav-number">4.2.</span> <span class="nav-text">Set方法注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口注入"><span class="nav-number">4.3.</span> <span class="nav-text">接口注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ApplicationContext的三个常用实现类"><span class="nav-number">5.</span> <span class="nav-text">ApplicationContext的三个常用实现类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ApplicationContext和BeanFactory的区别"><span class="nav-number">6.</span> <span class="nav-text">ApplicationContext和BeanFactory的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring对Bean的管理细节"><span class="nav-number">7.</span> <span class="nav-text">Spring对Bean的管理细节</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-是什么"><span class="nav-number">1.</span> <span class="nav-text">Spring 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优势"><span class="nav-number">2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IOC"><span class="nav-number">3.</span> <span class="nav-text">IOC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖注入"><span class="nav-number">4.</span> <span class="nav-text">依赖注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数注入"><span class="nav-number">4.1.</span> <span class="nav-text">构造函数注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set方法注入"><span class="nav-number">4.2.</span> <span class="nav-text">Set方法注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口注入"><span class="nav-number">4.3.</span> <span class="nav-text">接口注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ApplicationContext的三个常用实现类"><span class="nav-number">5.</span> <span class="nav-text">ApplicationContext的三个常用实现类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ApplicationContext和BeanFactory的区别"><span class="nav-number">6.</span> <span class="nav-text">ApplicationContext和BeanFactory的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring对Bean的管理细节"><span class="nav-number">7.</span> <span class="nav-text">Spring对Bean的管理细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP"><span class="nav-number">8.</span> <span class="nav-text">AOP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-AOP和AspectJ-AOP"><span class="nav-number">8.1.</span> <span class="nav-text">Spring AOP和AspectJ AOP</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -484,7 +524,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -497,7 +537,7 @@
             <a href="/categories/">
           
         
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span>
         </a>
       </div>
@@ -510,7 +550,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>

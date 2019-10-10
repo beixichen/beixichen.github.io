@@ -3,22 +3,29 @@
 
 
     <url>
-        <loc>http://yoursite.com/tags/Java/</loc>
-        <lastmod>2019-10-05T12:09:53.209Z</lastmod>
+        <loc>http://yoursite.com/tags/MySQL/</loc>
+        <lastmod>2019-10-10T12:04:13.107Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://yoursite.com/tags/MySQL/</loc>
-        <lastmod>2019-10-02T15:49:44.311Z</lastmod>
+        <loc>http://yoursite.com/tags/Java/</loc>
+        <lastmod>2019-10-10T12:00:12.866Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/java/</loc>
+        <lastmod>2019-10-10T11:59:59.631Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://yoursite.com/tags/Spring/</loc>
-        <lastmod>2019-10-02T15:49:27.616Z</lastmod>
+        <lastmod>2019-10-09T12:36:57.047Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

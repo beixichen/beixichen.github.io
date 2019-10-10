@@ -53,15 +53,19 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Tags">
-<meta property="og:url" content="http://yoursite.com/tags/index.html">
+  <meta name="description" content="索引InnoDB默认索引B+树，自适应hash索引除了叶子节点，其他都是索引字段，叶子节点存储真实数据密集索引 ：一个索引项(1001)对应一个数据记录(1001)">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【MySQL】索引，锁，InnoDB特点">
+<meta property="og:url" content="http://yoursite.com/2019/10/10/数据库/MySQL索引/index.html">
 <meta property="og:site_name" content="贝西晨的Blog呀">
+<meta property="og:description" content="索引InnoDB默认索引B+树，自适应hash索引除了叶子节点，其他都是索引字段，叶子节点存储真实数据密集索引 ：一个索引项(1001)对应一个数据记录(1001)">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-30T17:13:28.738Z">
+<meta property="og:updated_time" content="2019-10-10T12:04:13.107Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tags">
-  <link rel="canonical" href="http://yoursite.com/tags/">
+<meta name="twitter:title" content="【MySQL】索引，锁，InnoDB特点">
+<meta name="twitter:description" content="索引InnoDB默认索引B+树，自适应hash索引除了叶子节点，其他都是索引字段，叶子节点存储真实数据密集索引 ：一个索引项(1001)对应一个数据记录(1001)">
+  <link rel="canonical" href="http://yoursite.com/2019/10/10/数据库/MySQL索引/">
 
 
 <script id="page-configurations">
@@ -69,13 +73,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
-    isPage: true,
+    isPost: true,
+    isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>Tags | 贝西晨的Blog呀</title>
+  <title>【MySQL】索引，锁，InnoDB特点 | 贝西晨的Blog呀</title>
   
 
 
@@ -211,24 +215,6 @@
 
     
 
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-  
-
 </nav>
   <div class="site-search">
     <div class="popup search-popup">
@@ -268,35 +254,161 @@
             
 
   <div id="posts" class="posts-expand">
-    
-    
-    
-    <div class="post-block page">
-      
-      
-      
-      
-      <div class="post-body">
-        
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-              目前共计 8 个标签
-            </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/Java/" style="font-size: 30px; color: #5c2223">Java</a> <a href="/tags/MySQL/" style="font-size: 18px; color: #bf8e94">MySQL</a> <a href="/tags/Spring/" style="font-size: 24px; color: #8e585c">Spring</a> <a href="/tags/Web/" style="font-size: 12px; color: #f1c4cd">Web</a> <a href="/tags/hexo/" style="font-size: 12px; color: #f1c4cd">hexo</a> <a href="/tags/java/" style="font-size: 12px; color: #f1c4cd">java</a>
-            </div>
-          </div>
-        
-      </div>
-      
-      
-      
-    </div>
-    
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/10/数据库/MySQL索引/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beixichen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xixi.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="贝西晨的Blog呀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">【MySQL】索引，锁，InnoDB特点
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-10 19:00:21 / 修改时间：20:04:13" itemprop="dateCreated datePublished" datetime="2019-10-10T19:00:21+08:00">2019-10-10</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
 
     
     
     
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>InnoDB默认索引B+树，自适应hash索引</p><p>除了叶子节点，其他都是索引字段，叶子节点存储真实数据</p><p>密集索引 ：一个索引项(1001)对应一个数据记录(1001)</p><a id="more"></a>
+
+
+<p>稀疏索引 ： 一个索引项(1001)对应一块数据记录(1001,1002,1003)</p>
+<p>聚集索引 ： 和磁盘物理位置顺序相同(主键索引，整个表成为一个索引)</p>
+<p>非聚集索引 ： 和磁盘物理位置顺序不同(普通，唯一，全文，每个索引互相独立，给字段创建一个索引，字段中的数据就会被复制一份，生成该字段索引，查找的时候先通过该索引找到对应的主键索引，然后再通过主键索引找到对应的值)</p>
+<p>覆盖(复合)索引，多个字段组成的索引，若查询时是查找这些字段的值，则不需要使用主键索引</p>
+<p>— 找到不到笔记了，后续再加</p>
+<h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><p>InnoDB支持行锁和表锁，MyISAM支持表锁</p>
+<p>① Serializable (串行化)：可避免脏读、不可重复读、幻读的发生。</p>
+<p>② Repeatable read (可重复读)：可避免脏读、不可重复读的发生。</p>
+<p>③ Read committed (读已提交)：可避免脏读的发生。</p>
+<p>④ Read uncommitted (读未提交)：最低级别，任何情况都无法保证。</p>
+<h2 id="InnoDB特点"><a href="#InnoDB特点" class="headerlink" title="InnoDB特点"></a>InnoDB特点</h2><h3 id="自适应hash索引"><a href="#自适应hash索引" class="headerlink" title="自适应hash索引"></a>自适应hash索引</h3><p>会监控对二级索引的查找，如果发现某一个二级索引被频繁访问，二级索引就成为一个热数据。</p>
+<p>经常访问的二级索引数据会自动被生成到Hash索引里面去，自适应哈希索引通过缓冲池的B+树构造。不是整个表都建立索引，是对某些页建立索引</p>
+<p>限制：</p>
+<ol>
+<li>只能使用等值比较 </li>
+<li>会占用缓冲池</li>
+<li>无法用于排序</li>
+<li>有冲突可能</li>
+<li>人为无法干预</li>
+</ol>
+<p>###　两次写（提高可靠性）：</p>
+<p>问题点：部分写失效，当数据正在从内存向磁盘中写一个数据页时，数据库宕机，导致只写入了部分数据，部分数据丢失。页本身已经损坏，重做日志无效，重做日志是对页的物理修改。，</p>
+<p>解决方案：两次写</p>
+<p>添加</p>
+<p>内存两次写缓冲  2MB</p>
+<p>磁盘共享表空间连续128页 2MB</p>
+<p>原理</p>
+<ol>
+<li>刷新缓冲池脏页，不直接写数据文件，先拷贝至内存中的两次写缓冲区</li>
+<li>接着从两次写缓冲区分两次写入磁盘共享表空间的物理磁盘中，每次写入1MB，然后马上调用<strong>fsync函数</strong>，同步磁盘，避免缓冲写带来的问题</li>
+<li>第二步完成后，将两次写缓冲区的页离散的写入到数据文件中</li>
+</ol>
+<p>这样就可以解决上文提到的部分写失效的问题，因为在磁盘共享表空间中已有数据页副本拷贝，如果数据库在页写入数据文件的过程中宕机，在实例恢复时，可以从共享表空间中找到该页副本，将其拷贝覆盖原有的数据页，再应用重做日志即可。</p>
+<h3 id="插入缓冲机制-提高写性能"><a href="#插入缓冲机制-提高写性能" class="headerlink" title="插入缓冲机制(提高写性能)"></a>插入缓冲机制(提高写性能)</h3><p>问题：涉及辅助索引的插入效率低</p>
+<p>解决方案：</p>
+<p>对于非聚集类索引的插入和更新操作，不是每一次都直接插入到索引页中，而是先插入到内存中。如果索引页在缓冲池中，就直接插入，如果不在缓冲池中，就先将其躺入插入缓冲池中，然后以一定的频率和索引页合并，将同一个索引页中的锁哥插入合并到一个IO操作中。</p>
+<p>插入缓冲的问题</p>
+<ol>
+<li>数据库宕机的之后，恢复时间变长</li>
+<li>写密集情况下 ，插入缓冲会占用过多的缓冲池内存</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/10/Java基本知识/Java容器/" rel="next" title="【Java】普通容器，同步容器和并发容器">
+                  <i class="fa fa-chevron-left"></i> 【Java】普通容器，同步容器和并发容器
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
   </div>
 
 
@@ -333,6 +445,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">2.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB特点"><span class="nav-number">3.</span> <span class="nav-text">InnoDB特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自适应hash索引"><span class="nav-number">3.1.</span> <span class="nav-text">自适应hash索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入缓冲机制-提高写性能"><span class="nav-number">3.2.</span> <span class="nav-text">插入缓冲机制(提高写性能)</span></a></li></ol></li></ol></div>
+        
       </div>
       <!--/noindex-->
 
