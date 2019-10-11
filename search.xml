@@ -1,136 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title><![CDATA[【MySQL】索引，锁，InnoDB特点]]></title>
-    <url>%2F2019%2F10%2F10%2F%E6%95%B0%E6%8D%AE%E5%BA%93%2FMySQL%E7%B4%A2%E5%BC%95%2F</url>
-    <content type="text"><![CDATA[索引InnoDB默认索引B+树，自适应hash索引除了叶子节点，其他都是索引字段，叶子节点存储真实数据密集索引 ：一个索引项(1001)对应一个数据记录(1001) 稀疏索引 ： 一个索引项(1001)对应一块数据记录(1001,1002,1003) 聚集索引 ： 和磁盘物理位置顺序相同(主键索引，整个表成为一个索引) 非聚集索引 ： 和磁盘物理位置顺序不同(普通，唯一，全文，每个索引互相独立，给字段创建一个索引，字段中的数据就会被复制一份，生成该字段索引，查找的时候先通过该索引找到对应的主键索引，然后再通过主键索引找到对应的值) 覆盖(复合)索引，多个字段组成的索引，若查询时是查找这些字段的值，则不需要使用主键索引 — 找到不到笔记了，后续再加 锁InnoDB支持行锁和表锁，MyISAM支持表锁 ① Serializable (串行化)：可避免脏读、不可重复读、幻读的发生。 ② Repeatable read (可重复读)：可避免脏读、不可重复读的发生。 ③ Read committed (读已提交)：可避免脏读的发生。 ④ Read uncommitted (读未提交)：最低级别，任何情况都无法保证。 InnoDB特点自适应hash索引会监控对二级索引的查找，如果发现某一个二级索引被频繁访问，二级索引就成为一个热数据。 经常访问的二级索引数据会自动被生成到Hash索引里面去，自适应哈希索引通过缓冲池的B+树构造。不是整个表都建立索引，是对某些页建立索引 限制： 只能使用等值比较 会占用缓冲池 无法用于排序 有冲突可能 人为无法干预 ### 两次写（提高可靠性）： 问题点：部分写失效，当数据正在从内存向磁盘中写一个数据页时，数据库宕机，导致只写入了部分数据，部分数据丢失。页本身已经损坏，重做日志无效，重做日志是对页的物理修改。， 解决方案：两次写 添加 内存两次写缓冲 2MB 磁盘共享表空间连续128页 2MB 原理 刷新缓冲池脏页，不直接写数据文件，先拷贝至内存中的两次写缓冲区 接着从两次写缓冲区分两次写入磁盘共享表空间的物理磁盘中，每次写入1MB，然后马上调用fsync函数，同步磁盘，避免缓冲写带来的问题 第二步完成后，将两次写缓冲区的页离散的写入到数据文件中 这样就可以解决上文提到的部分写失效的问题，因为在磁盘共享表空间中已有数据页副本拷贝，如果数据库在页写入数据文件的过程中宕机，在实例恢复时，可以从共享表空间中找到该页副本，将其拷贝覆盖原有的数据页，再应用重做日志即可。 插入缓冲机制(提高写性能)问题：涉及辅助索引的插入效率低 解决方案： 对于非聚集类索引的插入和更新操作，不是每一次都直接插入到索引页中，而是先插入到内存中。如果索引页在缓冲池中，就直接插入，如果不在缓冲池中，就先将其躺入插入缓冲池中，然后以一定的频率和索引页合并，将同一个索引页中的锁哥插入合并到一个IO操作中。 插入缓冲的问题 数据库宕机的之后，恢复时间变长 写密集情况下 ，插入缓冲会占用过多的缓冲池内存]]></content>
+<search> 
+  
+  
+    
+    <entry>
+      <title>【MySQL】索引，锁，InnoDB特点</title>
+      <link href="/2019/10/10/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E7%B4%A2%E5%BC%95/"/>
+      <url>/2019/10/10/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E7%B4%A2%E5%BC%95/</url>
+      
+        <content type="html"><![CDATA[<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>InnoDB默认索引B+树，自适应hash索引</p><p>除了叶子节点，其他都是索引字段，叶子节点存储真实数据</p><p>密集索引 ：一个索引项(1001)对应一个数据记录(1001)</p><a id="more"></a><p>稀疏索引 ： 一个索引项(1001)对应一块数据记录(1001,1002,1003)</p><p>聚集索引 ： 和磁盘物理位置顺序相同(主键索引，整个表成为一个索引)</p><p>非聚集索引 ： 和磁盘物理位置顺序不同(普通，唯一，全文，每个索引互相独立，给字段创建一个索引，字段中的数据就会被复制一份，生成该字段索引，查找的时候先通过该索引找到对应的主键索引，然后再通过主键索引找到对应的值)</p><p>覆盖(复合)索引，多个字段组成的索引，若查询时是查找这些字段的值，则不需要使用主键索引</p><p>— 找到不到笔记了，后续再加</p><h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><p>InnoDB支持行锁和表锁，MyISAM支持表锁</p><p>① Serializable (串行化)：可避免脏读、不可重复读、幻读的发生。</p><p>② Repeatable read (可重复读)：可避免脏读、不可重复读的发生。</p><p>③ Read committed (读已提交)：可避免脏读的发生。</p><p>④ Read uncommitted (读未提交)：最低级别，任何情况都无法保证。</p><h2 id="InnoDB特点"><a href="#InnoDB特点" class="headerlink" title="InnoDB特点"></a>InnoDB特点</h2><h3 id="自适应hash索引"><a href="#自适应hash索引" class="headerlink" title="自适应hash索引"></a>自适应hash索引</h3><p>会监控对二级索引的查找，如果发现某一个二级索引被频繁访问，二级索引就成为一个热数据。</p><p>经常访问的二级索引数据会自动被生成到Hash索引里面去，自适应哈希索引通过缓冲池的B+树构造。不是整个表都建立索引，是对某些页建立索引</p><p>限制：</p><ol><li>只能使用等值比较 </li><li>会占用缓冲池</li><li>无法用于排序</li><li>有冲突可能</li><li>人为无法干预</li></ol><p>###　两次写（提高可靠性）：</p><p>问题点：部分写失效，当数据正在从内存向磁盘中写一个数据页时，数据库宕机，导致只写入了部分数据，部分数据丢失。页本身已经损坏，重做日志无效，重做日志是对页的物理修改。，</p><p>解决方案：两次写</p><p>添加</p><p>内存两次写缓冲  2MB</p><p>磁盘共享表空间连续128页 2MB</p><p>原理</p><ol><li>刷新缓冲池脏页，不直接写数据文件，先拷贝至内存中的两次写缓冲区</li><li>接着从两次写缓冲区分两次写入磁盘共享表空间的物理磁盘中，每次写入1MB，然后马上调用<strong>fsync函数</strong>，同步磁盘，避免缓冲写带来的问题</li><li>第二步完成后，将两次写缓冲区的页离散的写入到数据文件中</li></ol><p>这样就可以解决上文提到的部分写失效的问题，因为在磁盘共享表空间中已有数据页副本拷贝，如果数据库在页写入数据文件的过程中宕机，在实例恢复时，可以从共享表空间中找到该页副本，将其拷贝覆盖原有的数据页，再应用重做日志即可。</p><h3 id="插入缓冲机制-提高写性能"><a href="#插入缓冲机制-提高写性能" class="headerlink" title="插入缓冲机制(提高写性能)"></a>插入缓冲机制(提高写性能)</h3><p>问题：涉及辅助索引的插入效率低</p><p>解决方案：</p><p>对于非聚集类索引的插入和更新操作，不是每一次都直接插入到索引页中，而是先插入到内存中。如果索引页在缓冲池中，就直接插入，如果不在缓冲池中，就先将其躺入插入缓冲池中，然后以一定的频率和索引页合并，将同一个索引页中的锁哥插入合并到一个IO操作中。</p><p>插入缓冲的问题</p><ol><li>数据库宕机的之后，恢复时间变长</li><li>写密集情况下 ，插入缓冲会占用过多的缓冲池内存</li></ol>]]></content>
+      
+      
       <categories>
-        <category>数据库</category>
+          
+          <category> 数据库 </category>
+          
       </categories>
-      <tags>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【Java】普通容器，同步容器和并发容器]]></title>
-    <url>%2F2019%2F10%2F10%2FJava%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%2FJava%E5%AE%B9%E5%99%A8%2F</url>
-    <content type="text"><![CDATA[Java容器本文主要对Java中的容器进行介绍，主要分为普通容器，同步容器和并发容器 普通容器 ArrayList：适合读取O(1)，默认初始容量为10，size()是实际元素的个数 12//Default initial capacity.private static final int DEFAULT_CAPACITY = 10; 扩容方式，自动扩容还需要进行一个copy，消耗的资源较多 ，尽可能设置好初始大小 123int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);...elementData = Arrays.copyOf(elementData, newCapacity); LinkedList 适合添加和删除 O(1)，查找O(n) HashMap 实现了Map接口，底层由数组bucket+链表(散列表)+红黑树实现，几种数据结构存的都是键值对，hashcode相同bucket位置来储存Entry对象，当出现hash冲突时使用链表存储entry插入开头，当冲突数大于8时使用红黑树存储，使用链表键值可以为null，初始容量16，当元素数量达到总容量的0.75扩容，扩容方式2的n次方 123//The default initial capacity - MUST be a power of two.static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4; // aka 16 遍历删除1234567891011121314151617181920//listIterator&lt;String&gt; it = list.iterator(); while(it.hasNext())&#123; String x = it.next(); if(x.equals("del"))&#123; it.remove(); &#125;&#125;//mapIterator&lt;Map.Entry&lt;Integer, String&gt;&gt; it = map.entrySet().iterator(); while(it.hasNext())&#123; Map.Entry&lt;Integer, String&gt; entry = it.next(); Integer key = entry.getKey(); if(key % 2 == 0)&#123; System.out.println("To delete key " + key); it.remove(); System.out.println("The key " + + key + " was deleted"); &#125; &#125; 同步容器 Vector Stack HashTable 其中都是使用synchronized进行修饰，保证同一个变量只能由一个线程访问 并发容器 ConcurrentHashMap 和Hashmap的存储方式一样，但是通过对数组进行加锁synchronized和使用CAS(Compare And Swap)进行并发控制 CopyOnWriteArrayList - 线程安全的 ArrayList CopyOnWriteArraySet - 线程安全的 Set，它内部包含了一个 CopyOnWriteArrayList，因此本质上是由 CopyOnWriteArrayList 实现 ConcurrentSkipListSet - 相当于线程安全的 TreeSet。它是有序的 Set。它由 ConcurrentSkipListMap 实现。 ConcurrentHashMap - 线程安全的 HashMap。采用分段锁实现高效并发。 ConcurrentSkipListMap - 线程安全的有序 Map。使用跳表实现高效并发。 ConcurrentLinkedQueue - 线程安全的无界队列。底层采用单链表。支持 FIFO。 ConcurrentLinkedDeque - 线程安全的无界双端队列。底层采用双向链表。支持 FIFO 和 FILO。 ArrayBlockingQueue - 数组实现的阻塞队列。 LinkedBlockingQueue - 链表实现的阻塞队列。 LinkedBlockingDeque - 双向链表实现的双端阻塞队列。]]></content>
+      
+      
+        <tags>
+            
+            <tag> MySQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【Java】普通容器，同步容器和并发容器</title>
+      <link href="/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/"/>
+      <url>/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Java容器"><a href="#Java容器" class="headerlink" title="Java容器"></a>Java容器</h2><p>本文主要对Java中的容器进行介绍，主要分为普通容器，同步容器和并发容器<a id="more"></a></p><p><img src="C:\Users\fx50jk\AppData\Roaming\Typora\typora-user-images\1570411257098.png" alt="1570411257098"></p><h3 id="普通容器"><a href="#普通容器" class="headerlink" title="普通容器"></a>普通容器</h3><ul><li><p>ArrayList：适合读取O(1)，默认初始容量为10，size()是实际元素的个数</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Default initial capacity.</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span><br></pre></td></tr></table></figure><p>扩容方式，自动扩容还需要进行一个copy，消耗的资源较多 ，尽可能设置好初始大小</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> newCapacity = oldCapacity + (oldCapacity &gt;&gt; <span class="number">1</span>);</span><br><span class="line">...</span><br><span class="line">elementData = Arrays.copyOf(elementData, newCapacity);</span><br></pre></td></tr></table></figure></li><li><p>LinkedList 适合添加和删除 O(1)，查找O(n)</p></li><li><p>HashMap 实现了Map接口，底层由数组bucket+链表(散列表)+红黑树实现，几种数据结构存的都是键值对，hashcode相同bucket位置来储存Entry对象，当出现hash冲突时使用链表存储entry插入开头，当冲突数大于8时使用红黑树存储，使用链表键值可以为null，初始容量16，当元素数量达到总容量的0.75扩容，扩容方式2的n次方</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//The default initial capacity - MUST be a power of two.</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>; </span><br><span class="line"><span class="comment">// aka 16</span></span><br></pre></td></tr></table></figure></li></ul><h4 id="遍历删除"><a href="#遍历删除" class="headerlink" title="遍历删除"></a>遍历删除</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//list</span></span><br><span class="line">Iterator&lt;String&gt; it = list.iterator();</span><br><span class="line"> <span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">  String x = it.next();</span><br><span class="line">  <span class="keyword">if</span>(x.equals(<span class="string">"del"</span>))&#123;</span><br><span class="line">    it.remove();</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//map</span></span><br><span class="line">Iterator&lt;Map.Entry&lt;Integer, String&gt;&gt; it = map.entrySet().iterator();</span><br><span class="line">  <span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">    Map.Entry&lt;Integer, String&gt; entry = it.next();</span><br><span class="line">    Integer key = entry.getKey();</span><br><span class="line">    <span class="keyword">if</span>(key % <span class="number">2</span> == <span class="number">0</span>)&#123;</span><br><span class="line">       System.out.println(<span class="string">"To delete key "</span> + key);</span><br><span class="line">       it.remove();  </span><br><span class="line">       System.out.println(<span class="string">"The key "</span> + + key + <span class="string">" was deleted"</span>);</span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure><h3 id="同步容器"><a href="#同步容器" class="headerlink" title="同步容器"></a>同步容器</h3><ul><li>Vector </li><li>Stack</li><li>HashTable</li></ul><p>其中都是使用synchronized进行修饰，保证同一个变量只能由一个线程访问</p><h3 id="并发容器"><a href="#并发容器" class="headerlink" title="并发容器"></a>并发容器</h3><ul><li>ConcurrentHashMap 和Hashmap的存储方式一样，但是通过对数组进行加锁synchronized和使用CAS(Compare And Swap)进行并发控制</li><li>CopyOnWriteArrayList - 线程安全的 ArrayList</li><li>CopyOnWriteArraySet - 线程安全的 Set，它内部包含了一个 </li><li>CopyOnWriteArrayList，因此本质上是由 CopyOnWriteArrayList 实现</li><li>ConcurrentSkipListSet - 相当于线程安全的 TreeSet。它是有序的 Set。它由 ConcurrentSkipListMap 实现。</li><li>ConcurrentHashMap - 线程安全的 HashMap。采用分段锁实现高效并发。</li><li>ConcurrentSkipListMap - 线程安全的有序 Map。使用跳表实现高效并发。</li><li>ConcurrentLinkedQueue - 线程安全的无界队列。底层采用单链表。支持 FIFO。</li><li>ConcurrentLinkedDeque - 线程安全的无界双端队列。底层采用双向链表。支持 FIFO 和 FILO。</li><li>ArrayBlockingQueue - 数组实现的阻塞队列。</li><li>LinkedBlockingQueue - 链表实现的阻塞队列。</li><li>LinkedBlockingDeque - 双向链表实现的双端阻塞队列。</li></ul>]]></content>
+      
+      
       <categories>
-        <category>Java</category>
+          
+          <category> Java </category>
+          
       </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【Java】ThreadPool]]></title>
-    <url>%2F2019%2F10%2F09%2FJava%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%2FThreadPool%2F</url>
-    <content type="text"><![CDATA[线程池作用：减少对线程的创建和销毁，方便对线程进行管理好处： 降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁进行的资源消耗 提高响应速度。当任务到达时，不用创建新的线程就能直接从线程池取出线程进行执行 提高线程的可管理性。可对线程进行统一分配、调优和监控 ThreadPool的参数 源码如图 corePoolSize：核心线程数 核心线程会一直存活，即使没有任务需要执行当线程数小于核心线程数时（还未满，就会一直增），即使有线程空闲，线程池也会优先创建新线程处理设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭 maximumPoolSize：最大的线程数 corePoolSize&lt;线程数&lt;maximumPoolSize，且任务队列已满时。线程池会创建新线程来处理任务，直到线程数量达到maximumPoolSize当线程数已经=maximumPoolSize，且任务队列已满时，线程池会拒绝处理任务而抛出异常 keepAliveTime：线程空闲时间 当线程空闲时间达到keepAliveTime时，线程会被销毁，直到线程数量=corePoolSize 如果allowCoreThreadTimeout=true，则会直到线程数量=0（这个特性需要注意） unit：空闲时间单位 BlockingQueue workQueue ：任务队列 当核心线程数达到最大时，新任务会放在队列中排队等待执行 ThreadFactory threadFactory 创建线程的工厂 RejectedExecutionHandler handler：拒绝策略 两种情况会拒绝处理任务： 1、当线程数已经达到maxPoolSize，且任务队列已满时，会拒绝新任务 2、当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务（并不是立马停止，而是执行完再停止）。 若拒绝后，此时，线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置，默认值是AbortPolicy，会抛出异常 hreadPoolExecutor类有几个内部实现类来处理这类情况： 1： AbortPolicy 丢弃任务，抛运行时异常 2：CallerRunsPolicy 执行任务（这个策略重试添加当前的任务，他会自动重复调用 execute() 方法，直到成功） 如果执行器已关闭,则丢弃. 3：DiscardPolicy 对拒绝任务直接无声抛弃，没有异常信息 4：DiscardOldestPolicy 对拒绝任务不抛弃，而是抛弃队列里面等待最久的（队列头部的任务将被删除）一个线程，然后把拒绝任务加到队列（Queue是先进先出的任务调度算法，具体策略会咋下面有分析）（如果再次失败，则重复此过程） 5：实现RejectedExecutionHandler接口，可自定义处理器（可以自己实现然后set进去） Executor框架提供了三种线程池 Executors.newCachedThreadPool(); //创建一个缓冲池，缓冲池容量大小为Integer.MAX_VALUE CachedThreadPool的corePool为0，maximumPoolSize为Integer.MAX_VALUE，这就意味着所有的任务一提交就会加入到阻塞队列中。keepAliveTime这是为60L，unit设置为TimeUnit.SECONDS，意味着空闲线程等待新任务的最长时间为60秒，空闲线程超过60秒后将会被终止。阻塞队列采用的SynchronousQueue，而我们在【死磕Java并发】—-J.U.C之阻塞队列：SynchronousQueue中了解到SynchronousQueue是一个没有元素的阻塞队列，加上corePool = 0 ，maximumPoolSize = Integer.MAX_VALUE，这样就会存在一个问题，如果主线程提交任务的速度远远大于CachedThreadPool的处理速度，则CachedThreadPool会不断地创建新线程来执行任务，这样有可能会导致系统耗尽CPU和内存资源，所以在使用该线程池是，一定要注意控制并发的任务数，否则创建大量的线程可能导致严重的性能问题。 Executors.newSingleThreadExecutor(); //创建容量为1的缓冲池 作为单一worker线程的线程池，SingleThreadExecutor把corePool和maximumPoolSize均被设置为1，和FixedThreadPool一样使用的是无界队列LinkedBlockingQueue,所以带来的影响和FixedThreadPool一样，如果把这个当作全局线程池，可以很好实现异步，并且还能保证任务的顺序执行，进而达到消峰的效果 Executors.newFixedThreadPool(int); //创建固定容量大小的缓冲池 corePoolSize 和 maximumPoolSize都设置为创建FixedThreadPool时指定的参数nThreads，意味着当线程池满时且阻塞队列也已经满时，如果继续提交任务，则会直接走拒绝策略，该线程池不会再新建线程来执行任务，而是直接走拒绝策略。FixedThreadPool使用的是默认的拒绝策略，即AbortPolicy，则直接抛出异常。 keepAliveTime设置为0L，表示空闲的线程会立刻终止。 workQueue则是使用LinkedBlockingQueue，但是没有设置范围，那么则是最大值（Integer.MAX_VALUE），这基本就相当于一个无界队列了。使用该“无界队列”则会带来哪些影响呢？当线程池中的线程数量等于corePoolSize 时，如果继续提交任务，该任务会被添加到阻塞队列workQueue中，当阻塞队列也满了之后，则线程池会新建线程执行任务直到maximumPoolSize。由于FixedThreadPool使用的是“无界队列”LinkedBlockingQueue，那么maximumPoolSize参数无效，同时指定的拒绝策略AbortPolicy也将无效。而且该线程池也不会拒绝提交的任务，如果客户端提交任务的速度快于任务的执行，那么keepAliveTime也是一个无效参数。 线程池的处理流程 如果当前运行的线程少于CorePoolSize，则创建新线程来执行任务（需获取全局锁） 如果运行的线程大于等于CorePoolSize，则将任务加入到BlockingQueue。 如果无法将任务加入到BlockQueue（队列已满），则创建新的线程处理任务（需获取全局锁） 如果创建新线程将超出maximumPoolSize，任务将被拒绝。 参考：https://cloud.tencent.com/developer/article/1497458http://cmsblogs.com/?p=2448]]></content>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【Java】ThreadPool</title>
+      <link href="/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadPool/"/>
+      <url>/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadPool/</url>
+      
+        <content type="html"><![CDATA[<p>线程池作用：减少对线程的创建和销毁，方便对线程进行管理</p><p>好处：</p><ol><li>降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁进行的资源消耗</li><li>提高响应速度。当任务到达时，不用创建新的线程就能直接从线程池取出线程进行执行</li><li>提高线程的可管理性。可对线程进行统一分配、调优和监控</li></ol><a id="more"></a><h2 id="ThreadPool的参数"><a href="#ThreadPool的参数" class="headerlink" title="ThreadPool的参数"></a>ThreadPool的参数</h2><p><img src="/images/1570707345530.png" alt="1570707345530"></p><p>源码如上图</p><p>corePoolSize：核心线程数</p><blockquote><p>核心线程会一直存活，即使没有任务需要执行<br>当线程数小于核心线程数时（还未满，就会一直增），即使有线程空闲，线程池也会优先创建新线程处理<br>设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭</p></blockquote><p>maximumPoolSize：最大的线程数</p><blockquote><p>corePoolSize&lt;线程数&lt;maximumPoolSize，且任务队列已满时。线程池会创建新线程来处理任务，直到线程数量达到maximumPoolSize<br>当线程数已经=maximumPoolSize，且任务队列已满时，线程池会拒绝处理任务而抛出异常</p></blockquote><p>keepAliveTime：线程空闲时间</p><blockquote><p>当线程空闲时间达到keepAliveTime时，线程会被销毁，直到线程数量=corePoolSize<br> 如果allowCoreThreadTimeout=true，则会直到线程数量=0（这个特性需要注意）</p></blockquote><p>unit：空闲时间单位</p><p>BlockingQueue  workQueue ：任务队列</p><blockquote><p>当核心线程数达到最大时，新任务会放在队列中排队等待执行</p><ul><li>ArrayBlockingQueue：基于数组结构的有界阻塞队列，FIFO。</li><li>LinkedBlockingQueue：基于链表结构的有界阻塞队列，FIFO。</li><li>SynchronousQueue：不存储元素的阻塞队列，每个插入操作都必须等待一个移出操作，反之亦然。</li><li>PriorityBlockingQueue：具有优先界别的阻塞队列。</li></ul></blockquote><p>ThreadFactory threadFactory 创建线程的工厂</p><p>RejectedExecutionHandler handler：拒绝策略</p><blockquote><p>两种情况会拒绝处理任务：<br> 1、当线程数已经达到maxPoolSize，且任务队列已满时，会拒绝新任务<br> 2、当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务（并不是立马停止，而是执行完再停止）。<br> 若拒绝后，此时，线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置，默认值是AbortPolicy，会抛出异常<br> hreadPoolExecutor类有几个内部实现类来处理这类情况：<br> 1： AbortPolicy 丢弃任务，抛运行时异常<br> 2：CallerRunsPolicy 执行任务（这个策略重试添加当前的任务，他会自动重复调用 execute() 方法，直到成功） 如果执行器已关闭,则丢弃.<br> 3：DiscardPolicy  对拒绝任务直接无声抛弃，没有异常信息<br> 4：DiscardOldestPolicy 对拒绝任务不抛弃，而是抛弃队列里面等待最久的（队列头部的任务将被删除）一个线程，然后把拒绝任务加到队列（Queue是先进先出的任务调度算法，具体策略会咋下面有分析）（如果再次失败，则重复此过程）<br> 5：实现RejectedExecutionHandler接口，可自定义处理器（可以自己实现然后set进去）</p></blockquote><h2 id="Executor框架提供了三种线程池"><a href="#Executor框架提供了三种线程池" class="headerlink" title="Executor框架提供了三种线程池"></a>Executor框架提供了三种线程池</h2><ol><li><p>Executors.newCachedThreadPool();        //创建一个缓冲池，缓冲池容量大小为Integer.MAX_VALUE</p><blockquote><p>CachedThreadPool的corePool为0，maximumPoolSize为Integer.MAX_VALUE，这就意味着所有的任务一提交就会加入到阻塞队列中。keepAliveTime这是为60L，unit设置为TimeUnit.SECONDS，意味着空闲线程等待新任务的最长时间为60秒，空闲线程超过60秒后将会被终止。阻塞队列采用的SynchronousQueue，而我们在【死磕Java并发】—-J.U.C之阻塞队列：SynchronousQueue中了解到SynchronousQueue是一个没有元素的阻塞队列，加上corePool = 0 ，maximumPoolSize = Integer.MAX_VALUE，这样就会存在一个问题，如果主线程提交任务的速度远远大于CachedThreadPool的处理速度，则CachedThreadPool会不断地创建新线程来执行任务，这样有可能会导致系统耗尽CPU和内存资源，所以在使用该线程池是，一定要注意控制并发的任务数，否则创建大量的线程可能导致严重的性能问题。</p></blockquote></li><li><p>Executors.newSingleThreadExecutor();   //创建容量为1的缓冲池</p><blockquote><p>作为单一worker线程的线程池，SingleThreadExecutor把corePool和maximumPoolSize均被设置为1，和FixedThreadPool一样使用的是无界队列LinkedBlockingQueue,所以带来的影响和FixedThreadPool一样，如果把这个当作全局线程池，可以很好实现异步，并且还能保证任务的顺序执行，进而达到消峰的效果</p></blockquote></li><li><p>Executors.newFixedThreadPool(int);    //创建固定容量大小的缓冲池</p><blockquote><p>corePoolSize 和 maximumPoolSize都设置为创建FixedThreadPool时指定的参数nThreads，意味着当线程池满时且阻塞队列也已经满时，如果继续提交任务，则会直接走拒绝策略，该线程池不会再新建线程来执行任务，而是直接走拒绝策略。FixedThreadPool使用的是默认的拒绝策略，即AbortPolicy，则直接抛出异常。 keepAliveTime设置为0L，表示空闲的线程会立刻终止。 workQueue则是使用LinkedBlockingQueue，但是没有设置范围，那么则是最大值（Integer.MAX_VALUE），这基本就相当于一个无界队列了。使用该“无界队列”则会带来哪些影响呢？当线程池中的线程数量等于corePoolSize 时，如果继续提交任务，该任务会被添加到阻塞队列workQueue中，当阻塞队列也满了之后，则线程池会新建线程执行任务直到maximumPoolSize。由于FixedThreadPool使用的是“无界队列”LinkedBlockingQueue，那么maximumPoolSize参数无效，同时指定的拒绝策略AbortPolicy也将无效。而且该线程池也不会拒绝提交的任务，如果客户端提交任务的速度快于任务的执行，那么keepAliveTime也是一个无效参数。</p></blockquote></li></ol><h2 id="线程池的处理流程"><a href="#线程池的处理流程" class="headerlink" title="线程池的处理流程"></a>线程池的处理流程</h2><ol><li>如果当前运行的线程少于CorePoolSize，则创建新线程来执行任务（需获取全局锁）</li><li>如果运行的线程大于等于CorePoolSize，则将任务加入到BlockingQueue。</li><li>如果无法将任务加入到BlockQueue（队列已满），则创建新的线程处理任务（需获取全局锁）</li><li>如果创建新线程将超出maximumPoolSize，任务将被拒绝。</li></ol><p>参考：<br><a href="https://cloud.tencent.com/developer/article/1497458" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1497458</a><br><a href="http://cmsblogs.com/?p=2448" target="_blank" rel="noopener">http://cmsblogs.com/?p=2448</a></p>]]></content>
+      
+      
       <categories>
-        <category>Java</category>
+          
+          <category> Java </category>
+          
       </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【Java】ThreadLocal]]></title>
-    <url>%2F2019%2F10%2F09%2FJava%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%2FThreadLocal%2F</url>
-    <content type="text"><![CDATA[ThreadLocal解决多线程环境成员变量的问题，与线程同步机制不同，线程同步是多个线程共享同一个变量，而ThreadLocal是每一个线程床架一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程 get()：返回此线程局部变量的当前线程副本中的值。initialValue()：返回此线程局部变量的当前线程的“初始值”。remove()：移除此线程局部变量当前线程的值。set(T value)：将此线程局部变量的当前线程副本中的值设置为指定值。 ThreadLocal内部还有一个静态内部类ThreadLocalMap，该内部类才是实现线程隔离机制的关键，get()、set()、remove()都是基于该内部类操作。ThreadLocalMap提供了一种用键值对方式存储每一个线程的变量副本的方法，key为当前ThreadLocal对象，value则是对应线程的变量副本。 对于ThreadLocal需要注意的有两点：ThreadLocal实例本身是不存储值，它只是提供了一个在当前线程中找到副本值得key。是ThreadLocal包含在Thread中，而不是Thread包含在ThreadLocal中，有些小伙伴会弄错他们的关系。 ThreadLocal并不是为线程保存对象的副本，它仅仅只起到一个索引的作用。它的主要木得视为每一个线程隔离一个类的实例，这个实例的作用范围仅限于线程内部。]]></content>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【Java】ThreadLocal</title>
+      <link href="/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadLocal/"/>
+      <url>/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadLocal/</url>
+      
+        <content type="html"><![CDATA[<p>ThreadLocal解决多线程环境成员变量的问题，<font color="red">与线程同步机制不同，线程同步是多个线程共享同一个变量，</font><font color="green">而ThreadLocal是每一个线程床架一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程</font></p><a id="more"></a><p>get()：返回此线程局部变量的当前线程副本中的值。<br>initialValue()：返回此线程局部变量的当前线程的“初始值”。<br>remove()：移除此线程局部变量当前线程的值。<br>set(T value)：将此线程局部变量的当前线程副本中的值设置为指定值。</p><p>ThreadLocal内部还有一个静态内部类ThreadLocalMap，该内部类才是实现线程隔离机制的关键，get()、set()、remove()都是基于该内部类操作。ThreadLocalMap提供了一种用键值对方式存储每一个线程的变量副本的方法，key为当前ThreadLocal对象，value则是对应线程的变量副本。 对于ThreadLocal需要注意的有两点：<br>ThreadLocal实例本身是不存储值，它只是提供了一个在当前线程中找到副本值得key。<br>是ThreadLocal包含在Thread中，而不是Thread包含在ThreadLocal中，有些小伙伴会弄错他们的关系。</p><p>ThreadLocal并不是为线程保存对象的副本，它仅仅只起到一个索引的作用。它的主要木得视为每一个线程隔离一个类的实例，这个实例的作用范围仅限于线程内部。</p>]]></content>
+      
+      
       <categories>
-        <category>Java</category>
+          
+          <category> Java </category>
+          
       </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【Java】Serializable]]></title>
-    <url>%2F2019%2F10%2F05%2FJava%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%2FJava-Serializable%2F</url>
-    <content type="text"><![CDATA[Java序列化，将Java对象转换为字节数组，便于存储传输 反序列化，将字节数组转换为Java对象 如果一个类能够序列化，他的子类能够序列化 如果子类实现了Serializable接口，父类没有实现，父类不能被序列化，子类可以 由static修饰的类的成员，transient修饰的对象代表对象的临时数据，不能被序列化]]></content>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【Java】Serializable</title>
+      <link href="/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-Serializable/"/>
+      <url>/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-Serializable/</url>
+      
+        <content type="html"><![CDATA[<p>Java序列化，将Java对象转换为字节数组，便于存储传输<br>   反序列化，将字节数组转换为Java对象<a id="more"></a></p><ol><li>如果一个类能够序列化，他的子类能够序列化</li><li>如果子类实现了Serializable接口，父类没有实现，父类不能被序列化，子类可以</li><li>由static修饰的类的成员，transient修饰的对象代表对象的临时数据，不能被序列化</li></ol>]]></content>
+      
+      
       <categories>
-        <category>Java</category>
+          
+          <category> Java </category>
+          
       </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【Java】基本类型和包装类型]]></title>
-    <url>%2F2019%2F10%2F05%2FJava%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%2F%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B%2F</url>
-    <content type="text"><![CDATA[基本类型和包装类型 包装类型可以为null，基本类型不可以，如果数据库查询为null，但是使用基本类型接收，要进行自动拆箱，Integer转为int，抛出空指针异常 包装类型可以用于泛型，基本类型不可以 基本类型存在栈中，包装类型存储的是堆中的引用，基本类型更加高效 两个包装类型的(equals)值可能相同，但是(==)不是同一对象 当需要进行自动装箱时，如果数字在-128到127之间，会直接使用缓存中的对象，而不是重新创建一个对象由基本类型如：int转换为包装类型Integer 自动装箱，Integer.ValueOf()由包装类型如：Integer转为基本类型int 自动装箱，Integer.intValue()]]></content>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【Java】基本类型和包装类型</title>
+      <link href="/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B/"/>
+      <url>/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B/</url>
+      
+        <content type="html"><![CDATA[<h2 id="基本类型和包装类型"><a href="#基本类型和包装类型" class="headerlink" title="基本类型和包装类型"></a>基本类型和包装类型</h2><ol><li>包装类型可以为null，基本类型不可以，如果数据库查询为null，但是使用基本类型接收，要进行自动拆箱，Integer转为int，抛出空指针异常</li></ol><a id="more"></a><ol><li><p>包装类型可以用于泛型，基本类型不可以</p></li><li><p>基本类型存在栈中，包装类型存储的是堆中的引用，基本类型更加高效</p></li><li><p>两个包装类型的(equals)值可能相同，但是(==)不是同一对象</p></li><li><p>当需要进行自动装箱时，如果数字在-128到127之间，会直接使用缓存中的对象，而不是重新创建一个对象<br>由基本类型如：int转换为包装类型Integer 自动装箱，Integer.ValueOf()<br>由包装类型如：Integer转为基本类型int     自动装箱，Integer.intValue()</p></li></ol>]]></content>
+      
+      
       <categories>
-        <category>Java</category>
+          
+          <category> Java </category>
+          
       </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【Spring学习笔记3】Spring动态代理]]></title>
-    <url>%2F2019%2F10%2F02%2FSpring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%2Fproxy-study%2F</url>
-    <content type="text"><![CDATA[动态代理： 特点：字节码随用随创建，随用随加载 作用：不修改源码的基础上对方法增强 分类： 基于接口的动态代理 基于子类的动态代理 基于子类的动态代理： 涉及的类：Enhancer 提供者：第三方cglib库 如何创建代理对象： 使用Enhancer类中的create方法 创建代理对象的要求： 被代理类不能是最终类 create方法的参数： Class：字节码 它是用于指定被代理对象的字节码。 callback：用于提供增强的代码 它是让我们写如何代理。我们一般都是些一个该接口的实现类，通常情况下都是匿名内部类，但不是必须的。 此接口的实现类都是谁用谁写。 我们一般写的都是该接口的子接口实现类：MethodInterceptor 通过接口实现动态代理123456789101112131415161718192021222324252627IProducer proxyProducer = (IProducer) Proxy.newProxyInstance(producer.getClass().getClassLoader(),producer.getClass().getInterfaces(),new InvocationHandler() &#123; /** * 作用：执行被代理对象的任何接口方法都会经过该方法 * 方法参数的含义 * @param proxy 代理对象的引用 * @param method 当前执行的方法 * @param args 当前执行方法所需的参数 * @return 和被代理对象方法有相同的返回值 * @throws Throwable */ @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123; //提供增强的代码 Object returnValue = null; //1.获取方法执行的参数 Float money = (Float)args[0]; //2.判断当前方法是不是销售 if("saleProduct".equals(method.getName())) &#123; returnValue = method.invoke(producer, money*0.8f); &#125; return returnValue; &#125;&#125;);proxyProducer.saleProduct(10000f); 通过cglib实现动态代理1234567891011121314151617181920212223242526Producer cglibProducer = (Producer)Enhancer.create(producer.getClass(), new MethodInterceptor() &#123; /** * 执行北地阿里对象的任何方法都会经过该方法 * @param proxy * @param method * @param args * 以上三个参数和基于接口的动态代理中invoke方法的参数是一样的 * @param methodProxy ：当前执行方法的代理对象 * @return * @throws Throwable */ @Override public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable &#123; //提供增强的代码 Object returnValue = null; //1.获取方法执行的参数 Float money = (Float)args[0]; //2.判断当前方法是不是销售 if("saleProduct".equals(method.getName())) &#123; returnValue = method.invoke(producer, money*0.8f); &#125; return returnValue; &#125;&#125;);cglibProducer.saleProduct(12000f);]]></content>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【Spring学习笔记3】Spring动态代理</title>
+      <link href="/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/proxy-study/"/>
+      <url>/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/proxy-study/</url>
+      
+        <content type="html"><![CDATA[<h2 id="动态代理："><a href="#动态代理：" class="headerlink" title="动态代理："></a>动态代理：</h2><p>   特点：字节码随用随创建，随用随加载<br>   作用：不修改源码的基础上对方法增强<a id="more"></a><br>   分类：<br>       基于接口的动态代理<br>       基于子类的动态代理<br>   基于子类的动态代理：<br>       涉及的类：Enhancer<br>       提供者：第三方cglib库<br>   如何创建代理对象：<br>       使用Enhancer类中的create方法<br>   创建代理对象的要求：<br>       被代理类不能是最终类<br>   create方法的参数：<br>       Class：字节码<br>           它是用于指定被代理对象的字节码。<br>   callback：用于提供增强的代码<br>        它是让我们写如何代理。我们一般都是些一个该接口的实现类，通常情况下都是匿名内部类，但不是必须的。<br>        此接口的实现类都是谁用谁写。<br>        我们一般写的都是该接口的子接口实现类：MethodInterceptor</p><h2 id="通过接口实现动态代理"><a href="#通过接口实现动态代理" class="headerlink" title="通过接口实现动态代理"></a>通过接口实现动态代理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">IProducer proxyProducer = (IProducer) Proxy.newProxyInstance(producer.getClass().getClassLoader(),</span><br><span class="line">producer.getClass().getInterfaces(),</span><br><span class="line"><span class="keyword">new</span> InvocationHandler() &#123;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 作用：执行被代理对象的任何接口方法都会经过该方法</span></span><br><span class="line"><span class="comment"> * 方法参数的含义</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> proxy   代理对象的引用</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> method  当前执行的方法</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> args    当前执行方法所需的参数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span>        和被代理对象方法有相同的返回值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line"><span class="comment">//提供增强的代码</span></span><br><span class="line">Object returnValue = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//1.获取方法执行的参数</span></span><br><span class="line">Float money = (Float)args[<span class="number">0</span>];</span><br><span class="line"><span class="comment">//2.判断当前方法是不是销售</span></span><br><span class="line"><span class="keyword">if</span>(<span class="string">"saleProduct"</span>.equals(method.getName())) &#123;</span><br><span class="line">returnValue = method.invoke(producer, money*<span class="number">0.8f</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> returnValue;</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">proxyProducer.saleProduct(<span class="number">10000f</span>);</span><br></pre></td></tr></table></figure><h2 id="通过cglib实现动态代理"><a href="#通过cglib实现动态代理" class="headerlink" title="通过cglib实现动态代理"></a>通过cglib实现动态代理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Producer cglibProducer = (Producer)Enhancer.create(producer.getClass(), <span class="keyword">new</span> MethodInterceptor() &#123;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行北地阿里对象的任何方法都会经过该方法</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> proxy</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> method</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> args</span></span><br><span class="line"><span class="comment"> *    以上三个参数和基于接口的动态代理中invoke方法的参数是一样的</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> methodProxy ：当前执行方法的代理对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object proxy, Method method, Object[] args, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line"><span class="comment">//提供增强的代码</span></span><br><span class="line">Object returnValue = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//1.获取方法执行的参数</span></span><br><span class="line">Float money = (Float)args[<span class="number">0</span>];</span><br><span class="line"><span class="comment">//2.判断当前方法是不是销售</span></span><br><span class="line"><span class="keyword">if</span>(<span class="string">"saleProduct"</span>.equals(method.getName())) &#123;</span><br><span class="line">returnValue = method.invoke(producer, money*<span class="number">0.8f</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> returnValue;</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">cglibProducer.saleProduct(<span class="number">12000f</span>);</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
       <categories>
-        <category>Java</category>
-        <category>Spring</category>
+          
+          <category> Java </category>
+          
+          <category> Spring </category>
+          
       </categories>
-      <tags>
-        <tag>Spring</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【Spring学习笔记2】常用的各种注解及替代xml配置的作用]]></title>
-    <url>%2F2019%2F10%2F02%2FSpring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%2FSpring-study2%2F</url>
-    <content type="text"><![CDATA[123&lt;bean id="" class="" scope="" init-method="" destroy-method=""&gt; &lt;property name="" value="" | ref=""&gt;&lt;/property&gt; &lt;/bean&gt; 用于创建对象 他们的作用就和在XML配置文件中编写一个标签实现的功能是一样的Component: 作用：用于把当前类对象存入spring容器中 属性： value：用于指定bean的id。当我们不写时，它的默认值是当前类名，且首字母改小写。Controller：一般用在表现层Service：一般用在业务层Repository：一般用在持久层以上三个注解他们的作用和属性与Component是一模一样。他们三个是spring框架为我们提供明确的三层使用的注解，使我们的三层对象更加清晰 用于注入数据 他们的作用就和在xml配置文件中的bean标签中写一个标签的作用是一样的@Autowired: 作用：自动按照类型注入。只要容器中有唯一的一个bean对象类型和要注入的变量类型匹配，就可以注入成功 如果ioc容器中没有任何bean的类型和要注入的变量类型匹配，则报错。 如果Ioc容器中有多个类型匹配时： 出现位置： 可以是变量上，也可以是方法上 细节： 在使用注解注入时，set方法就不是必须的了。@Qualifier: 作用：在按照类中注入的基础之上再按照名称注入。它在给类成员注入时不能单独使用（需要和Autowired一起使用）。但是在给方法参数注入时可以 属性：value：用于指定注入bean的id。 @Resource 作用：直接按照bean的id注入。它可以独立使用属性： name：用于指定bean的id。以上三个注入都只能注入其他bean类型的数据，而基本类型和String类型无法使用上述注解实现。 另外，集合类型的注入只能通过XML来实现。@Value 作用：用于注入基本类型和String类型的数据 属性： value：用于指定数据的值。它可以使用spring中SpEL(也就是spring的el表达式） SpEL的写法：${表达式} 用于改变作用范围 他们的作用就和在bean标签中使用scope属性实现的功能是一样的 @Scope 作用：用于指定bean的作用范围 属性： value：指定范围的取值。常用取值：singleton prototype 和生命周期相关 他们的作用就和在bean标签中使用init-method和destroy-methode的作用是一样的 @PreDestroy 作用：用于指定销毁方法 @PostConstruct 作用：用于指定初始化方法 配置类里面常用的注解 @Configuration 作用：指定当前类是一个配置类 细节：当配置类为AnnotationConfigApplicationContext对象创建的参数时，该注解可以不写。@ComponentScan 作用：用于通过注解指定spring在创建容器时要扫描的包 属性： value：它和basePackages的作用是一样的，都是用于指定创建容器时要扫描的包。 我们使用此注解就等同于在xml中配置了:&lt;context:component-scan base-package=&quot;com.example&quot;&gt;&lt;/context:component-scan&gt;@Bean 作用：用于把当前方法的返回值作为bean对象存入spring的ioc容器中 属性: name:用于指定bean的id。当不写时，默认值是当前方法的名称 细节： 当我们使用注解配置方法时，如果方法有参数，spring框架会去容器中查找有没有可用的bean对象。 查找的方式和Autowired注解的作用是一样的@Import 作用：用于导入其他的配置类 属性： value：用于指定其他配置类的字节码。 当我们使用Import的注解之后，有Import注解的类就父配置类，而导入的都是子配置类@PropertySource 作用：用于指定properties文件的位置 属性： value：指定文件的名称和路径。 关键字：classpath，表示类路径下]]></content>
+      
+      
+        <tags>
+            
+            <tag> Spring </tag>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【Spring学习笔记2】常用的各种注解及替代xml配置的作用</title>
+      <link href="/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/"/>
+      <url>/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/</url>
+      
+        <content type="html"><![CDATA[<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">""</span> <span class="attr">scope</span>=<span class="string">""</span>  <span class="attr">init-method</span>=<span class="string">""</span> <span class="attr">destroy-method</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">""</span>  <span class="attr">value</span>=<span class="string">""</span> | <span class="attr">ref</span>=<span class="string">""</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure><a id="more"></a><h2 id="用于创建对象"><a href="#用于创建对象" class="headerlink" title="用于创建对象"></a>用于创建对象</h2><blockquote><p>他们的作用就和在XML配置文件中编写一个<bean>标签实现的功能是一样的<br>Component:<br>    作用：用于把当前类对象存入spring容器中<br>    属性：<br>        value：用于指定bean的id。当我们不写时，它的默认值是当前类名，且首字母改小写。<br><br>Controller：一般用在表现层<br>Service：一般用在业务层<br>Repository：一般用在持久层<br>以上三个注解他们的作用和属性与Component是一模一样。<br>他们三个是spring框架为我们提供明确的三层使用的注解，使我们的三层对象更加清晰</bean></p></blockquote><h2 id="用于注入数据"><a href="#用于注入数据" class="headerlink" title="用于注入数据"></a>用于注入数据</h2><blockquote><p>他们的作用就和在xml配置文件中的bean标签中写一个<property>标签的作用是一样的<br>@Autowired:<br>    作用：自动按照类型注入。只要容器中有唯一的一个bean对象类型和要注入的变量类型匹配，就可以注入成功<br>          如果ioc容器中没有任何bean的类型和要注入的变量类型匹配，则报错。<br>          如果Ioc容器中有多个类型匹配时：<br>    出现位置：<br>        可以是变量上，也可以是方法上<br>    细节：<br>        在使用注解注入时，set方法就不是必须的了。<br><br>@Qualifier:<br>    作用：在按照类中注入的基础之上再按照名称注入。它在给类成员注入时不能单独使用（需要和Autowired一起使用）。但是在给方法参数注入时可以<br>    属性：<br>value：用于指定注入bean的id。    <br><br>@Resource<br>    作用：直接按照bean的id注入。它可以独立使用<br>属性：<br>    name：用于指定bean的id。<br>以上三个注入都只能注入其他bean类型的数据，而基本类型和String类型无法使用上述注解实现。<br>    另外，集合类型的注入只能通过XML来实现。<br><br>@Value<br>    作用：用于注入基本类型和String类型的数据<br>    属性：<br>        value：用于指定数据的值。它可以使用spring中SpEL(也就是spring的el表达式）<br>                SpEL的写法：${表达式}</property></p></blockquote><h2 id="用于改变作用范围"><a href="#用于改变作用范围" class="headerlink" title="用于改变作用范围"></a>用于改变作用范围</h2><blockquote><p>他们的作用就和在bean标签中使用scope属性实现的功能是一样的<br>    @Scope<br>    作用：用于指定bean的作用范围<br>    属性：<br>    value：指定范围的取值。常用取值：singleton prototype</p></blockquote><h2 id="和生命周期相关"><a href="#和生命周期相关" class="headerlink" title="和生命周期相关"></a>和生命周期相关</h2><blockquote><p>他们的作用就和在bean标签中使用init-method和destroy-methode的作用是一样的<br>    @PreDestroy<br>        作用：用于指定销毁方法<br>    @PostConstruct<br>        作用：用于指定初始化方法</p></blockquote><h2 id="配置类里面常用的注解"><a href="#配置类里面常用的注解" class="headerlink" title="配置类里面常用的注解"></a>配置类里面常用的注解</h2><blockquote><p>@Configuration<br>    作用：指定当前类是一个配置类<br>    细节：当配置类为AnnotationConfigApplicationContext对象创建的参数时，该注解可以不写。<br><br>@ComponentScan<br>     作用：用于通过注解指定spring在创建容器时要扫描的包<br>     属性：<br>         value：它和basePackages的作用是一样的，都是用于指定创建容器时要扫描的包。<br>        我们使用此注解就等同于在xml中配置了:<br><code>&lt;context:component-scan base-package=&quot;com.example&quot;&gt;&lt;/context:component-scan&gt;</code><br><br>@Bean<br>    作用：用于把当前方法的返回值作为bean对象存入spring的ioc容器中<br>        属性:<br>    name:用于指定bean的id。当不写时，默认值是当前方法的名称<br>        细节：<br>    当我们使用注解配置方法时，如果方法有参数，spring框架会去容器中查找有没有可用的bean对象。<br>    查找的方式和Autowired注解的作用是一样的<br><br>@Import<br>     作用：用于导入其他的配置类<br> 属性：<br>     value：用于指定其他配置类的字节码。<br>         当我们使用Import的注解之后，有Import注解的类就父配置类，而导入的都是子配置类<br><br>@PropertySource<br>     作用：用于指定properties文件的位置<br>     属性：<br>         value：指定文件的名称和路径。<br>                     关键字：classpath，表示类路径下</p></blockquote>]]></content>
+      
+      
       <categories>
-        <category>Java</category>
-        <category>Spring</category>
+          
+          <category> Java </category>
+          
+          <category> Spring </category>
+          
       </categories>
-      <tags>
-        <tag>Spring</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【Spring学习笔记1】IOC的创建和Bean的管理]]></title>
-    <url>%2F2019%2F10%2F02%2FSpring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%2FSpring-study1%2F</url>
-    <content type="text"><![CDATA[Spring 是什么分层的轻量型开源框架，以 IoC（Inverse Of Control：反转控制）和 AOP（Aspect Oriented Programming：面向切面编程）为内核 优势 方便解耦，简化开发通过 Spring提供的 IoC容器，可以将对象间的依赖关系交由 Spring进行控制，避免硬编码所造成的过度程序耦合。用户也不必再为单例模式类、属性文件解析等这些很底层的需求编写代码，可以更专注于上层的应用。 AOP 编程的支持通过 Spring的 AOP 功能，方便进行面向切面的编程，许多不容易用传统OOP 实现的功能可以通过 AOP 轻松应付。 声明式事务的支持可以将我们从单调烦闷的事务管理代码中解脱出来，通过声明式方式灵活的进行事务的管理，提高开发效率和质量。 方便集成各种优秀框架Spring可以降低各种框架的使用难度， 提供了对各种优秀框架 （Struts、 Hibernate、 Hessian、 Quartz等）的直接支持。 IOC控制反转，将主动创建对象的权利交给Spring框架来管理(在当前类需要用到其他类的对象，由Spring创建，只需要在配置文件中声明依赖关系的维护，不用考虑对象是如何创建出来的)目的：降低耦合内部通过工厂模式进行Bean的创建，通过一个Map进行Bean的管理 依赖注入能注入的数据：有三类 基本类型和String其他bean类型（在配置文件中或者注解配置过的bean）复杂类型/集合类型 注入的方式：有三种 第一种：使用构造函数提供第二种：set方法注入第三种：使用注解注入 构造函数注入 使用的标签:constructor-arg标签中的属性type：用于指定要注入的数据的数据类型，该数据类型也是构造函数中某个或某些参数的类型index：用于指定要注入的数据给构造函数中指定索引位置的参数赋值。索引的位置是从0开始name：用于指定给构造函数中指定名称的参数赋值 常用的 =============以上三个用于指定给构造函数中哪个参数赋值value：用于提供基本类型和String类型的数据ref：用于指定其他的bean类型数据。它指的就是在spring的Ioc核心容器中出现过的bean对象优势：在获取bean对象时，注入数据是必须的操作，否则对象无法创建成功。弊端：改变了bean对象的实例化方式，使我们在创建对象时，如果用不到这些数据，也必须提供。1234567 &lt;bean id="" class=""&gt; &lt;constructor-arg name="name" value=""&gt;&lt;/constructor-arg&gt; &lt;constructor-arg name="birthday" ref="now"&gt;&lt;/constructor-arg&gt; &lt;/bean&gt; &lt;!-- 配置一个日期对象 --&gt;&lt;bean id="now" class="java.util.Date"&gt;&lt;/bean&gt; Set方法注入 标签：property出现的位置：bean标签的内部标签的属性 name：用于指定注入时所调用的set方法名称 value：用于提供基本类型和String类型的数据 ref：用于指定其他的bean类型数据。它指的就是在spring的Ioc核心容器中出现过的bean对象优势： 创建对象时没有明确的限制，可以直接使用默认构造函数弊端： 如果有某个成员必须有值，则获取对象是有可能set方法没有执行。1234567891011121314&lt;bean id="" class=""&gt;&lt;!--用于给List结构集合注入的标签： list array set用于给Map结构集合注入的标签: map props结构相同，标签可以互换--&gt; &lt;property name="myList"&gt; &lt;array&gt; &lt;value&gt;AAA&lt;/value&gt; &lt;value&gt;BBB&lt;/value&gt; &lt;value&gt;CCC&lt;/value&gt; &lt;/array&gt; &lt;/property&gt;&lt;/bean&gt; 接口注入ApplicationContext的三个常用实现类 ClassPathXmlApplicationContext：它可以加载类路径下的配置文件，要求配置文件必须在类路径 下。不在的话，加载不了。(更常用) FileSystemXmlApplicationContext：它可以加载磁盘任意路径下的配置文件(必须有访问权限） AnnotationConfigApplicationContext：它是用于读取注解创建容器的 ApplicationContext和BeanFactory的区别 BeanFactory： Spring最底层的接口，各种Bean的定义，配置初始化，实例化，控制bean的生命周期 使用延迟加载，读取配置文件时不会创建对象，使用时才会创建 ApplicationContext： BeanFactory的派生，可进行更多的扩展，继承messagesource 支持国际化，统一资源文件访 问，同时加载多个配置文件，载入多个上下文使每个上下文专注特定层次容器启动时，读取配 置文件后一次性创建所有的Bean，有利于发现配置错误，但占用过多的内存空间 区别：BeanFactory 通常以编程方式创建，ApplicationContext 以声明方式创建BeanFactory 延迟加载(创建多例对象使用)，ApplicationContext 立即加载(创建单例对象使用) 都支持BeanPostProcessor、BeanFactoryPostProcess，BeanFactory需要手动注册，applicationContext自动注册 Spring对Bean的管理细节创建Bean的三种方式： 使用默认构造函数创建，在Spring的配置文件中使用bean标签，配以id和class属性之后，且没有其他属性和标签时,采用的就是默认构造函数创建bean对象.此时如果类中没有默认构造函数，则对象无法创建。 1&lt;bean id="" class=""&gt;&lt;/bean&gt; 使用普通工厂中的方法创建对象（使用某个类中的方法创建对象，并存入spring容器） 1&lt;bean id="" factory-bean="" factory-method="" &gt;&lt;/bean&gt; 使用工厂中的静态方法创建对象（使用某个类中的静态方法创建对象，并存入spring容器) 1&lt;bean id="" class="" factory-method="" &gt;&lt;/bean&gt; bean标签的scope属性： 作用：用于指定bean的作用范围 取值： 常用的就是单例的和多例的singleton：单例的（默认值）prototype：多例的request：作用于web应用的请求范围session：作用于web应用的会话范围global-session：作用于集群环境的会话范围（全局会话范围），当不是集群环境时，它就是session bean对象的生命周期单例对象出生：当容器创建时对象出生（解析完配置文件，立即创建）活着：只要容器还在，对象一直活着死亡：容器销毁，对象消亡总结：单例对象的生命周期和容器相同多例对象出生：当我们使用对象时spring框架为我们创建（使用时创建，延迟创建）活着：对象只要是在使用过程中就一直活着。死亡：当对象长时间不用，且没有别的对象引用时，由Java的垃圾回收器回收 AOP将与业务逻辑无关的代码如日志，权限控制分离，减少系统重复代码，降低耦合，便于扩展和维护 基于动态代理，如果代理对象实现了某个接口，则使用JDK的动态代理创建代理对象 如果代理对象没有试下接口的对象，就使用CGlib动态代理生成一个被代理对象的子类作为代理 Spring AOP和AspectJ AOP SpringAOP 运行时增强 AspectJ 编译时增强 基于代理 基于字节码操作 性能一般 性能更好 PS.解耦的思路： 第一步：使用反射来创建对象，而避免使用new关键字。 第二步：通过读取配置文件来获取要创建的对象全限定类名。]]></content>
+      
+      
+        <tags>
+            
+            <tag> Spring </tag>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【Spring学习笔记1】IOC的创建和Bean的管理</title>
+      <link href="/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/"/>
+      <url>/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Spring-是什么"><a href="#Spring-是什么" class="headerlink" title="Spring 是什么"></a>Spring 是什么</h2><p>分层的轻量型开源框架，以 IoC（Inverse Of Control：反转控制）和 AOP（Aspect Oriented Programming：面向切面编程）为内核</p><a id="more"></a><h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><ol><li>方便解耦，简化开发<br>通过 Spring提供的 IoC容器，可以将对象间的依赖关系交由 Spring进行控制，避免硬编码所造成的过度程序耦合。用户也不必再为单例模式类、属性文件解析等这些很底层的需求编写代码，可以更专注于上层的应用。</li><li>AOP 编程的支持<br>通过 Spring的 AOP 功能，方便进行面向切面的编程，许多不容易用传统OOP 实现的功能可以通过 AOP 轻松应付。</li><li>声明式事务的支持<br>可以将我们从单调烦闷的事务管理代码中解脱出来，通过声明式方式灵活的进行事务的管理，<br>提高开发效率和质量。</li><li>方便集成各种优秀框架<br>Spring可以降低各种框架的使用难度， 提供了对各种优秀框架 （Struts、 Hibernate、 Hessian、 Quartz<br>等）的直接支持。</li></ol><h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><p>控制反转，将主动创建对象的权利交给Spring框架来管理<br>(在当前类需要用到其他类的对象，由Spring创建，只需要在配置文件中声明依赖关系的维护，不用考虑对象是如何创建出来的)<br>目的：降低耦合<br>内部通过工厂模式进行Bean的创建，通过一个Map进行Bean的管理</p><h2 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h2><p>能注入的数据：有三类</p><blockquote><p>基本类型和String<br>其他bean类型（在配置文件中或者注解配置过的bean）<br>复杂类型/集合类型</p></blockquote><p>注入的方式：有三种</p><blockquote><p>第一种：使用构造函数提供<br>第二种：set方法注入<br>第三种：使用注解注入</p></blockquote><h3 id="构造函数注入"><a href="#构造函数注入" class="headerlink" title="构造函数注入"></a>构造函数注入</h3><blockquote><p>使用的标签:constructor-arg<br>标签中的属性<br>type：用于指定要注入的数据的数据类型，该数据类型也是构造函数中某个或某些参数的类型<br>index：用于指定要注入的数据给构造函数中指定索引位置的参数赋值。索引的位置是从0开始<br>name：用于指定给构造函数中指定名称的参数赋值                                        常用的<br> =============以上三个用于指定给构造函数中哪个参数赋值<br>value：用于提供基本类型和String类型的数据<br>ref：用于指定其他的bean类型数据。它指的就是在spring的Ioc核心容器中出现过的bean对象<br>优势：<br>在获取bean对象时，注入数据是必须的操作，否则对象无法创建成功。<br>弊端：<br>改变了bean对象的实例化方式，使我们在创建对象时，如果用不到这些数据，也必须提供。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">""</span>&gt;</span><span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">name</span>=<span class="string">"birthday"</span> <span class="attr">ref</span>=<span class="string">"now"</span>&gt;</span><span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- 配置一个日期对象 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"now"</span> <span class="attr">class</span>=<span class="string">"java.util.Date"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p></blockquote><h3 id="Set方法注入"><a href="#Set方法注入" class="headerlink" title="Set方法注入"></a>Set方法注入</h3><blockquote><p>标签：property<br>出现的位置：bean标签的内部<br>标签的属性<br> name：用于指定注入时所调用的set方法名称<br> value：用于提供基本类型和String类型的数据<br> ref：用于指定其他的bean类型数据。它指的就是在spring的Ioc核心容器中出现过的bean对象<br>优势：<br>   创建对象时没有明确的限制，可以直接使用默认构造函数<br>弊端：<br>   如果有某个成员必须有值，则获取对象是有可能set方法没有执行。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">""</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--用于给List结构集合注入的标签：</span></span><br><span class="line"><span class="comment">        list array set</span></span><br><span class="line"><span class="comment">用于给Map结构集合注入的标签:</span></span><br><span class="line"><span class="comment">   map  props</span></span><br><span class="line"><span class="comment">结构相同，标签可以互换--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"myList"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">value</span>&gt;</span>AAA<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">value</span>&gt;</span>BBB<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">value</span>&gt;</span>CCC<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p></blockquote><h3 id="接口注入"><a href="#接口注入" class="headerlink" title="接口注入"></a>接口注入</h3><h2 id="ApplicationContext的三个常用实现类"><a href="#ApplicationContext的三个常用实现类" class="headerlink" title="ApplicationContext的三个常用实现类"></a>ApplicationContext的三个常用实现类</h2><p> ClassPathXmlApplicationContext：它可以加载类路径下的配置文件，要求配置文件必须在类路径     下。不在的话，加载不了。(更常用)<br> FileSystemXmlApplicationContext：它可以加载磁盘任意路径下的配置文件(必须有访问权限）<br> AnnotationConfigApplicationContext：它是用于读取注解创建容器的</p><h2 id="ApplicationContext和BeanFactory的区别"><a href="#ApplicationContext和BeanFactory的区别" class="headerlink" title="ApplicationContext和BeanFactory的区别"></a>ApplicationContext和BeanFactory的区别</h2><ul><li><p>BeanFactory：<br>  Spring最底层的接口，各种Bean的定义，配置初始化，实例化，控制bean的生命周期<br>  使用延迟加载，读取配置文件时不会创建对象，使用时才会创建</p></li><li><p>ApplicationContext：<br>  BeanFactory的派生，可进行更多的扩展，继承messagesource 支持国际化，统一资源文件访      问，同时加载多个配置文件，载入多个上下文使每个上下文专注特定层次容器启动时，读取配          置文件后一次性创建所有的Bean，有利于发现配置错误，但占用过多的内存空间</p></li><li><p>区别：<br>BeanFactory 通常以编程方式创建，ApplicationContext 以声明方式创建<br>BeanFactory 延迟加载(创建多例对象使用)，ApplicationContext 立即加载(创建单例对象使用)</p><p>都支持BeanPostProcessor、BeanFactoryPostProcess，BeanFactory需要手动注册，applicationContext自动注册</p></li></ul><h2 id="Spring对Bean的管理细节"><a href="#Spring对Bean的管理细节" class="headerlink" title="Spring对Bean的管理细节"></a>Spring对Bean的管理细节</h2><p>创建Bean的三种方式：</p><ol><li><p>使用默认构造函数创建，在Spring的配置文件中使用bean标签，配以id和class属性之后，且没有其他属性和标签时,采用的就是默认构造函数创建bean对象.此时如果类中没有默认构造函数，则对象无法创建。</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">""</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></li><li><p>使用普通工厂中的方法创建对象（使用某个类中的方法创建对象，并存入spring容器）</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">factory-bean</span>=<span class="string">""</span> <span class="attr">factory-method</span>=<span class="string">""</span> &gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></li><li><p>使用工厂中的静态方法创建对象（使用某个类中的静态方法创建对象，并存入spring容器)</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">""</span> <span class="attr">factory-method</span>=<span class="string">""</span> &gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></li></ol><hr><div class="note info">            <p>bean标签的scope属性：<br>  作用：用于指定bean的作用范围<br>  取值： 常用的就是单例的和多例的</p><blockquote><p>singleton：单例的（默认值）<br>prototype：多例的<br>request：作用于web应用的请求范围<br>session：作用于web应用的会话范围<br>global-session：作用于集群环境的会话范围（全局会话范围），当不是集群环境时，它就是session</p></blockquote>          </div><div class="note info">            <p><strong>bean对象的生命周期</strong><br>单例对象</p><blockquote><p>出生：当容器创建时对象出生（解析完配置文件，立即创建）<br>活着：只要容器还在，对象一直活着<br>死亡：容器销毁，对象消亡<br>总结：单例对象的生命周期和容器相同</p></blockquote><p>多例对象</p><blockquote><p>出生：当我们使用对象时spring框架为我们创建（使用时创建，延迟创建）<br>活着：对象只要是在使用过程中就一直活着。<br>死亡：当对象长时间不用，且没有别的对象引用时，由Java的垃圾回收器回收</p></blockquote>          </div><h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>将与业务逻辑无关的代码如日志，权限控制分离，减少系统重复代码，降低耦合，便于扩展和维护</p><p>基于动态代理，如果代理对象实现了某个接口，则使用JDK的动态代理创建代理对象</p><p>如果代理对象没有试下接口的对象，就使用CGlib动态代理生成一个被代理对象的子类作为代理</p><h3 id="Spring-AOP和AspectJ-AOP"><a href="#Spring-AOP和AspectJ-AOP" class="headerlink" title="Spring AOP和AspectJ AOP"></a>Spring AOP和AspectJ AOP</h3><table><thead><tr><th>SpringAOP</th><th>运行时增强</th><th>AspectJ</th><th>编译时增强</th></tr></thead><tbody><tr><td></td><td>基于代理</td><td></td><td>基于字节码操作</td></tr><tr><td></td><td>性能一般</td><td></td><td>性能更好</td></tr><tr><td></td><td></td><td></td></tr></tbody></table><p>PS.<br>解耦的思路：<br>    第一步：使用反射来创建对象，而避免使用new关键字。<br>    第二步：通过读取配置文件来获取要创建的对象全限定类名。</p>]]></content>
+      
+      
       <categories>
-        <category>Java</category>
-        <category>Spring</category>
+          
+          <category> Java </category>
+          
+          <category> Spring </category>
+          
       </categories>
-      <tags>
-        <tag>Spring</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【MySQL】char和varchar的区别]]></title>
-    <url>%2F2019%2F09%2F26%2F%E6%95%B0%E6%8D%AE%E5%BA%93%2Fmysql%E4%B8%ADchar%EF%BC%8Cvarchar%2F</url>
-    <content type="text"><![CDATA[MySQL中char和varcharchar长度不变，长度不足时会补空格，取出数据时也会有空格需要进行trim，存取效率要高，英文1字节，汉字2字节 varchar 长度不定，如果长度不足，长度会自动转换，更节省空间，英文汉字都是2字节]]></content>
+      
+      
+        <tags>
+            
+            <tag> Spring </tag>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【MySQL】char和varchar的区别</title>
+      <link href="/2019/09/26/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql%E4%B8%ADchar%EF%BC%8Cvarchar/"/>
+      <url>/2019/09/26/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql%E4%B8%ADchar%EF%BC%8Cvarchar/</url>
+      
+        <content type="html"><![CDATA[<h1 id="MySQL中char和varchar"><a href="#MySQL中char和varchar" class="headerlink" title="MySQL中char和varchar"></a>MySQL中char和varchar</h1><p>char长度不变，长度不足时会补空格，取出数据时也会有空格需要进行trim，存取效率要高，英文1字节，汉字2字节</p><a id="more"></a><p>varchar 长度不定，如果长度不足，长度会自动转换，更节省空间，英文汉字都是2字节</p>]]></content>
+      
+      
       <categories>
-        <category>数据库</category>
+          
+          <category> 数据库 </category>
+          
       </categories>
-      <tags>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Hello Hexo]]></title>
-    <url>%2F2018%2F03%2F23%2FHello-Hexo%2F</url>
-    <content type="text"><![CDATA[This is my first test on githubBlog by hexo.]]></content>
-  </entry>
-  <entry>
-    <title><![CDATA[Hello World]]></title>
-    <url>%2F2018%2F03%2F23%2Fhello-world%2F</url>
-    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+      
+      
+        <tags>
+            
+            <tag> MySQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello Hexo</title>
+      <link href="/2018/03/23/Hello-Hexo/"/>
+      <url>/2018/03/23/Hello-Hexo/</url>
+      
+        <content type="html"><![CDATA[<p>This is my first test on githubBlog by hexo.</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2018/03/23/hello-world/"/>
+      <url>/2018/03/23/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><a id="more"></a><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+      
+      
       <categories>
-        <category>Web</category>
+          
+          <category> Web </category>
+          
       </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>Web</tag>
-      </tags>
-  </entry>
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
+            
+            <tag> Web </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
 </search>

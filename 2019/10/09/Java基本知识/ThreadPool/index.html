@@ -61,12 +61,12 @@
 <meta property="og:site_name" content="贝西晨的Blog呀">
 <meta property="og:description" content="线程池作用：减少对线程的创建和销毁，方便对线程进行管理好处： 降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁进行的资源消耗 提高响应速度。当任务到达时，不用创建新的线程就能直接从线程池取出线程进行执行 提高线程的可管理性。可对线程进行统一分配、调优和监控">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="c:/Users/fx50jk/AppData/Roaming/Typora/typora-user-images/1570707345530.png">
-<meta property="og:updated_time" content="2019-10-10T12:20:05.739Z">
+<meta property="og:image" content="http://yoursite.com/images/1570707345530.png">
+<meta property="og:updated_time" content="2019-10-11T09:17:39.588Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java】ThreadPool">
 <meta name="twitter:description" content="线程池作用：减少对线程的创建和销毁，方便对线程进行管理好处： 降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁进行的资源消耗 提高响应速度。当任务到达时，不用创建新的线程就能直接从线程池取出线程进行执行 提高线程的可管理性。可对线程进行统一分配、调优和监控">
-<meta name="twitter:image" content="c:/Users/fx50jk/AppData/Roaming/Typora/typora-user-images/1570707345530.png">
+<meta name="twitter:image" content="http://yoursite.com/images/1570707345530.png">
   <link rel="canonical" href="http://yoursite.com/2019/10/09/Java基本知识/ThreadPool/">
 
 
@@ -300,7 +300,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-10 20:20:05" itemprop="dateModified" datetime="2019-10-10T20:20:05+08:00">2019-10-10</time>
+                <time title="修改时间：2019-10-11 17:17:39" itemprop="dateModified" datetime="2019-10-11T17:17:39+08:00">2019-10-11</time>
               </span>
             
           
@@ -336,8 +336,8 @@
 </ol><a id="more"></a>
 
 
-<h2 id="ThreadPool的参数"><a href="#ThreadPool的参数" class="headerlink" title="ThreadPool的参数"></a>ThreadPool的参数</h2><p><img src="C:\Users\fx50jk\AppData\Roaming\Typora\typora-user-images\1570707345530.png" alt="1570707056742"></p>
-<p>源码如图</p>
+<h2 id="ThreadPool的参数"><a href="#ThreadPool的参数" class="headerlink" title="ThreadPool的参数"></a>ThreadPool的参数</h2><p><img src="/images/1570707345530.png" alt="1570707345530"></p>
+<p>源码如上图</p>
 <p>corePoolSize：核心线程数</p>
 <blockquote>
 <p>核心线程会一直存活，即使没有任务需要执行<br>当线程数小于核心线程数时（还未满，就会一直增），即使有线程空闲，线程池也会优先创建新线程处理<br>设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭</p>
@@ -354,6 +354,12 @@
 <p>BlockingQueue  workQueue ：任务队列</p>
 <blockquote>
 <p>当核心线程数达到最大时，新任务会放在队列中排队等待执行</p>
+<ul>
+<li>ArrayBlockingQueue：基于数组结构的有界阻塞队列，FIFO。</li>
+<li>LinkedBlockingQueue：基于链表结构的有界阻塞队列，FIFO。</li>
+<li>SynchronousQueue：不存储元素的阻塞队列，每个插入操作都必须等待一个移出操作，反之亦然。</li>
+<li>PriorityBlockingQueue：具有优先界别的阻塞队列。</li>
+</ul>
 </blockquote>
 <p>ThreadFactory threadFactory 创建线程的工厂</p>
 <p>RejectedExecutionHandler handler：拒绝策略</p>
