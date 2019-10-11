@@ -91,7 +91,7 @@
     <link href="http://yoursite.com/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadLocal/"/>
     <id>http://yoursite.com/2019/10/09/Java基本知识/ThreadLocal/</id>
     <published>2019-10-09T11:10:38.000Z</published>
-    <updated>2019-10-10T12:00:12.866Z</updated>
+    <updated>2019-10-10T12:25:00.839Z</updated>
     
     <content type="html"><![CDATA[<p>ThreadLocal解决多线程环境成员变量的问题，<font color="red">与线程同步机制不同，线程同步是多个线程共享同一个变量，</font><font color="green">而ThreadLocal是每一个线程床架一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程</font></p><a id="more"></a><p>get()：返回此线程局部变量的当前线程副本中的值。<br>initialValue()：返回此线程局部变量的当前线程的“初始值”。<br>remove()：移除此线程局部变量当前线程的值。<br>set(T value)：将此线程局部变量的当前线程副本中的值设置为指定值。</p><p>ThreadLocal内部还有一个静态内部类ThreadLocalMap，该内部类才是实现线程隔离机制的关键，get()、set()、remove()都是基于该内部类操作。ThreadLocalMap提供了一种用键值对方式存储每一个线程的变量副本的方法，key为当前ThreadLocal对象，value则是对应线程的变量副本。 对于ThreadLocal需要注意的有两点：<br>ThreadLocal实例本身是不存储值，它只是提供了一个在当前线程中找到副本值得key。<br>是ThreadLocal包含在Thread中，而不是Thread包含在ThreadLocal中，有些小伙伴会弄错他们的关系。</p><p>ThreadLocal并不是为线程保存对象的副本，它仅仅只起到一个索引的作用。它的主要木得视为每一个线程隔离一个类的实例，这个实例的作用范围仅限于线程内部。</p>]]></content>
     

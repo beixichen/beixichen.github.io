@@ -4,22 +4,22 @@
 
     <sitemap>
         <loc>http://yoursite.com/post-sitemap.xml</loc>
-        <lastmod>2019-10-10T12:22:41.034Z</lastmod>
+        <lastmod>2019-10-10T12:25:00.839Z</lastmod>
     </sitemap>
 
     <sitemap>
         <loc>http://yoursite.com/page-sitemap.xml</loc>
-        <lastmod>2019-10-01T09:35:40.254Z</lastmod>
+        <lastmod>2019-10-11T03:20:25.694Z</lastmod>
     </sitemap>
 
     <sitemap>
         <loc>http://yoursite.com/category-sitemap.xml</loc>
-        <lastmod>2019-10-10T12:22:41.034Z</lastmod>
+        <lastmod>2019-10-10T12:25:00.839Z</lastmod>
     </sitemap>
 
     <sitemap>
         <loc>http://yoursite.com/tag-sitemap.xml</loc>
-        <lastmod>2019-10-10T12:22:41.034Z</lastmod>
+        <lastmod>2019-10-10T12:25:00.839Z</lastmod>
     </sitemap>
 
 </sitemapindex>
