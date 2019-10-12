@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-10-11T10:32:33.019Z</updated>
+  <updated>2019-10-11T15:25:37.591Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,28 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>【Java】AbstractQueuedSynchronizer队列同步器(AQS)</title>
-    <link href="http://yoursite.com/2019/10/11/AQS/"/>
-    <id>http://yoursite.com/2019/10/11/AQS/</id>
-    <published>2019-10-11T10:11:45.000Z</published>
-    <updated>2019-10-11T10:32:33.019Z</updated>
-    
-    <content type="html"><![CDATA[<p> JUC包里面使用继承AQS进行实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。</p><a id="more"></a><p>使用int类型的成员变量state来表示同步状态，当state&gt;0时表示已经获取了锁，当state = 0时表示释放了锁。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt; JUC包里面使用继承AQS进行实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
-    
-  </entry>
   
   <entry>
     <title>【MySQL】索引，锁，InnoDB特点</title>
