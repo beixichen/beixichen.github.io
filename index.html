@@ -253,6 +253,100 @@
   
   
   <div class="post-block home">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/11/AQS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beixichen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xixi.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="贝西晨的Blog呀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/10/11/AQS/" class="post-title-link" itemprop="url">【Java】AbstractQueuedSynchronizer队列同步器(AQS)</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-11 18:11:45 / 修改时间：18:32:33" itemprop="dateCreated datePublished" datetime="2019-10-11T18:11:45+08:00">2019-10-11</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p> JUC包里面使用继承AQS进行实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/10/11/AQS/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+        <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block home">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/10/数据库/MySQL索引/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -282,11 +376,19 @@
                 
               
 
-              <time title="创建时间：2019-10-10 19:00:21 / 修改时间：20:21:54" itemprop="dateCreated datePublished" datetime="2019-10-10T19:00:21+08:00">2019-10-10</time>
+              <time title="创建时间：2019-10-10 19:00:21" itemprop="dateCreated datePublished" datetime="2019-10-10T19:00:21+08:00">2019-10-10</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-11 23:25:37" itemprop="dateModified" datetime="2019-10-11T23:25:37+08:00">2019-10-11</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -481,7 +583,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-11 17:41:48" itemprop="dateModified" datetime="2019-10-11T17:41:48+08:00">2019-10-11</time>
+                <time title="修改时间：2019-10-11 17:53:51" itemprop="dateModified" datetime="2019-10-11T17:53:51+08:00">2019-10-11</time>
               </span>
             
           
@@ -587,7 +689,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-10 20:25:00" itemprop="dateModified" datetime="2019-10-10T20:25:00+08:00">2019-10-10</time>
+                <time title="修改时间：2019-10-12 16:33:26" itemprop="dateModified" datetime="2019-10-12T16:33:26+08:00">2019-10-12</time>
               </span>
             
           
@@ -616,7 +718,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>ThreadLocal解决多线程环境成员变量的问题，<font color="red">与线程同步机制不同，线程同步是多个线程共享同一个变量，</font><font color="green">而ThreadLocal是每一个线程床架一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程</font></p>
+          <h2 id="作用及基本介绍"><a href="#作用及基本介绍" class="headerlink" title="作用及基本介绍"></a>作用及基本介绍</h2><p>ThreadLocal解决多线程环境成员变量的问题，<font color="red">与线程同步机制不同，线程同步是多个线程共享同一个变量（用空间换时间），</font><font color="green">而ThreadLocal是每一个线程创建一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程</font></p>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -1089,7 +1191,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-09 20:36:57" itemprop="dateModified" datetime="2019-10-09T20:36:57+08:00">2019-10-09</time>
+                <time title="修改时间：2019-10-11 18:02:33" itemprop="dateModified" datetime="2019-10-11T18:02:33+08:00">2019-10-11</time>
               </span>
             
           
@@ -1130,108 +1232,6 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/10/02/Spring学习笔记/Spring-study1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/26/数据库/mysql中char，varchar/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beixichen">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/xixi.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="贝西晨的Blog呀">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/09/26/数据库/mysql中char，varchar/" class="post-title-link" itemprop="url">【MySQL】char和varchar的区别</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-09-26 16:42:03" itemprop="dateCreated datePublished" datetime="2019-09-26T16:42:03+08:00">2019-09-26</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-10 20:20:14" itemprop="dateModified" datetime="2019-10-10T20:20:14+08:00">2019-10-10</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据库/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          mysql,char,varchar
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/09/26/数据库/mysql中char，varchar/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1307,7 +1307,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

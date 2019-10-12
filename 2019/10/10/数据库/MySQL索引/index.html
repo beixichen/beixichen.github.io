@@ -61,7 +61,7 @@
 <meta property="og:site_name" content="贝西晨的Blog呀">
 <meta property="og:description" content="索引InnoDB默认索引B+树，自适应hash索引除了叶子节点，其他都是索引字段，叶子节点存储真实数据密集索引 ：一个索引项(1001)对应一个数据记录(1001)">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-10T12:21:54.730Z">
+<meta property="og:updated_time" content="2019-10-11T15:25:37.591Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【MySQL】索引，锁，InnoDB特点">
 <meta name="twitter:description" content="索引InnoDB默认索引B+树，自适应hash索引除了叶子节点，其他都是索引字段，叶子节点存储真实数据密集索引 ：一个索引项(1001)对应一个数据记录(1001)">
@@ -287,11 +287,19 @@
                 
               
 
-              <time title="创建时间：2019-10-10 19:00:21 / 修改时间：20:21:54" itemprop="dateCreated datePublished" datetime="2019-10-10T19:00:21+08:00">2019-10-10</time>
+              <time title="创建时间：2019-10-10 19:00:21" itemprop="dateCreated datePublished" datetime="2019-10-10T19:00:21+08:00">2019-10-10</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-11 23:25:37" itemprop="dateModified" datetime="2019-10-11T23:25:37+08:00">2019-10-11</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -327,11 +335,13 @@
 <p>非聚集索引 ： 和磁盘物理位置顺序不同(普通，唯一，全文，每个索引互相独立，给字段创建一个索引，字段中的数据就会被复制一份，生成该字段索引，查找的时候先通过该索引找到对应的主键索引，然后再通过主键索引找到对应的值)</p>
 <p>覆盖(复合)索引，多个字段组成的索引，若查询时是查找这些字段的值，则不需要使用主键索引</p>
 <p>— 找到不到笔记了，后续再加</p>
-<h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><p>InnoDB支持行锁和表锁，MyISAM支持表锁</p>
-<p>① Serializable (串行化)：可避免脏读、不可重复读、幻读的发生。</p>
-<p>② Repeatable read (可重复读)：可避免脏读、不可重复读的发生。</p>
-<p>③ Read committed (读已提交)：可避免脏读的发生。</p>
-<p>④ Read uncommitted (读未提交)：最低级别，任何情况都无法保证。</p>
+<h2 id="数据库事务"><a href="#数据库事务" class="headerlink" title="数据库事务"></a>数据库事务</h2><p>① Serializable (串行化)：可避免脏读、不可重复读、幻读的发生。<br>② Repeatable read (可重复读)：可避免脏读、不可重复读的发生。<br>③ Read committed (读已提交)：可避免脏读的发生。<br>④ Read uncommitted (读未提交)：最低级别，任何情况都无法保证。</p>
+<p>脏读 ：表示一个事务能够读取另一个事务中还未提交的数据。比如，某个事务尝试插入记录 A，此时该事务还未提交，然后另一个事务尝试读取到了记录 A。</p>
+<p>不可重复读 ：是指在一个事务内，多次读同一数据。</p>
+<p>幻读 ：指同一个事务内多次查询返回的结果集不一样。比如同一个事务 A 第一次查询时候有 n 条记录，但是第二次同等条件下查询却有 n+1 条记录，这就好像产生了幻觉。发生幻读的原因也是另外一个事务新增或者删除或者修改了第一个事务结果集里面的数据，同一个记录的数据内容被修改了，所有数据行的记录就变多或者变少了。</p>
+<h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><p>InnoDB支持行锁和表锁，MyISAM支持表锁<br>表级锁：开销小，加锁快，不会出现死锁。锁定粒度大，发生锁冲突的概率最高，并发量最低。<br>行级锁：开销大，加锁慢，会出现死锁。锁力度小，发生锁冲突的概率小，并发度最高。</p>
+<p>乐观锁：每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是在提交更新的时候会判断一下在此期间别人有没有去更新这个数据。</p>
+<p>悲观锁：每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会阻止，直到这个锁被释放。</p>
 <h2 id="InnoDB特点"><a href="#InnoDB特点" class="headerlink" title="InnoDB特点"></a>InnoDB特点</h2><h3 id="自适应hash索引"><a href="#自适应hash索引" class="headerlink" title="自适应hash索引"></a>自适应hash索引</h3><p>会监控对二级索引的查找，如果发现某一个二级索引被频繁访问，二级索引就成为一个热数据。</p>
 <p>经常访问的二级索引数据会自动被生成到Hash索引里面去，自适应哈希索引通过缓冲池的B+树构造。不是整个表都建立索引，是对某些页建立索引</p>
 <p>限制：</p>
@@ -342,8 +352,7 @@
 <li>有冲突可能</li>
 <li>人为无法干预</li>
 </ol>
-<p>###　两次写（提高可靠性）：</p>
-<p>问题点：部分写失效，当数据正在从内存向磁盘中写一个数据页时，数据库宕机，导致只写入了部分数据，部分数据丢失。页本身已经损坏，重做日志无效，重做日志是对页的物理修改。，</p>
+<h3 id="两次写（提高可靠性）："><a href="#两次写（提高可靠性）：" class="headerlink" title="两次写（提高可靠性）："></a>两次写（提高可靠性）：</h3><p>问题点：部分写失效，当数据正在从内存向磁盘中写一个数据页时，数据库宕机，导致只写入了部分数据，部分数据丢失。页本身已经损坏，重做日志无效，重做日志是对页的物理修改。，</p>
 <p>解决方案：两次写</p>
 <p>添加</p>
 <p>内存两次写缓冲  2MB</p>
@@ -363,6 +372,7 @@
 <li>数据库宕机的之后，恢复时间变长</li>
 <li>写密集情况下 ，插入缓冲会占用过多的缓冲池内存</li>
 </ol>
+<h2 id="InnoDB和MyIASM区别"><a href="#InnoDB和MyIASM区别" class="headerlink" title="InnoDB和MyIASM区别"></a>InnoDB和MyIASM区别</h2><p>InnoDB支持行锁和表锁，外键， 事务，不支持全文检索，锁的粒度小，适合并发度高的情况<br>MyIASM支持表锁，不支持事务，外键，在写操作是会锁定整张表</p>
 
     </div>
 
@@ -397,6 +407,10 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/10/11/AQS/" rel="prev" title="【Java】AbstractQueuedSynchronizer队列同步器(AQS)">
+                  【Java】AbstractQueuedSynchronizer队列同步器(AQS) <i class="fa fa-chevron-right"></i>
+                </a>
               
             </div>
           </div>
@@ -445,7 +459,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">2.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB特点"><span class="nav-number">3.</span> <span class="nav-text">InnoDB特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自适应hash索引"><span class="nav-number">3.1.</span> <span class="nav-text">自适应hash索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入缓冲机制-提高写性能"><span class="nav-number">3.2.</span> <span class="nav-text">插入缓冲机制(提高写性能)</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库事务"><span class="nav-number">2.</span> <span class="nav-text">数据库事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">3.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB特点"><span class="nav-number">4.</span> <span class="nav-text">InnoDB特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自适应hash索引"><span class="nav-number">4.1.</span> <span class="nav-text">自适应hash索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两次写（提高可靠性）："><span class="nav-number">4.2.</span> <span class="nav-text">两次写（提高可靠性）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入缓冲机制-提高写性能"><span class="nav-number">4.3.</span> <span class="nav-text">插入缓冲机制(提高写性能)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB和MyIASM区别"><span class="nav-number">5.</span> <span class="nav-text">InnoDB和MyIASM区别</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -463,7 +477,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
