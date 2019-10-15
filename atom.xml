@@ -61,6 +61,28 @@
   </entry>
   
   <entry>
+    <title>【Java】AQS(AbstractQueuedSynchronizer)队列同步器</title>
+    <link href="http://yoursite.com/2019/10/11/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/AQS/"/>
+    <id>http://yoursite.com/2019/10/11/Java基本知识/AQS/</id>
+    <published>2019-10-11T10:11:45.000Z</published>
+    <updated>2019-10-15T12:16:23.008Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="AQS-AbstractQueuedSynchronizer队列同步器"><a href="#AQS-AbstractQueuedSynchronizer队列同步器" class="headerlink" title="AQS(AbstractQueuedSynchronizer队列同步器)"></a>AQS(AbstractQueuedSynchronizer队列同步器)</h2><p>JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。</p><a id="more"></a><p>状态控制：<br>`private volatile int state;<br>使用int类型的成员变量state来表示同步状态，当state&gt;0时表示已经获取了锁，当state = 0时表示释放了锁。<br>getState()：返回同步状态的当前值；<br>setState(int newState)：设置当前同步状态；<br>compareAndSetState(int expect, int update)：使用CAS设置当前状态，该方法能够保证状态设置的原子性；</p><h3 id="AQS内的CLH同步队列"><a href="#AQS内的CLH同步队列" class="headerlink" title="AQS内的CLH同步队列"></a>AQS内的CLH同步队列</h3><p>对同步状态的获取和释放<br>FIFO的双向队列，AQS依赖它来完成同步状态的管理，当前线程如果获取同步状态失败时，AQS则会将当前线程已经等待状态等信息构造成一个节点（Node）并将其加入到CLH同步队列，同时会阻塞当前线程，当同步状态释放时，会把首节点唤醒（公平锁），使其再次尝试获取同步状态。</p><h3 id="AQS使用的LockSupport"><a href="#AQS使用的LockSupport" class="headerlink" title="AQS使用的LockSupport"></a>AQS使用的LockSupport</h3><p>对线程的阻塞和唤醒<br>LockSupport 不可重入，一个线程连续两次调用park()，将会产生死锁，一直阻塞<br>park()：阻塞线程，<br>unpark()：唤醒线程</p><p>参考链接<br><a href="http://cmsblogs.com/?p=2174" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之AQS</a><br><a href="http://cmsblogs.com/?p=2197" target="_blank" rel="noopener">J.U.C之AQS：同步状态的获取与释放</a><br><a href="https://blog.csdn.net/aitangyong/article/details/38373137?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">LockSupport的park和unpark的基本使用,以及对线程中断的响应性</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;AQS-AbstractQueuedSynchronizer队列同步器&quot;&gt;&lt;a href=&quot;#AQS-AbstractQueuedSynchronizer队列同步器&quot; class=&quot;headerlink&quot; title=&quot;AQS(AbstractQueuedSynchronizer队列同步器)&quot;&gt;&lt;/a&gt;AQS(AbstractQueuedSynchronizer队列同步器)&lt;/h2&gt;&lt;p&gt;JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
     <title>【MySQL】索引，锁，InnoDB特点</title>
     <link href="http://yoursite.com/2019/10/10/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E7%B4%A2%E5%BC%95/"/>
     <id>http://yoursite.com/2019/10/10/数据库/MySQL索引/</id>
