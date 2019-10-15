@@ -56,14 +56,14 @@
   <meta name="description" content="Redis性能好，对一些结果变化不频繁的结果，存入缓存，加快请求响应高并发进行削峰，减少同一时间对数据库的请求数量，防止数据库崩溃">
 <meta name="keywords" content="Redis">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【Redis】Redis内存淘汰机制、缓存问题及解决、持久化方案">
+<meta property="og:title" content="【Redis】内存淘汰机制、缓存问题及解决、持久化方案">
 <meta property="og:url" content="http://yoursite.com/2019/10/15/数据库/redis-study1/index.html">
 <meta property="og:site_name" content="贝西晨的Blog呀">
 <meta property="og:description" content="Redis性能好，对一些结果变化不频繁的结果，存入缓存，加快请求响应高并发进行削峰，减少同一时间对数据库的请求数量，防止数据库崩溃">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-15T08:50:35.681Z">
+<meta property="og:updated_time" content="2019-10-15T10:12:20.436Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【Redis】Redis内存淘汰机制、缓存问题及解决、持久化方案">
+<meta name="twitter:title" content="【Redis】内存淘汰机制、缓存问题及解决、持久化方案">
 <meta name="twitter:description" content="Redis性能好，对一些结果变化不频繁的结果，存入缓存，加快请求响应高并发进行削峰，减少同一时间对数据库的请求数量，防止数据库崩溃">
   <link rel="canonical" href="http://yoursite.com/2019/10/15/数据库/redis-study1/">
 
@@ -79,7 +79,7 @@
   };
 </script>
 
-  <title>【Redis】Redis内存淘汰机制、缓存问题及解决、持久化方案 | 贝西晨的Blog呀</title>
+  <title>【Redis】内存淘汰机制、缓存问题及解决、持久化方案 | 贝西晨的Blog呀</title>
   
 
 
@@ -271,7 +271,7 @@
       <meta itemprop="name" content="贝西晨的Blog呀">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">【Redis】Redis内存淘汰机制、缓存问题及解决、持久化方案
+        <h1 class="post-title" itemprop="name headline">【Redis】内存淘汰机制、缓存问题及解决、持久化方案
 
           
         </h1>
@@ -287,7 +287,7 @@
                 
               
 
-              <time title="创建时间：2019-10-15 16:47:48 / 修改时间：16:50:35" itemprop="dateCreated datePublished" datetime="2019-10-15T16:47:48+08:00">2019-10-15</time>
+              <time title="创建时间：2019-10-15 16:47:48 / 修改时间：18:12:20" itemprop="dateCreated datePublished" datetime="2019-10-15T16:47:48+08:00">2019-10-15</time>
             </span>
           
             
@@ -347,8 +347,8 @@
 <li>对内存设置淘汰策略</li>
 <li>使用redis集群</li>
 </ol>
-</blockquote>
 <p>redis采用的是定期删除+惰性删除策略。<br>为什么不用定时删除策略?<br>定时删除,用一个定时器来负责监视key,过期则自动删除。虽然内存及时释放，但是十分消耗CPU资源。在大并发请求下，CPU要将时间应用在处理请求，而不是删除key,因此没有采用这一策略.<br>定期删除+惰性删除是如何工作的呢?<br>定期删除，redis默认每个100ms检查，是否有过期的key,有过期key则删除。需要说明的是，redis不是每个100ms将所有的key检查一次，而是随机抽取进行检查(如果每隔100ms,全部key进行检查，redis岂不是卡死)。因此，如果只采用定期删除策略，会导致很多key到时间没有删除。<br>于是，惰性删除派上用场。也就是说在你获取某个key的时候，redis会检查一下，这个key如果设置了过期时间那么是否过期了？如果过期了此时就会删除。<br>采用定期删除+惰性删除就没其他问题了么?<br>不是的，如果定期删除没删除key。然后你也没即时去请求key，也就是说惰性删除也没生效。这样，redis的内存会越来越高。那么就应该采用内存淘汰机制。<br>在redis.conf中有一行配置<br>` maxmemory-policy volatile-lru<br>该配置就是配内存淘汰策略的(什么，你没配过？好好反省一下自己)<br>1）noeviction：当内存不足以容纳新写入数据时，新写入操作会报错。应该没人用吧。<br>2）allkeys-lru：当内存不足以容纳新写入数据时，在键空间中，移除最近最少使用的key。推荐使用，目前项目在用这种。<br>3）allkeys-random：当内存不足以容纳新写入数据时，在键空间中，随机移除某个key。应该也没人用吧，你不删最少使用Key,去随机删。<br>4）volatile-lru：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，移除最近最少使用的key。这种情况一般是把redis既当缓存，又做持久化存储的时候才用。不推荐<br>5）volatile-random：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，随机移除某个key。依然不推荐<br>6）volatile-ttl：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，有更早过期时间的key优先移除。不推荐<br>ps：如果没有设置 expire 的key, 不满足先决条件(prerequisites); 那么 volatile-lru, volatile-random 和 volatile-ttl 策略的行为, 和 noeviction(不删除) 基本上一致。</p>
+</blockquote>
 <h2 id="使用缓存的缺点"><a href="#使用缓存的缺点" class="headerlink" title="使用缓存的缺点"></a>使用缓存的缺点</h2><blockquote>
 <ol>
 <li>缓存和数据库双写一致性问题</li>
@@ -393,7 +393,7 @@
 <li>AOF使用日志记录所有的写操作，在服务器启动时，通过执行这些命令还原数据库。<br>AOF的持久化更加完整，安全，默认每秒钟fsync一次，出现故障时可使用redis-check-aof进行问题修复，并且自己可以对aof文件进行重写<br>RDB可能会丢失数据，但是体积更小，保存某个时间点的所有数据，进行大数据集恢复时速度要快<br>一般两种方式同时使用，在同时使用时，优先使用AOF进行数据集的恢复</li>
 </ol>
 </blockquote>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.cnblogs.com/rjzheng/p/9096228.html" target="_blank" rel="noopener">分布式之redis复习精讲</a><br><a href="https://mp.weixin.qq.com/s__biz=MjM5ODYxMDA5OQ==&amp;mid=404308725&amp;idx=1&amp;sn=1a25ce76dd1956014ceb8a011855268e&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">主从DB与cache一致性</a><br><a href="https://www.cnblogs.com/haifeiWu/p/9440988.html#autoid-8-0-0" target="_blank" rel="noopener">Redis协议规范（译文）</a><br><a href="http://www.redis.cn/topics/persistence.html" target="_blank" rel="noopener">Redis官方持久化</a><br><a href="https://segmentfault.com/a/1190000014262882" target="_blank" rel="noopener">Redis使用中存在的问题</a></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.cnblogs.com/rjzheng/p/9096228.html" target="_blank" rel="noopener">分布式之redis复习精讲</a><br><a href="https://mp.weixin.qq.com/s__biz=MjM5ODYxMDA5OQ==&amp;mid=404308725&amp;idx=1&amp;sn=1a25ce76dd1956014ceb8a011855268e&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">主从DB与cache一致性</a><br><a href="https://www.cnblogs.com/haifeiWu/p/9440988.html#autoid-8-0-0" target="_blank" rel="noopener">Redis协议规范（译文）</a><br><a href="http://www.redis.cn/topics/persistence.html" target="_blank" rel="noopener">Redis官方持久化</a><br><a href="https://segmentfault.com/a/1190000014262882" target="_blank" rel="noopener">Redis使用中存在的问题</a><br><a href="https://coolshell.cn/articles/17416.html" target="_blank" rel="noopener">缓存更新套路</a></p>
 
     </div>
 
@@ -428,6 +428,10 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/10/15/Java基本知识/volatile/" rel="prev" title="【Java】volatile关键字解析">
+                  【Java】volatile关键字解析 <i class="fa fa-chevron-right"></i>
+                </a>
               
             </div>
           </div>
@@ -494,7 +498,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -507,7 +511,7 @@
             <a href="/categories/">
           
         
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span>
         </a>
       </div>
@@ -520,7 +524,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>

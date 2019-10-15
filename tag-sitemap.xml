@@ -3,8 +3,15 @@
 
 
     <url>
+        <loc>http://yoursite.com/tags/Java/</loc>
+        <lastmod>2019-10-15T10:37:19.138Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
         <loc>http://yoursite.com/tags/Redis/</loc>
-        <lastmod>2019-10-15T08:50:35.681Z</lastmod>
+        <lastmod>2019-10-15T10:12:20.436Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
@@ -12,13 +19,6 @@
     <url>
         <loc>http://yoursite.com/tags/MySQL/</loc>
         <lastmod>2019-10-15T03:15:57.463Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/tags/Java/</loc>
-        <lastmod>2019-10-12T10:40:22.186Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
