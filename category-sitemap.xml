@@ -8,15 +8,22 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/categories/Java/</loc>
-        <lastmod>2019-10-12T08:38:57.763Z</lastmod>
+        <loc>http://yoursite.com/categories/Redis/</loc>
+        <lastmod>2019-10-15T08:50:35.681Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
-        <lastmod>2019-10-11T15:25:37.591Z</lastmod>
+        <lastmod>2019-10-15T03:15:57.463Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/categories/Java/</loc>
+        <lastmod>2019-10-12T10:40:22.186Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

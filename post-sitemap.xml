@@ -8,16 +8,8 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/</loc>
-        <lastmod>2019-10-12T08:38:57.763Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadLocal/</loc>
-        <lastmod>2019-10-12T08:33:26.461Z</lastmod>
+        <loc>http://yoursite.com/2019/10/15/%E6%95%B0%E6%8D%AE%E5%BA%93/redis-study1/</loc>
+        <lastmod>2019-10-15T08:50:35.681Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -25,7 +17,23 @@
 
     <url>
         <loc>http://yoursite.com/2019/10/10/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E7%B4%A2%E5%BC%95/</loc>
-        <lastmod>2019-10-11T15:25:37.591Z</lastmod>
+        <lastmod>2019-10-15T03:15:57.463Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadLocal/</loc>
+        <lastmod>2019-10-12T10:40:22.186Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/</loc>
+        <lastmod>2019-10-12T08:38:57.763Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
