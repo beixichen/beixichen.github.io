@@ -8,6 +8,14 @@
     </url>
 
     <url>
+        <loc>http://yoursite.com/2019/10/15/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/JavaClassLoader/</loc>
+        <lastmod>2019-10-15T13:47:01.615Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://yoursite.com/2019/10/11/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/AQS/</loc>
         <lastmod>2019-10-15T12:16:23.008Z</lastmod>
         <changefreq>weekly</changefreq>
