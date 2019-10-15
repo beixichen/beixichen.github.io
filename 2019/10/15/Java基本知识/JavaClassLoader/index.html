@@ -62,7 +62,7 @@
 <meta property="og:description" content="类装载工作由ClassLoder和其子类负责。JVM在运行时会产生三个ClassLoader：(BootStrap)根装载器，ExtClassLoader(扩展类装载器)和AppClassLoader，其中根装载器不是ClassLoader的子类，由C++编写，因此在java中看不到他，负责装载JRE的核心类库。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/ClassLoaderpng.png">
-<meta property="og:updated_time" content="2019-10-15T13:47:01.615Z">
+<meta property="og:updated_time" content="2019-10-15T14:06:30.752Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java】类加载机制，全盘负责，双亲委派，类初始化过程">
 <meta name="twitter:description" content="类装载工作由ClassLoder和其子类负责。JVM在运行时会产生三个ClassLoader：(BootStrap)根装载器，ExtClassLoader(扩展类装载器)和AppClassLoader，其中根装载器不是ClassLoader的子类，由C++编写，因此在java中看不到他，负责装载JRE的核心类库。">
@@ -289,7 +289,7 @@
                 
               
 
-              <time title="创建时间：2019-10-15 21:29:14 / 修改时间：21:47:01" itemprop="dateCreated datePublished" datetime="2019-10-15T21:29:14+08:00">2019-10-15</time>
+              <time title="创建时间：2019-10-15 21:29:14 / 修改时间：22:06:30" itemprop="dateCreated datePublished" datetime="2019-10-15T21:29:14+08:00">2019-10-15</time>
             </span>
           
             
@@ -321,7 +321,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>类装载工作由ClassLoder和其子类负责。JVM在运行时会产生三个ClassLoader：(BootStrap)根装载器，ExtClassLoader(扩展类装载器)和AppClassLoader，其中根装载器不是ClassLoader的子类，由C++编写，因此在java中看不到他，负责装载JRE的核心类库。<br><img src="/images/ClassLoaderpng.png" alt="ClassLoader"></p><a id="more"></a>
+        <p>类装载工作由ClassLoder和其子类负责。JVM在运行时会产生三个ClassLoader：(BootStrap)根装载器，ExtClassLoader(扩展类装载器)和AppClassLoader，其中根装载器不是ClassLoader的子类，由C++编写，因此在java中看不到他，负责装载JRE的核心类库。<a id="more"></a><br><img src="/images/ClassLoaderpng.png" alt="ClassLoader"></p>
 <h2 id="全盘负责委托"><a href="#全盘负责委托" class="headerlink" title="全盘负责委托"></a>全盘负责委托</h2><p>Java装载类使用“全盘负责委托机制”指ClassLoader装载一个类时，除非显示的使用另一个ClassLoader，否则该类所依赖和引用的类也由这个ClassLoader载入。</p>
 <h2 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h2><p>如果一个类加载器收到了类加载的请求，它首先不会自己去加载这个类，而是把这个请求委派给父类加载器去完成，每一层的类加载器都是如此，这样所有的加载请求都会被传送到顶层的启动类加载器中，只有当父加载无法完成加载请求（它的搜索范围中没找到所需的类）时，子加载器才会尝试去加载类。<br>好处：保证任何的类加载器最终得到的是同一个Object对象</p>
 <h3 id="双亲委派加载Class详细过程："><a href="#双亲委派加载Class详细过程：" class="headerlink" title="双亲委派加载Class详细过程："></a>双亲委派加载Class详细过程：</h3><blockquote>
