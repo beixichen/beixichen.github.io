@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-10-15T14:06:30.752Z</updated>
+  <updated>2019-10-16T01:25:09.035Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>springboot</title>
+    <link href="http://yoursite.com/2019/10/16/springboot/"/>
+    <id>http://yoursite.com/2019/10/16/springboot/</id>
+    <published>2019-10-16T01:25:09.000Z</published>
+    <updated>2019-10-16T01:25:09.035Z</updated>
+    
+    <content type="html"><![CDATA[<p>Spring Boot的四大神器</p><blockquote><ol><li>auto-configuration 自动配置</li><li>starter pom更易管理，减少手动添加依赖项的数量</li><li>cli 通过命令行添加参数，运行groovy</li><li>actuator 应用系统的监控和管理的集成功能，可以查看应用配置的详细信息，例如自动化配置信息、创建的Spring beans信息、系统环境变量的配置信以及Web请求的详细信息等</li></ol></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Spring Boot的四大神器&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;auto-configuration 自动配置&lt;/li&gt;
+&lt;li&gt;starter pom更易管理，减少手动添加依赖项的数量&lt;/li&gt;
+&lt;li&gt;cli 通过命令行添加参数，运行groovy&lt;
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>【Java】类加载机制，全盘负责，双亲委派，类初始化过程</title>

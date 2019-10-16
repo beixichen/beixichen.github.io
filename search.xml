@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[springboot]]></title>
+    <url>%2F2019%2F10%2F16%2Fspringboot%2F</url>
+    <content type="text"><![CDATA[Spring Boot的四大神器 auto-configuration 自动配置 starter pom更易管理，减少手动添加依赖项的数量 cli 通过命令行添加参数，运行groovy actuator 应用系统的监控和管理的集成功能，可以查看应用配置的详细信息，例如自动化配置信息、创建的Spring beans信息、系统环境变量的配置信以及Web请求的详细信息等]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[【Java】类加载机制，全盘负责，双亲委派，类初始化过程]]></title>
     <url>%2F2019%2F10%2F15%2FJava%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%2FJavaClassLoader%2F</url>
     <content type="text"><![CDATA[类装载工作由ClassLoder和其子类负责。JVM在运行时会产生三个ClassLoader：(BootStrap)根装载器，ExtClassLoader(扩展类装载器)和AppClassLoader，其中根装载器不是ClassLoader的子类，由C++编写，因此在java中看不到他，负责装载JRE的核心类库。 全盘负责委托Java装载类使用“全盘负责委托机制”指ClassLoader装载一个类时，除非显示的使用另一个ClassLoader，否则该类所依赖和引用的类也由这个ClassLoader载入。 双亲委派模型如果一个类加载器收到了类加载的请求，它首先不会自己去加载这个类，而是把这个请求委派给父类加载器去完成，每一层的类加载器都是如此，这样所有的加载请求都会被传送到顶层的启动类加载器中，只有当父加载无法完成加载请求（它的搜索范围中没找到所需的类）时，子加载器才会尝试去加载类。好处：保证任何的类加载器最终得到的是同一个Object对象 双亲委派加载Class详细过程： 源ClassLoader先判断该Class是否已加载，如果已加载，则返回Class对象；如果没有则委托给父类加载器。 父类加载器判断是否加载过该Class，如果已加载，则返回Class对象；如果没有则委托给祖父类加载器。 依此类推，直到始祖类加载器（引用类加载器）。 始祖类加载器判断是否加载过该Class，如果已加载，则返回Class对象；如果没有则尝试从其对应的类路径下寻找class字节码文件并载入。如果载入成功，则返回Class对象；如果载入失败，则委托给始祖类加载器的子类加载器。 始祖类加载器的子类加载器尝试从其对应的类路径下寻找class字节码文件并载入。如果载入成功，则返回Class对象；如果载入失败，则委托给始祖类加载器的孙类加载器。 依此类推，直到源ClassLoader。 源ClassLoader尝试从其对应的类路径下寻找class字节码文件并载入。如果载入成功，则返回Class对象；如果载入失败，源ClassLoader不会再委托其子类加载器，而是抛出异常。 Java类加载过程类装载器把一个类装入Java虚拟机中，要经过三个步骤来完成： ①编译加载（以二进制形式来生成Class对象）②链接（又分为验证、准备和解析） 校验：检查导入类或接口的二进制数据的正确性； 准备：给类的静态变量分配并初始化存储空间； 解析：虚拟机将常量池中的符号引用替换成直接引用的过程。符号引用就理解为一个 标示，而在直接引用直接指向内存中的地址；③初始化（激活类的静态变量和静态代码块、初始化Java代码） Java类初始化过程 先初始化静态成员，静态代码块，父类空白（构造）代码块，然后调用父类构造器，再初始化父类非静态成员，最后调用自身构造器，自身空白（构造）代码块，自身非静态成员。1.父类静态变量、父类静态代码块 static{ }2.子类静态变量、子类静态代码块 static{ }3.父类字段初始化 ，如private String name =”base”4.父类非静态代码块（空白代码块） {} 5.父类构造方法6.子类字段初始化，如private String name=”sub”;7.子类非静态代码块{}8 子类构造方法 定义自已的类加载器分为两步： 1、继承java.lang.ClassLoader2、重写父类的findClass方法 为什么偏偏只重写findClass方法？ 因为JDK已经在loadClass方法中帮我们实现了ClassLoader搜索类的算法，当在loadClass方法中搜索不到类时，loadClass方法就会调用findClass方法来搜索类，所以我们只需重写该方法即可。如没有特殊的要求，一般不建议重写loadClass搜索类的算法。 如果想保持双亲委派模型，就应该重写findClass(name)方法；如果想破坏双亲委派模型，可以重写loadClass(name)方法。]]></content>

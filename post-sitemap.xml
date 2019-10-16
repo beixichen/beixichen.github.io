@@ -8,6 +8,14 @@
     </url>
 
     <url>
+        <loc>http://yoursite.com/2019/10/16/springboot/</loc>
+        <lastmod>2019-10-16T01:25:09.035Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://yoursite.com/2019/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E7%B4%A2%E5%BC%95/</loc>
         <lastmod>2019-10-16T01:16:48.418Z</lastmod>
         <changefreq>weekly</changefreq>
