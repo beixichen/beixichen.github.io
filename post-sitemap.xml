@@ -8,7 +8,23 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/15/JavaClassLoader/</loc>
+        <loc>http://yoursite.com/2019/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E7%B4%A2%E5%BC%95/</loc>
+        <lastmod>2019-10-16T01:16:48.418Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/2019/09/29/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql%E4%B8%ADchar%EF%BC%8Cvarchar/</loc>
+        <lastmod>2019-10-16T01:16:14.779Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/2019/10/15/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/JavaClassLoader/</loc>
         <lastmod>2019-10-15T14:06:30.752Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -16,7 +32,7 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/11/AQS/</loc>
+        <loc>http://yoursite.com/2019/10/11/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/AQS/</loc>
         <lastmod>2019-10-15T12:16:23.008Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -24,7 +40,7 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/15/volatile/</loc>
+        <loc>http://yoursite.com/2019/10/15/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/volatile/</loc>
         <lastmod>2019-10-15T10:37:19.138Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -40,15 +56,7 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/10/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E7%B4%A2%E5%BC%95/</loc>
-        <lastmod>2019-10-15T03:15:57.463Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/2019/10/09/ThreadLocal/</loc>
+        <loc>http://yoursite.com/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadLocal/</loc>
         <lastmod>2019-10-12T10:40:22.186Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -56,7 +64,7 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/10/Java%E5%AE%B9%E5%99%A8/</loc>
+        <loc>http://yoursite.com/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/</loc>
         <lastmod>2019-10-12T08:38:57.763Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -64,7 +72,7 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/02/Spring-study1/</loc>
+        <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/</loc>
         <lastmod>2019-10-11T10:02:33.986Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -72,7 +80,7 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/09/ThreadPool/</loc>
+        <loc>http://yoursite.com/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadPool/</loc>
         <lastmod>2019-10-11T09:53:51.555Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -88,15 +96,7 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/09/26/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql%E4%B8%ADchar%EF%BC%8Cvarchar/</loc>
-        <lastmod>2019-10-10T12:20:14.059Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/2019/10/05/Java-Serializable/</loc>
+        <loc>http://yoursite.com/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-Serializable/</loc>
         <lastmod>2019-10-10T11:24:45.414Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -104,7 +104,7 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/05/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B/</loc>
+        <loc>http://yoursite.com/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B/</loc>
         <lastmod>2019-10-05T12:09:53.209Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -112,7 +112,7 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/02/Spring-study2/</loc>
+        <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/</loc>
         <lastmod>2019-10-02T15:49:27.616Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -120,7 +120,7 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/02/proxy-study/</loc>
+        <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/proxy-study/</loc>
         <lastmod>2019-10-02T15:21:12.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>

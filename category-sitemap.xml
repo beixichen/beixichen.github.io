@@ -8,6 +8,13 @@
     </url>
 
     <url>
+        <loc>http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+        <lastmod>2019-10-16T01:16:48.418Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
         <loc>http://yoursite.com/categories/Java/</loc>
         <lastmod>2019-10-15T14:06:30.752Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -17,13 +24,6 @@
     <url>
         <loc>http://yoursite.com/categories/Redis/</loc>
         <lastmod>2019-10-15T10:12:20.436Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
-        <lastmod>2019-10-15T03:15:57.463Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

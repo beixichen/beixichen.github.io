@@ -53,14 +53,19 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="贝西晨的Blog呀">
-<meta property="og:url" content="http://yoursite.com/tags/Spring/index.html">
+  <meta name="description" content="AQS(AbstractQueuedSynchronizer队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Java】AQS(AbstractQueuedSynchronizer)队列同步器">
+<meta property="og:url" content="http://yoursite.com/2019/10/11/Java基本知识/AQS/index.html">
 <meta property="og:site_name" content="贝西晨的Blog呀">
+<meta property="og:description" content="AQS(AbstractQueuedSynchronizer队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-15T12:16:23.008Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="贝西晨的Blog呀">
-  <link rel="canonical" href="http://yoursite.com/tags/Spring/">
+<meta name="twitter:title" content="【Java】AQS(AbstractQueuedSynchronizer)队列同步器">
+<meta name="twitter:description" content="AQS(AbstractQueuedSynchronizer队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
+  <link rel="canonical" href="http://yoursite.com/2019/10/11/Java基本知识/AQS/">
 
 
 <script id="page-configurations">
@@ -68,13 +73,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>标签: Spring | 贝西晨的Blog呀</title>
+  <title>【Java】AQS(AbstractQueuedSynchronizer)队列同步器 | 贝西晨的Blog呀</title>
   
 
 
@@ -210,24 +215,6 @@
 
     
 
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-  
-
 </nav>
   <div class="site-search">
     <div class="popup search-popup">
@@ -266,118 +253,136 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
   
   
   
-  <div class="post-block tag">
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1 class="collection-header">Spring<small>标签</small>
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/11/Java基本知识/AQS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beixichen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xixi.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="贝西晨的Blog呀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">【Java】AQS(AbstractQueuedSynchronizer)队列同步器
+
+          
         </h1>
-      </div>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-11 18:11:45" itemprop="dateCreated datePublished" datetime="2019-10-11T18:11:45+08:00">2019-10-11</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-15 20:16:23" itemprop="dateModified" datetime="2019-10-15T20:16:23+08:00">2019-10-15</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+        <h2 id="AQS-AbstractQueuedSynchronizer队列同步器"><a href="#AQS-AbstractQueuedSynchronizer队列同步器" class="headerlink" title="AQS(AbstractQueuedSynchronizer队列同步器)"></a>AQS(AbstractQueuedSynchronizer队列同步器)</h2><p>JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。</p><a id="more"></a>
+<p>状态控制：<br>`private volatile int state;<br>使用int类型的成员变量state来表示同步状态，当state&gt;0时表示已经获取了锁，当state = 0时表示释放了锁。<br>getState()：返回同步状态的当前值；<br>setState(int newState)：设置当前同步状态；<br>compareAndSetState(int expect, int update)：使用CAS设置当前状态，该方法能够保证状态设置的原子性；</p>
+<h3 id="AQS内的CLH同步队列"><a href="#AQS内的CLH同步队列" class="headerlink" title="AQS内的CLH同步队列"></a>AQS内的CLH同步队列</h3><p>对同步状态的获取和释放<br>FIFO的双向队列，AQS依赖它来完成同步状态的管理，当前线程如果获取同步状态失败时，AQS则会将当前线程已经等待状态等信息构造成一个节点（Node）并将其加入到CLH同步队列，同时会阻塞当前线程，当同步状态释放时，会把首节点唤醒（公平锁），使其再次尝试获取同步状态。</p>
+<h3 id="AQS使用的LockSupport"><a href="#AQS使用的LockSupport" class="headerlink" title="AQS使用的LockSupport"></a>AQS使用的LockSupport</h3><p>对线程的阻塞和唤醒<br>LockSupport 不可重入，一个线程连续两次调用park()，将会产生死锁，一直阻塞<br>park()：阻塞线程，<br>unpark()：唤醒线程</p>
+<p>参考链接<br><a href="http://cmsblogs.com/?p=2174" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之AQS</a><br><a href="http://cmsblogs.com/?p=2197" target="_blank" rel="noopener">J.U.C之AQS：同步状态的获取与释放</a><br><a href="https://blog.csdn.net/aitangyong/article/details/38373137?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">LockSupport的park和unpark的基本使用,以及对线程中断的响应性</a></p>
 
-  
-  
+    </div>
 
-  
     
-    <div class="collection-year">
-      <h1 class="collection-header">2019</h1>
-    </div>
-  
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
+    
+    
         
-          <a class="post-title-link" href="/2019/10/02/Spring学习笔记/proxy-study/" itemprop="url">
-            <span itemprop="name">【Spring学习笔记3】Spring动态代理</span>
-          </a>
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Java/" rel="tag"># Java</a>
+            
+          </div>
         
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-10-02T23:12:17+08:00"
-              content="2019-10-02">
-          10-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-  
-  
-
-  
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
         
-          <a class="post-title-link" href="/2019/10/02/Spring学习笔记/Spring-study2/" itemprop="url">
-            <span itemprop="name">【Spring学习笔记2】常用的各种注解及替代xml配置的作用</span>
-          </a>
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/10/Java基本知识/Java容器/" rel="next" title="【Java】普通容器，同步容器和并发容器">
+                  <i class="fa fa-chevron-left"></i> 【Java】普通容器，同步容器和并发容器
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/10/15/数据库/redis-study1/" rel="prev" title="【Redis】内存淘汰机制、缓存问题及解决、持久化方案">
+                  【Redis】内存淘汰机制、缓存问题及解决、持久化方案 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
         
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-10-02T21:06:40+08:00"
-              content="2019-10-02">
-          10-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-  
-  
-
-  
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/10/02/Spring学习笔记/Spring-study1/" itemprop="url">
-            <span itemprop="name">【Spring学习笔记1】IOC的创建和Bean的管理</span>
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-10-02T19:19:16+08:00"
-              content="2019-10-02">
-          10-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    </div>
+      </footer>
+    
   </div>
   
   
   
+  </article>
 
-  
-
+  </div>
 
 
           </div>
@@ -396,6 +401,11 @@
 
   <aside class="sidebar">
     <div class="sidebar-inner">
+        
+        
+        
+        
+      
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
@@ -408,6 +418,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AQS-AbstractQueuedSynchronizer队列同步器"><span class="nav-number">1.</span> <span class="nav-text">AQS(AbstractQueuedSynchronizer队列同步器)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS内的CLH同步队列"><span class="nav-number">1.1.</span> <span class="nav-text">AQS内的CLH同步队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS使用的LockSupport"><span class="nav-number">1.2.</span> <span class="nav-text">AQS使用的LockSupport</span></a></li></ol></li></ol></div>
+        
       </div>
       <!--/noindex-->
 
