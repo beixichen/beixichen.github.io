@@ -3,6 +3,13 @@
 
 
     <url>
+        <loc>http://yoursite.com/tags/SpringBoot/</loc>
+        <lastmod>2019-10-16T01:27:27.559Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
         <loc>http://yoursite.com/tags/MySQL/</loc>
         <lastmod>2019-10-16T01:16:48.418Z</lastmod>
         <changefreq>weekly</changefreq>
