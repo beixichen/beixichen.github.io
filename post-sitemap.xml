@@ -8,8 +8,16 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-index/</loc>
-        <lastmod>2019-10-16T01:44:31.023Z</lastmod>
+        <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/</loc>
+        <lastmod>2019-10-16T01:47:35.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/</loc>
+        <lastmod>2019-10-16T01:47:15.579Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -17,7 +25,15 @@
 
     <url>
         <loc>http://yoursite.com/2019/09/29/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-1/</loc>
-        <lastmod>2019-10-16T01:44:09.114Z</lastmod>
+        <lastmod>2019-10-16T01:46:38.680Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/2019/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-index/</loc>
+        <lastmod>2019-10-16T01:46:34.950Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -72,14 +88,6 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/</loc>
-        <lastmod>2019-10-11T10:02:33.986Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://yoursite.com/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadPool/</loc>
         <lastmod>2019-10-11T09:53:51.555Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -106,14 +114,6 @@
     <url>
         <loc>http://yoursite.com/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B/</loc>
         <lastmod>2019-10-05T12:09:53.209Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/</loc>
-        <lastmod>2019-10-02T15:49:27.616Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
