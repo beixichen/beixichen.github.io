@@ -53,19 +53,19 @@
   };
 </script>
 
-  <meta name="description" content="Spring Boot的四大神器   auto-configuration 自动配置 starter pom更易管理，减少手动添加依赖项的数量 cli 通过命令行添加参数，运行groovy actuator 应用系统的监控和管理的集成功能，可以查看应用配置的详细信息，例如自动化配置信息、创建的Spring beans信息、系统环境变量的配置信以及Web请求的详细信息等">
-<meta name="keywords" content="SpringBoot">
+  <meta name="description" content="mysql,char,varchar">
+<meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="springboot">
-<meta property="og:url" content="http://yoursite.com/2019/10/16/springboot/index.html">
+<meta property="og:title" content="【MySQL】char和varchar的区别">
+<meta property="og:url" content="http://yoursite.com/2019/09/29/数据库/MySQL-1/index.html">
 <meta property="og:site_name" content="贝西晨的Blog呀">
-<meta property="og:description" content="Spring Boot的四大神器   auto-configuration 自动配置 starter pom更易管理，减少手动添加依赖项的数量 cli 通过命令行添加参数，运行groovy actuator 应用系统的监控和管理的集成功能，可以查看应用配置的详细信息，例如自动化配置信息、创建的Spring beans信息、系统环境变量的配置信以及Web请求的详细信息等">
+<meta property="og:description" content="mysql,char,varchar">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-16T01:28:46.362Z">
+<meta property="og:updated_time" content="2019-10-16T01:33:29.328Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="springboot">
-<meta name="twitter:description" content="Spring Boot的四大神器   auto-configuration 自动配置 starter pom更易管理，减少手动添加依赖项的数量 cli 通过命令行添加参数，运行groovy actuator 应用系统的监控和管理的集成功能，可以查看应用配置的详细信息，例如自动化配置信息、创建的Spring beans信息、系统环境变量的配置信以及Web请求的详细信息等">
-  <link rel="canonical" href="http://yoursite.com/2019/10/16/springboot/">
+<meta name="twitter:title" content="【MySQL】char和varchar的区别">
+<meta name="twitter:description" content="mysql,char,varchar">
+  <link rel="canonical" href="http://yoursite.com/2019/09/29/数据库/MySQL-1/">
 
 
 <script id="page-configurations">
@@ -79,7 +79,7 @@
   };
 </script>
 
-  <title>springboot | 贝西晨的Blog呀</title>
+  <title>【MySQL】char和varchar的区别 | 贝西晨的Blog呀</title>
   
 
 
@@ -259,7 +259,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/16/springboot/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/29/数据库/MySQL-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beixichen">
@@ -271,7 +271,7 @@
       <meta itemprop="name" content="贝西晨的Blog呀">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">springboot
+        <h1 class="post-title" itemprop="name headline">【MySQL】char和varchar的区别
 
           
         </h1>
@@ -287,14 +287,37 @@
                 
               
 
-              <time title="创建时间：2019-10-16 09:25:09 / 修改时间：09:28:46" itemprop="dateCreated datePublished" datetime="2019-10-16T09:25:09+08:00">2019-10-16</time>
+              <time title="创建时间：2019-09-29 16:47:48" itemprop="dateCreated datePublished" datetime="2019-09-29T16:47:48+08:00">2019-09-29</time>
             </span>
           
             
 
             
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-16 09:33:29" itemprop="dateModified" datetime="2019-10-16T09:33:29+08:00">2019-10-16</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据库/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a></span>
+
+                
+                
+              
+            </span>
           
 
+          
+            <div class="post-description">mysql,char,varchar</div>
           
 
         </div>
@@ -306,15 +329,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Spring Boot的四大神器</p>
-<blockquote>
-<ol>
-<li>auto-configuration 自动配置</li>
-<li>starter pom更易管理，减少手动添加依赖项的数量</li>
-<li>cli 通过命令行添加参数，运行groovy</li>
-<li>actuator 应用系统的监控和管理的集成功能，可以查看应用配置的详细信息，例如自动化配置信息、创建的Spring beans信息、系统环境变量的配置信以及Web请求的详细信息等</li>
-</ol>
-</blockquote>
+        <h1 id="MySQL中char和varchar"><a href="#MySQL中char和varchar" class="headerlink" title="MySQL中char和varchar"></a>MySQL中char和varchar</h1><p>char长度不变，长度不足时会补空格，取出数据时也会有空格需要进行trim，存取效率要高，英文1字节，汉字2字节</p><a id="more"></a>
+<p>varchar 长度不定，如果长度不足，长度会自动转换，更节省空间，英文汉字都是2字节</p>
 
     </div>
 
@@ -330,7 +346,7 @@
           
           <div class="post-tags">
             
-              <a href="/tags/SpringBoot/" rel="tag"># SpringBoot</a>
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
             
           </div>
         
@@ -340,8 +356,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/10/15/Java基本知识/JavaClassLoader/" rel="next" title="【Java】类加载机制，全盘负责，双亲委派，类初始化过程">
-                  <i class="fa fa-chevron-left"></i> 【Java】类加载机制，全盘负责，双亲委派，类初始化过程
+                <a href="/2018/03/23/Hello-Hexo/" rel="next" title="Hello Hexo">
+                  <i class="fa fa-chevron-left"></i> Hello Hexo
                 </a>
               
             </div>
@@ -349,6 +365,10 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/10/02/Spring学习笔记/Spring-study1/" rel="prev" title="【Spring学习笔记1】IOC的创建和Bean的管理">
+                  【Spring学习笔记1】IOC的创建和Bean的管理 <i class="fa fa-chevron-right"></i>
+                </a>
               
             </div>
           </div>
@@ -397,6 +417,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL中char和varchar"><span class="nav-number">1.</span> <span class="nav-text">MySQL中char和varchar</span></a></li></ol></div>
+        
       </div>
       <!--/noindex-->
 
@@ -413,7 +435,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

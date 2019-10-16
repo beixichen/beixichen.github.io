@@ -8,24 +8,16 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/16/springboot/</loc>
-        <lastmod>2019-10-16T01:28:46.362Z</lastmod>
+        <loc>http://yoursite.com/2019/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-index/</loc>
+        <lastmod>2019-10-16T01:34:09.120Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E7%B4%A2%E5%BC%95/</loc>
-        <lastmod>2019-10-16T01:16:48.418Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/2019/09/29/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql%E4%B8%ADchar%EF%BC%8Cvarchar/</loc>
-        <lastmod>2019-10-16T01:16:14.779Z</lastmod>
+        <loc>http://yoursite.com/2019/09/29/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-1/</loc>
+        <lastmod>2019-10-16T01:33:29.328Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
