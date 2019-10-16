@@ -8,16 +8,24 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/</loc>
-        <lastmod>2019-10-16T01:51:19.364Z</lastmod>
+        <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/</loc>
+        <lastmod>2019-10-16T02:14:12.665Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
     </url>
 
     <url>
-        <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/</loc>
-        <lastmod>2019-10-16T01:51:03.617Z</lastmod>
+        <loc>http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/</loc>
+        <lastmod>2019-10-16T02:14:05.986Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/2019/10/15/%E6%95%B0%E6%8D%AE%E5%BA%93/redis-study1/</loc>
+        <lastmod>2019-10-16T02:11:09.197Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -25,7 +33,7 @@
 
     <url>
         <loc>http://yoursite.com/2019/09/29/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-1/</loc>
-        <lastmod>2019-10-16T01:46:38.680Z</lastmod>
+        <lastmod>2019-10-16T02:10:38.772Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -33,7 +41,7 @@
 
     <url>
         <loc>http://yoursite.com/2019/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-index/</loc>
-        <lastmod>2019-10-16T01:46:34.950Z</lastmod>
+        <lastmod>2019-10-16T02:10:32.219Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -58,14 +66,6 @@
     <url>
         <loc>http://yoursite.com/2019/10/15/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/volatile/</loc>
         <lastmod>2019-10-15T10:37:19.138Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/2019/10/15/%E6%95%B0%E6%8D%AE%E5%BA%93/redis-study1/</loc>
-        <lastmod>2019-10-15T10:12:20.436Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

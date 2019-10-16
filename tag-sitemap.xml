@@ -4,28 +4,28 @@
 
     <url>
         <loc>http://yoursite.com/tags/Spring/</loc>
-        <lastmod>2019-10-16T01:51:19.364Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/tags/mysql/</loc>
-        <lastmod>2019-10-16T01:46:38.680Z</lastmod>
+        <lastmod>2019-10-16T02:14:12.665Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://yoursite.com/tags/Java/</loc>
-        <lastmod>2019-10-15T14:06:30.752Z</lastmod>
+        <lastmod>2019-10-16T02:14:12.665Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://yoursite.com/tags/Redis/</loc>
-        <lastmod>2019-10-15T10:12:20.436Z</lastmod>
+        <lastmod>2019-10-16T02:11:09.197Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/MySQL/</loc>
+        <lastmod>2019-10-16T02:10:38.772Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
