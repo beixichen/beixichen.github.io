@@ -238,7 +238,7 @@
       
       <categories>
           
-          <category> 数据库 </category>
+          <category> MySQL </category>
           
       </categories>
       
@@ -350,14 +350,14 @@
       
       <categories>
           
-          <category> 数据库 </category>
+          <category> Redis </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> MySQL </tag>
+            <tag> Redis </tag>
             
         </tags>
       
