@@ -8,15 +8,8 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/categories/java/spring/</loc>
-        <lastmod>2019-10-16T01:47:35.153Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/categories/java/</loc>
-        <lastmod>2019-10-16T01:47:35.153Z</lastmod>
+        <loc>http://yoursite.com/categories/Spring/</loc>
+        <lastmod>2019-10-16T01:51:19.364Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
