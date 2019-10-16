@@ -53,19 +53,21 @@
   };
 </script>
 
-  <meta name="description" content="AQS(AbstractQueuedSynchronizer队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
+  <meta name="description" content="类装载工作由ClassLoder和其子类负责。JVM在运行时会产生三个ClassLoader：(BootStrap)根装载器，ExtClassLoader(扩展类装载器)和AppClassLoader，其中根装载器不是ClassLoader的子类，由C++编写，因此在java中看不到他，负责装载JRE的核心类库。">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【Java】AQS(AbstractQueuedSynchronizer)队列同步器">
-<meta property="og:url" content="http://yoursite.com/2019/10/11/Java基本知识/AQS/index.html">
+<meta property="og:title" content="【Java】类加载机制，全盘负责，双亲委派，类初始化过程">
+<meta property="og:url" content="http://yoursite.com/2019/10/15/JavaClassLoader/index.html">
 <meta property="og:site_name" content="贝西晨的Blog呀">
-<meta property="og:description" content="AQS(AbstractQueuedSynchronizer队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
+<meta property="og:description" content="类装载工作由ClassLoder和其子类负责。JVM在运行时会产生三个ClassLoader：(BootStrap)根装载器，ExtClassLoader(扩展类装载器)和AppClassLoader，其中根装载器不是ClassLoader的子类，由C++编写，因此在java中看不到他，负责装载JRE的核心类库。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-15T12:16:23.008Z">
+<meta property="og:image" content="http://yoursite.com/images/ClassLoaderpng.png">
+<meta property="og:updated_time" content="2019-10-15T14:06:30.752Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【Java】AQS(AbstractQueuedSynchronizer)队列同步器">
-<meta name="twitter:description" content="AQS(AbstractQueuedSynchronizer队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
-  <link rel="canonical" href="http://yoursite.com/2019/10/11/Java基本知识/AQS/">
+<meta name="twitter:title" content="【Java】类加载机制，全盘负责，双亲委派，类初始化过程">
+<meta name="twitter:description" content="类装载工作由ClassLoder和其子类负责。JVM在运行时会产生三个ClassLoader：(BootStrap)根装载器，ExtClassLoader(扩展类装载器)和AppClassLoader，其中根装载器不是ClassLoader的子类，由C++编写，因此在java中看不到他，负责装载JRE的核心类库。">
+<meta name="twitter:image" content="http://yoursite.com/images/ClassLoaderpng.png">
+  <link rel="canonical" href="http://yoursite.com/2019/10/15/JavaClassLoader/">
 
 
 <script id="page-configurations">
@@ -79,7 +81,7 @@
   };
 </script>
 
-  <title>【Java】AQS(AbstractQueuedSynchronizer)队列同步器 | 贝西晨的Blog呀</title>
+  <title>【Java】类加载机制，全盘负责，双亲委派，类初始化过程 | 贝西晨的Blog呀</title>
   
 
 
@@ -259,7 +261,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/11/Java基本知识/AQS/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/15/JavaClassLoader/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beixichen">
@@ -271,7 +273,7 @@
       <meta itemprop="name" content="贝西晨的Blog呀">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">【Java】AQS(AbstractQueuedSynchronizer)队列同步器
+        <h1 class="post-title" itemprop="name headline">【Java】类加载机制，全盘负责，双亲委派，类初始化过程
 
           
         </h1>
@@ -287,19 +289,11 @@
                 
               
 
-              <time title="创建时间：2019-10-11 18:11:45" itemprop="dateCreated datePublished" datetime="2019-10-11T18:11:45+08:00">2019-10-11</time>
+              <time title="创建时间：2019-10-15 21:29:14 / 修改时间：22:06:30" itemprop="dateCreated datePublished" datetime="2019-10-15T21:29:14+08:00">2019-10-15</time>
             </span>
           
             
 
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-15 20:16:23" itemprop="dateModified" datetime="2019-10-15T20:16:23+08:00">2019-10-15</time>
-              </span>
             
           
             <span class="post-meta-item">
@@ -327,11 +321,34 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="AQS-AbstractQueuedSynchronizer队列同步器"><a href="#AQS-AbstractQueuedSynchronizer队列同步器" class="headerlink" title="AQS(AbstractQueuedSynchronizer队列同步器)"></a>AQS(AbstractQueuedSynchronizer队列同步器)</h2><p>JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。</p><a id="more"></a>
-<p>状态控制：<br>`private volatile int state;<br>使用int类型的成员变量state来表示同步状态，当state&gt;0时表示已经获取了锁，当state = 0时表示释放了锁。<br>getState()：返回同步状态的当前值；<br>setState(int newState)：设置当前同步状态；<br>compareAndSetState(int expect, int update)：使用CAS设置当前状态，该方法能够保证状态设置的原子性；</p>
-<h3 id="AQS内的CLH同步队列"><a href="#AQS内的CLH同步队列" class="headerlink" title="AQS内的CLH同步队列"></a>AQS内的CLH同步队列</h3><p>对同步状态的获取和释放<br>FIFO的双向队列，AQS依赖它来完成同步状态的管理，当前线程如果获取同步状态失败时，AQS则会将当前线程已经等待状态等信息构造成一个节点（Node）并将其加入到CLH同步队列，同时会阻塞当前线程，当同步状态释放时，会把首节点唤醒（公平锁），使其再次尝试获取同步状态。</p>
-<h3 id="AQS使用的LockSupport"><a href="#AQS使用的LockSupport" class="headerlink" title="AQS使用的LockSupport"></a>AQS使用的LockSupport</h3><p>对线程的阻塞和唤醒<br>LockSupport 不可重入，一个线程连续两次调用park()，将会产生死锁，一直阻塞<br>park()：阻塞线程，<br>unpark()：唤醒线程</p>
-<p>参考链接<br><a href="http://cmsblogs.com/?p=2174" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之AQS</a><br><a href="http://cmsblogs.com/?p=2197" target="_blank" rel="noopener">J.U.C之AQS：同步状态的获取与释放</a><br><a href="https://blog.csdn.net/aitangyong/article/details/38373137?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">LockSupport的park和unpark的基本使用,以及对线程中断的响应性</a></p>
+        <p>类装载工作由ClassLoder和其子类负责。JVM在运行时会产生三个ClassLoader：(BootStrap)根装载器，ExtClassLoader(扩展类装载器)和AppClassLoader，其中根装载器不是ClassLoader的子类，由C++编写，因此在java中看不到他，负责装载JRE的核心类库。<a id="more"></a><br><img src="/images/ClassLoaderpng.png" alt="ClassLoader"></p>
+<h2 id="全盘负责委托"><a href="#全盘负责委托" class="headerlink" title="全盘负责委托"></a>全盘负责委托</h2><p>Java装载类使用“全盘负责委托机制”指ClassLoader装载一个类时，除非显示的使用另一个ClassLoader，否则该类所依赖和引用的类也由这个ClassLoader载入。</p>
+<h2 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h2><p>如果一个类加载器收到了类加载的请求，它首先不会自己去加载这个类，而是把这个请求委派给父类加载器去完成，每一层的类加载器都是如此，这样所有的加载请求都会被传送到顶层的启动类加载器中，只有当父加载无法完成加载请求（它的搜索范围中没找到所需的类）时，子加载器才会尝试去加载类。<br>好处：保证任何的类加载器最终得到的是同一个Object对象</p>
+<h3 id="双亲委派加载Class详细过程："><a href="#双亲委派加载Class详细过程：" class="headerlink" title="双亲委派加载Class详细过程："></a>双亲委派加载Class详细过程：</h3><blockquote>
+<ol>
+<li>源ClassLoader先判断该Class是否已加载，如果已加载，则返回Class对象；如果没有则委托给父类加载器。</li>
+<li>父类加载器判断是否加载过该Class，如果已加载，则返回Class对象；如果没有则委托给祖父类加载器。</li>
+<li>依此类推，直到始祖类加载器（引用类加载器）。</li>
+<li>始祖类加载器判断是否加载过该Class，如果已加载，则返回Class对象；如果没有则尝试从其对应的类路径下寻找class字节码文件并载入。如果载入成功，则返回Class对象；如果载入失败，则委托给始祖类加载器的子类加载器。</li>
+<li>始祖类加载器的子类加载器尝试从其对应的类路径下寻找class字节码文件并载入。如果载入成功，则返回Class对象；如果载入失败，则委托给始祖类加载器的孙类加载器。</li>
+<li>依此类推，直到源ClassLoader。</li>
+<li>源ClassLoader尝试从其对应的类路径下寻找class字节码文件并载入。如果载入成功，则返回Class对象；如果载入失败，源ClassLoader不会再委托其子类加载器，而是抛出异常。</li>
+</ol>
+</blockquote>
+<h2 id="Java类加载过程"><a href="#Java类加载过程" class="headerlink" title="Java类加载过程"></a>Java类加载过程</h2><p>类装载器把一个类装入Java虚拟机中，要经过三个步骤来完成： </p>
+<blockquote>
+<p>①编译加载（以二进制形式来生成Class对象）<br>②链接（又分为验证、准备和解析）<br>       校验：检查导入类或接口的二进制数据的正确性；<br>       准备：给类的静态变量分配并初始化存储空间；<br>       解析：虚拟机将常量池中的符号引用替换成直接引用的过程。符号引用就理解为一个                    标示，而在直接引用直接指向内存中的地址；<br>③初始化（激活类的静态变量和静态代码块、初始化Java代码）</p>
+</blockquote>
+<h2 id="Java类初始化过程"><a href="#Java类初始化过程" class="headerlink" title="Java类初始化过程"></a>Java类初始化过程</h2><blockquote>
+<p>先初始化静态成员，静态代码块，父类空白（构造）代码块，然后调用父类构造器，再初始化父类非静态成员，最后调用自身构造器，自身空白（构造）代码块，自身非静态成员。<br>1.父类静态变量、父类静态代码块 static{ }<br>2.子类静态变量、子类静态代码块 static{ }<br>3.父类字段初始化 ，如private String name =”base”<br>4.父类非静态代码块（空白代码块） {}                                                                                                 5.父类构造方法<br>6.子类字段初始化，如private String name=”sub”;<br>7.子类非静态代码块{}<br>8 子类构造方法</p>
+</blockquote>
+<h2 id="定义自已的类加载器"><a href="#定义自已的类加载器" class="headerlink" title="定义自已的类加载器"></a>定义自已的类加载器</h2><p>分为两步：</p>
+<blockquote>
+<p>1、继承java.lang.ClassLoader<br>2、重写父类的findClass方法</p>
+</blockquote>
+<p>为什么偏偏只重写findClass方法？</p>
+<p>因为JDK已经在loadClass方法中帮我们实现了ClassLoader搜索类的算法，当在loadClass方法中搜索不到类时，loadClass方法就会调用findClass方法来搜索类，所以我们只需重写该方法即可。如没有特殊的要求，一般不建议重写loadClass搜索类的算法。</p>
+<p>如果想保持双亲委派模型，就应该重写findClass(name)方法；如果想破坏双亲委派模型，可以重写loadClass(name)方法。</p>
 
     </div>
 
@@ -357,8 +374,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/10/10/数据库/MySQL索引/" rel="next" title="【MySQL】索引，锁，InnoDB特点">
-                  <i class="fa fa-chevron-left"></i> 【MySQL】索引，锁，InnoDB特点
+                <a href="/2019/10/15/volatile/" rel="next" title="【Java】volatile关键字解析">
+                  <i class="fa fa-chevron-left"></i> 【Java】volatile关键字解析
                 </a>
               
             </div>
@@ -366,10 +383,6 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/10/15/数据库/redis-study1/" rel="prev" title="【Redis】内存淘汰机制、缓存问题及解决、持久化方案">
-                  【Redis】内存淘汰机制、缓存问题及解决、持久化方案 <i class="fa fa-chevron-right"></i>
-                </a>
               
             </div>
           </div>
@@ -418,7 +431,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AQS-AbstractQueuedSynchronizer队列同步器"><span class="nav-number">1.</span> <span class="nav-text">AQS(AbstractQueuedSynchronizer队列同步器)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS内的CLH同步队列"><span class="nav-number">1.1.</span> <span class="nav-text">AQS内的CLH同步队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS使用的LockSupport"><span class="nav-number">1.2.</span> <span class="nav-text">AQS使用的LockSupport</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#全盘负责委托"><span class="nav-number">1.</span> <span class="nav-text">全盘负责委托</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">2.</span> <span class="nav-text">双亲委派模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派加载Class详细过程："><span class="nav-number">2.1.</span> <span class="nav-text">双亲委派加载Class详细过程：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java类加载过程"><span class="nav-number">3.</span> <span class="nav-text">Java类加载过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java类初始化过程"><span class="nav-number">4.</span> <span class="nav-text">Java类初始化过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义自已的类加载器"><span class="nav-number">5.</span> <span class="nav-text">定义自已的类加载器</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->

@@ -53,19 +53,19 @@
   };
 </script>
 
-  <meta name="description" content="作用及基本介绍ThreadLocal解决多线程环境成员变量的冲突问题（解决共享冲突），不是解决线程同步问题，与线程同步机制不同，线程同步是多个线程共享同一个变量（用空间换时间），而ThreadLocal是每一个线程创建一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程">
+  <meta name="description" content="AQS(AbstractQueuedSynchronizer队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【Java】ThreadLocal">
-<meta property="og:url" content="http://yoursite.com/2019/10/09/Java基本知识/ThreadLocal/index.html">
+<meta property="og:title" content="【Java】AQS(AbstractQueuedSynchronizer)队列同步器">
+<meta property="og:url" content="http://yoursite.com/2019/10/11/AQS/index.html">
 <meta property="og:site_name" content="贝西晨的Blog呀">
-<meta property="og:description" content="作用及基本介绍ThreadLocal解决多线程环境成员变量的冲突问题（解决共享冲突），不是解决线程同步问题，与线程同步机制不同，线程同步是多个线程共享同一个变量（用空间换时间），而ThreadLocal是每一个线程创建一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程">
+<meta property="og:description" content="AQS(AbstractQueuedSynchronizer队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-12T10:40:22.186Z">
+<meta property="og:updated_time" content="2019-10-15T12:16:23.008Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【Java】ThreadLocal">
-<meta name="twitter:description" content="作用及基本介绍ThreadLocal解决多线程环境成员变量的冲突问题（解决共享冲突），不是解决线程同步问题，与线程同步机制不同，线程同步是多个线程共享同一个变量（用空间换时间），而ThreadLocal是每一个线程创建一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程">
-  <link rel="canonical" href="http://yoursite.com/2019/10/09/Java基本知识/ThreadLocal/">
+<meta name="twitter:title" content="【Java】AQS(AbstractQueuedSynchronizer)队列同步器">
+<meta name="twitter:description" content="AQS(AbstractQueuedSynchronizer队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
+  <link rel="canonical" href="http://yoursite.com/2019/10/11/AQS/">
 
 
 <script id="page-configurations">
@@ -79,7 +79,7 @@
   };
 </script>
 
-  <title>【Java】ThreadLocal | 贝西晨的Blog呀</title>
+  <title>【Java】AQS(AbstractQueuedSynchronizer)队列同步器 | 贝西晨的Blog呀</title>
   
 
 
@@ -259,7 +259,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/09/Java基本知识/ThreadLocal/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/11/AQS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beixichen">
@@ -271,7 +271,7 @@
       <meta itemprop="name" content="贝西晨的Blog呀">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">【Java】ThreadLocal
+        <h1 class="post-title" itemprop="name headline">【Java】AQS(AbstractQueuedSynchronizer)队列同步器
 
           
         </h1>
@@ -287,7 +287,7 @@
                 
               
 
-              <time title="创建时间：2019-10-09 19:10:38" itemprop="dateCreated datePublished" datetime="2019-10-09T19:10:38+08:00">2019-10-09</time>
+              <time title="创建时间：2019-10-11 18:11:45" itemprop="dateCreated datePublished" datetime="2019-10-11T18:11:45+08:00">2019-10-11</time>
             </span>
           
             
@@ -298,7 +298,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-12 18:40:22" itemprop="dateModified" datetime="2019-10-12T18:40:22+08:00">2019-10-12</time>
+                <time title="修改时间：2019-10-15 20:16:23" itemprop="dateModified" datetime="2019-10-15T20:16:23+08:00">2019-10-15</time>
               </span>
             
           
@@ -327,15 +327,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="作用及基本介绍"><a href="#作用及基本介绍" class="headerlink" title="作用及基本介绍"></a>作用及基本介绍</h2><p>ThreadLocal解决多线程环境成员变量的冲突问题（解决共享冲突），不是解决线程同步问题，<font color="red">与线程同步机制不同，线程同步是多个线程共享同一个变量（用空间换时间），</font><font color="green">而ThreadLocal是每一个线程创建一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程</font></p><a id="more"></a>
-<p>get()：返回此线程局部变量的当前线程副本中的值。<br>initialValue()：返回此线程局部变量的当前线程的“初始值”。<br>remove()：移除此线程局部变量当前线程的值。<br>set(T value)：将此线程局部变量的当前线程副本中的值设置为指定值。</p>
-<h2 id="ThreaLocalMap"><a href="#ThreaLocalMap" class="headerlink" title="ThreaLocalMap"></a>ThreaLocalMap</h2><p>ThreadLocal内部还有一个静态内部类ThreadLocalMap，该内部类才是实现线程隔离机制的关键，get()、set()、remove()都是基于该内部类操作。ThreadLocalMap提供了一种用键值对方式存储每一个线程的变量副本的方法，key为当前ThreadLocal对象（实际上是指向该ThreadLocal对象的弱引用），value则是对应线程的变量副本。 对于ThreadLocal需要注意的有两点：<br>ThreadLocal实例本身是不存储值，它只是提供了一个在当前线程中找到副本值得key。<br>是ThreadLocal包含在Thread中，而不是Thread包含在ThreadLocal中。</p>
-<p>为什么使用弱引用</p>
-<blockquote>
-<p>因为如果这里使用普通的key-value形式来定义存储结构，实质上就会造成节点的生命周期与线程强绑定，只要线程没有销毁，那么节点在GC分析中一直处于可达状态，没办法被回收，而程序本身也无法判断是否可以清理节点。弱引用是Java中四档引用的第三档，比软引用更加弱一些，如果一个对象没有强引用链可达，那么一般活不过下一次GC。当某个ThreadLocal已经没有强引用可达，则随着它被垃圾回收，在ThreadLocalMap里对应的Entry的键值会失效，这为ThreadLocalMap本身的垃圾清理提供了便利。</p>
-</blockquote>
-<p>ThreadLocalMap 的散列算法</p>
-<p>斐波那契散列法，来保证哈希表的离散度。而它选用的乘数值即是2^32 * 黄金分割比。</p>
+        <h2 id="AQS-AbstractQueuedSynchronizer队列同步器"><a href="#AQS-AbstractQueuedSynchronizer队列同步器" class="headerlink" title="AQS(AbstractQueuedSynchronizer队列同步器)"></a>AQS(AbstractQueuedSynchronizer队列同步器)</h2><p>JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。</p><a id="more"></a>
+<p>状态控制：<br>`private volatile int state;<br>使用int类型的成员变量state来表示同步状态，当state&gt;0时表示已经获取了锁，当state = 0时表示释放了锁。<br>getState()：返回同步状态的当前值；<br>setState(int newState)：设置当前同步状态；<br>compareAndSetState(int expect, int update)：使用CAS设置当前状态，该方法能够保证状态设置的原子性；</p>
+<h3 id="AQS内的CLH同步队列"><a href="#AQS内的CLH同步队列" class="headerlink" title="AQS内的CLH同步队列"></a>AQS内的CLH同步队列</h3><p>对同步状态的获取和释放<br>FIFO的双向队列，AQS依赖它来完成同步状态的管理，当前线程如果获取同步状态失败时，AQS则会将当前线程已经等待状态等信息构造成一个节点（Node）并将其加入到CLH同步队列，同时会阻塞当前线程，当同步状态释放时，会把首节点唤醒（公平锁），使其再次尝试获取同步状态。</p>
+<h3 id="AQS使用的LockSupport"><a href="#AQS使用的LockSupport" class="headerlink" title="AQS使用的LockSupport"></a>AQS使用的LockSupport</h3><p>对线程的阻塞和唤醒<br>LockSupport 不可重入，一个线程连续两次调用park()，将会产生死锁，一直阻塞<br>park()：阻塞线程，<br>unpark()：唤醒线程</p>
+<p>参考链接<br><a href="http://cmsblogs.com/?p=2174" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之AQS</a><br><a href="http://cmsblogs.com/?p=2197" target="_blank" rel="noopener">J.U.C之AQS：同步状态的获取与释放</a><br><a href="https://blog.csdn.net/aitangyong/article/details/38373137?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">LockSupport的park和unpark的基本使用,以及对线程中断的响应性</a></p>
 
     </div>
 
@@ -361,8 +357,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/10/05/Java基本知识/Java-Serializable/" rel="next" title="【Java】Serializable">
-                  <i class="fa fa-chevron-left"></i> 【Java】Serializable
+                <a href="/2019/10/10/数据库/MySQL索引/" rel="next" title="【MySQL】索引，锁，InnoDB特点">
+                  <i class="fa fa-chevron-left"></i> 【MySQL】索引，锁，InnoDB特点
                 </a>
               
             </div>
@@ -371,8 +367,8 @@
 
             <div class="post-nav-prev post-nav-item">
               
-                <a href="/2019/10/09/Java基本知识/ThreadPool/" rel="prev" title="【Java】ThreadPool">
-                  【Java】ThreadPool <i class="fa fa-chevron-right"></i>
+                <a href="/2019/10/15/数据库/redis-study1/" rel="prev" title="【Redis】内存淘汰机制、缓存问题及解决、持久化方案">
+                  【Redis】内存淘汰机制、缓存问题及解决、持久化方案 <i class="fa fa-chevron-right"></i>
                 </a>
               
             </div>
@@ -422,7 +418,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#作用及基本介绍"><span class="nav-number">1.</span> <span class="nav-text">作用及基本介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreaLocalMap"><span class="nav-number">2.</span> <span class="nav-text">ThreaLocalMap</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AQS-AbstractQueuedSynchronizer队列同步器"><span class="nav-number">1.</span> <span class="nav-text">AQS(AbstractQueuedSynchronizer队列同步器)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS内的CLH同步队列"><span class="nav-number">1.1.</span> <span class="nav-text">AQS内的CLH同步队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS使用的LockSupport"><span class="nav-number">1.2.</span> <span class="nav-text">AQS使用的LockSupport</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
