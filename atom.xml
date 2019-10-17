@@ -5,9 +5,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="http://beixichen.xyz/"/>
   <updated>2019-10-15T14:06:30.752Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>http://beixichen.xyz/</id>
   
   <author>
     <name>beixichen</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>【Java】类加载机制，全盘负责，双亲委派，类初始化过程</title>
-    <link href="http://yoursite.com/2019/10/15/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/JavaClassLoader/"/>
-    <id>http://yoursite.com/2019/10/15/Java基本知识/JavaClassLoader/</id>
+    <link href="http://beixichen.xyz/2019/10/15/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/JavaClassLoader/"/>
+    <id>http://beixichen.xyz/2019/10/15/Java基本知识/JavaClassLoader/</id>
     <published>2019-10-15T13:29:14.000Z</published>
     <updated>2019-10-15T14:06:30.752Z</updated>
     
@@ -31,17 +31,17 @@
     
     </summary>
     
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>【Java】volatile关键字解析</title>
-    <link href="http://yoursite.com/2019/10/15/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/volatile/"/>
-    <id>http://yoursite.com/2019/10/15/Java基本知识/volatile/</id>
+    <link href="http://beixichen.xyz/2019/10/15/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/volatile/"/>
+    <id>http://beixichen.xyz/2019/10/15/Java基本知识/volatile/</id>
     <published>2019-10-15T10:14:45.000Z</published>
     <updated>2019-10-15T10:37:19.138Z</updated>
     
@@ -53,17 +53,17 @@
     
     </summary>
     
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>【Redis】内存淘汰机制、缓存问题及解决、持久化方案</title>
-    <link href="http://yoursite.com/2019/10/15/%E6%95%B0%E6%8D%AE%E5%BA%93/redis-study1/"/>
-    <id>http://yoursite.com/2019/10/15/数据库/redis-study1/</id>
+    <link href="http://beixichen.xyz/2019/10/15/%E6%95%B0%E6%8D%AE%E5%BA%93/redis-study1/"/>
+    <id>http://beixichen.xyz/2019/10/15/数据库/redis-study1/</id>
     <published>2019-10-15T08:47:48.000Z</published>
     <updated>2019-10-16T02:11:09.197Z</updated>
     
@@ -75,17 +75,17 @@
     
     </summary>
     
-      <category term="Redis" scheme="http://yoursite.com/categories/Redis/"/>
+      <category term="Redis" scheme="http://beixichen.xyz/categories/Redis/"/>
     
     
-      <category term="Redis" scheme="http://yoursite.com/tags/Redis/"/>
+      <category term="Redis" scheme="http://beixichen.xyz/tags/Redis/"/>
     
   </entry>
   
   <entry>
     <title>【Java】AQS(AbstractQueuedSynchronizer)队列同步器</title>
-    <link href="http://yoursite.com/2019/10/11/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/AQS/"/>
-    <id>http://yoursite.com/2019/10/11/Java基本知识/AQS/</id>
+    <link href="http://beixichen.xyz/2019/10/11/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/AQS/"/>
+    <id>http://beixichen.xyz/2019/10/11/Java基本知识/AQS/</id>
     <published>2019-10-11T10:11:45.000Z</published>
     <updated>2019-10-15T12:16:23.008Z</updated>
     
@@ -97,17 +97,17 @@
     
     </summary>
     
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>【Java】普通容器，同步容器和并发容器</title>
-    <link href="http://yoursite.com/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/"/>
-    <id>http://yoursite.com/2019/10/10/Java基本知识/Java容器/</id>
+    <link href="http://beixichen.xyz/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/"/>
+    <id>http://beixichen.xyz/2019/10/10/Java基本知识/Java容器/</id>
     <published>2019-10-10T01:17:47.000Z</published>
     <updated>2019-10-12T08:38:57.763Z</updated>
     
@@ -119,17 +119,17 @@
     
     </summary>
     
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>【Java】ThreadPool</title>
-    <link href="http://yoursite.com/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadPool/"/>
-    <id>http://yoursite.com/2019/10/09/Java基本知识/ThreadPool/</id>
+    <link href="http://beixichen.xyz/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadPool/"/>
+    <id>http://beixichen.xyz/2019/10/09/Java基本知识/ThreadPool/</id>
     <published>2019-10-09T11:15:38.000Z</published>
     <updated>2019-10-11T09:53:51.555Z</updated>
     
@@ -145,17 +145,17 @@
     
     </summary>
     
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>【Java】ThreadLocal</title>
-    <link href="http://yoursite.com/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadLocal/"/>
-    <id>http://yoursite.com/2019/10/09/Java基本知识/ThreadLocal/</id>
+    <link href="http://beixichen.xyz/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadLocal/"/>
+    <id>http://beixichen.xyz/2019/10/09/Java基本知识/ThreadLocal/</id>
     <published>2019-10-09T11:10:38.000Z</published>
     <updated>2019-10-12T10:40:22.186Z</updated>
     
@@ -167,17 +167,17 @@
     
     </summary>
     
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>【Java】Serializable</title>
-    <link href="http://yoursite.com/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-Serializable/"/>
-    <id>http://yoursite.com/2019/10/05/Java基本知识/Java-Serializable/</id>
+    <link href="http://beixichen.xyz/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-Serializable/"/>
+    <id>http://beixichen.xyz/2019/10/05/Java基本知识/Java-Serializable/</id>
     <published>2019-10-05T11:39:56.000Z</published>
     <updated>2019-10-10T11:24:45.414Z</updated>
     
@@ -189,17 +189,17 @@
     
     </summary>
     
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>【Java】基本类型和包装类型</title>
-    <link href="http://yoursite.com/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B/"/>
-    <id>http://yoursite.com/2019/10/05/Java基本知识/基本类型和包装类型/</id>
+    <link href="http://beixichen.xyz/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B/"/>
+    <id>http://beixichen.xyz/2019/10/05/Java基本知识/基本类型和包装类型/</id>
     <published>2019-10-05T11:38:11.000Z</published>
     <updated>2019-10-05T12:09:53.209Z</updated>
     
@@ -213,17 +213,17 @@
     
     </summary>
     
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>【MySQL】索引，锁，InnoDB特点</title>
-    <link href="http://yoursite.com/2019/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-index/"/>
-    <id>http://yoursite.com/2019/10/03/数据库/MySQL-index/</id>
+    <link href="http://beixichen.xyz/2019/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-index/"/>
+    <id>http://beixichen.xyz/2019/10/03/数据库/MySQL-index/</id>
     <published>2019-10-03T08:47:48.000Z</published>
     <updated>2019-10-16T02:10:32.219Z</updated>
     
@@ -235,17 +235,17 @@
     
     </summary>
     
-      <category term="MySQL" scheme="http://yoursite.com/categories/MySQL/"/>
+      <category term="MySQL" scheme="http://beixichen.xyz/categories/MySQL/"/>
     
     
-      <category term="MySQL" scheme="http://yoursite.com/tags/MySQL/"/>
+      <category term="MySQL" scheme="http://beixichen.xyz/tags/MySQL/"/>
     
   </entry>
   
   <entry>
     <title>【Spring学习笔记3】Spring动态代理</title>
-    <link href="http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/proxy-study/"/>
-    <id>http://yoursite.com/2019/10/02/Spring学习笔记/proxy-study/</id>
+    <link href="http://beixichen.xyz/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/proxy-study/"/>
+    <id>http://beixichen.xyz/2019/10/02/Spring学习笔记/proxy-study/</id>
     <published>2019-10-02T15:12:17.000Z</published>
     <updated>2019-10-02T15:21:12.000Z</updated>
     
@@ -257,21 +257,21 @@
     
     </summary>
     
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
     
-      <category term="Spring" scheme="http://yoursite.com/categories/Java/Spring/"/>
+      <category term="Spring" scheme="http://beixichen.xyz/categories/Java/Spring/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
-      <category term="Spring" scheme="http://yoursite.com/tags/Spring/"/>
+      <category term="Spring" scheme="http://beixichen.xyz/tags/Spring/"/>
     
   </entry>
   
   <entry>
     <title>【Spring学习笔记2】常用的各种注解及替代xml配置的作用</title>
-    <link href="http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/"/>
-    <id>http://yoursite.com/2019/10/02/Spring学习笔记/Spring-study2/</id>
+    <link href="http://beixichen.xyz/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/"/>
+    <id>http://beixichen.xyz/2019/10/02/Spring学习笔记/Spring-study2/</id>
     <published>2019-10-02T13:06:40.000Z</published>
     <updated>2019-10-16T02:14:12.665Z</updated>
     
@@ -283,21 +283,21 @@
     
     </summary>
     
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
     
-      <category term="Spring" scheme="http://yoursite.com/categories/Java/Spring/"/>
+      <category term="Spring" scheme="http://beixichen.xyz/categories/Java/Spring/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
-      <category term="Spring" scheme="http://yoursite.com/tags/Spring/"/>
+      <category term="Spring" scheme="http://beixichen.xyz/tags/Spring/"/>
     
   </entry>
   
   <entry>
     <title>【Spring学习笔记1】IOC的创建和Bean的管理</title>
-    <link href="http://yoursite.com/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/"/>
-    <id>http://yoursite.com/2019/10/02/Spring学习笔记/Spring-study1/</id>
+    <link href="http://beixichen.xyz/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/"/>
+    <id>http://beixichen.xyz/2019/10/02/Spring学习笔记/Spring-study1/</id>
     <published>2019-10-02T11:19:16.000Z</published>
     <updated>2019-10-16T02:14:05.986Z</updated>
     
@@ -309,21 +309,21 @@
     
     </summary>
     
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
     
-      <category term="Spring" scheme="http://yoursite.com/categories/Java/Spring/"/>
+      <category term="Spring" scheme="http://beixichen.xyz/categories/Java/Spring/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
-      <category term="Spring" scheme="http://yoursite.com/tags/Spring/"/>
+      <category term="Spring" scheme="http://beixichen.xyz/tags/Spring/"/>
     
   </entry>
   
   <entry>
     <title>【MySQL】char和varchar的区别</title>
-    <link href="http://yoursite.com/2019/09/29/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-1/"/>
-    <id>http://yoursite.com/2019/09/29/数据库/MySQL-1/</id>
+    <link href="http://beixichen.xyz/2019/09/29/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-1/"/>
+    <id>http://beixichen.xyz/2019/09/29/数据库/MySQL-1/</id>
     <published>2019-09-29T08:47:48.000Z</published>
     <updated>2019-10-16T02:10:38.772Z</updated>
     
@@ -335,17 +335,17 @@
     
     </summary>
     
-      <category term="MySQL" scheme="http://yoursite.com/categories/MySQL/"/>
+      <category term="MySQL" scheme="http://beixichen.xyz/categories/MySQL/"/>
     
     
-      <category term="MySQL" scheme="http://yoursite.com/tags/MySQL/"/>
+      <category term="MySQL" scheme="http://beixichen.xyz/tags/MySQL/"/>
     
   </entry>
   
   <entry>
     <title>Hello Hexo</title>
-    <link href="http://yoursite.com/2018/03/23/Hello-Hexo/"/>
-    <id>http://yoursite.com/2018/03/23/Hello-Hexo/</id>
+    <link href="http://beixichen.xyz/2018/03/23/Hello-Hexo/"/>
+    <id>http://beixichen.xyz/2018/03/23/Hello-Hexo/</id>
     <published>2018-03-23T06:45:31.000Z</published>
     <updated>2018-03-23T06:47:36.859Z</updated>
     
@@ -366,8 +366,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="http://yoursite.com/2018/03/23/hello-world/"/>
-    <id>http://yoursite.com/2018/03/23/hello-world/</id>
+    <link href="http://beixichen.xyz/2018/03/23/hello-world/"/>
+    <id>http://beixichen.xyz/2018/03/23/hello-world/</id>
     <published>2018-03-23T03:05:38.274Z</published>
     <updated>2019-10-16T03:51:54.993Z</updated>
     
@@ -379,12 +379,12 @@
     
     </summary>
     
-      <category term="Web" scheme="http://yoursite.com/categories/Web/"/>
+      <category term="Web" scheme="http://beixichen.xyz/categories/Web/"/>
     
     
-      <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
+      <category term="Hexo" scheme="http://beixichen.xyz/tags/Hexo/"/>
     
-      <category term="Web" scheme="http://yoursite.com/tags/Web/"/>
+      <category term="Web" scheme="http://beixichen.xyz/tags/Web/"/>
     
   </entry>
   
