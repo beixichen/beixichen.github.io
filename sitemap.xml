@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://beixichen.xyz/2019/10/16/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-%E9%94%81/</loc>
+    
+    <lastmod>2019-10-17T15:43:45.495Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://beixichen.xyz/2019/10/16/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/springboot/</loc>
+    
+    <lastmod>2019-10-17T13:20:22.987Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://beixichen.xyz/2018/03/23/hello-world/</loc>
     
     <lastmod>2019-10-16T03:51:54.993Z</lastmod>

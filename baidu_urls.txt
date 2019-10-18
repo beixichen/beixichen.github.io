@@ -1,0 +1,9 @@
+http://beixichen.xyz/2019/10/16/Spring学习笔记/springboot/
+http://beixichen.xyz/2019/10/16/Java基本知识/Java-锁/
+http://beixichen.xyz/2019/10/15/Java基本知识/JavaClassLoader/
+http://beixichen.xyz/2019/10/15/Java基本知识/volatile/
+http://beixichen.xyz/2019/10/15/数据库/redis-study1/
+http://beixichen.xyz/2019/10/11/Java基本知识/AQS/
+http://beixichen.xyz/2019/10/10/Java基本知识/Java容器/
+http://beixichen.xyz/2019/10/09/Java基本知识/ThreadPool/
+http://beixichen.xyz/2019/10/09/Java基本知识/ThreadLocal/

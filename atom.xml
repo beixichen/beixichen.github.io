@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://beixichen.xyz/"/>
-  <updated>2019-10-15T14:06:30.752Z</updated>
+  <updated>2019-10-17T13:20:22.987Z</updated>
   <id>http://beixichen.xyz/</id>
   
   <author>
@@ -15,6 +15,57 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【Spring】Spring注解整体解析</title>
+    <link href="http://beixichen.xyz/2019/10/16/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/springboot/"/>
+    <id>http://beixichen.xyz/2019/10/16/Spring学习笔记/springboot/</id>
+    <published>2019-10-16T13:32:10.000Z</published>
+    <updated>2019-10-17T13:20:22.987Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Spring-Boot的四大神器"><a href="#Spring-Boot的四大神器" class="headerlink" title="Spring Boot的四大神器"></a>Spring Boot的四大神器</h2><blockquote><ol><li>auto-configuration 自动配置</li><li>starter pom更易管理，减少手动添加依赖项的数量</li><li>cli 通过命令行添加参数，运行groovy</li><li>actuator 应用系统的监控和管理的集成功能，可以查看应用配置的详细信息，例如自动化配置信息、创建的Spring beans信息、系统环境变量的配置信以及Web请求的详细信息等</li></ol></blockquote><a id="more"></a><h2 id="SpringBoot的注解"><a href="#SpringBoot的注解" class="headerlink" title="SpringBoot的注解"></a>SpringBoot的注解</h2><h3 id="基础注解"><a href="#基础注解" class="headerlink" title="基础注解"></a>基础注解</h3><blockquote><ol><li>@Configuration  声明该类为配置类，可包含多个@Bean的方法，进行Bean的定义，初始化容器</li><li>@Component 可以注解其他类的注解，如@Controller @Service @Repository，当类不好归类时使用</li><li>@Bean 放在方法上面，产生一个Bean，交给Spring</li><li>@Autowired 自动导入依赖的Bean</li><li>@Import 通过导入的方式实现把实例加入到SpringIOC容器中，可以将没有被Spring管理的类导入到Spring容器中</li><li>@ImportResource 与Import基本一致，区别导入的是配置文件</li><li>@Conditional 通过代码设置的不同条件装在不同的bean</li><li>@ComponentScan 进行包扫描</li><li>@Qualifier：当有多个同一类型的Bean时，可以用@Qualifier(“name”)来指定。与@Autowired配合使用。</li><li>@Resource(name=”name”,type=”type”)：没有括号内内容的话，默认byName。</li></ol></blockquote><h3 id="核心注解"><a href="#核心注解" class="headerlink" title="核心注解"></a>核心注解</h3><blockquote><ol><li>@SpringBootApplication，实际主要为@SpringBootConfiguration，@EnableAutoConfiguration，@ComponentScan三个注解的组合<blockquote><p>@SpringBootConfiguration 表明此类是一个SpringBoot的配置类<br>@EnableAutoConfiguration 告诉SpringBoot开启自动配置功能；这样自动配置才能生效；<br>@ComponentScan 扫描包</p></blockquote></li><li>@Conditional<blockquote><p>@ConditionalOnBean(A.class) 仅在当前上下文中存在A对象时，才会实例化一个Bean<br>@ConditionalOnMissingBean 和上一个相反，不存在时，实例化<br>@ConditionalOnClass     可以仅当某些类存在于classpath上时候才创建某个Bean<br>@ConditionalOnMissingClass 和上面相反，当classpath中没有指定的 Class才开启配置<br>@ConditionalOnProperty 当指定的属性有指定的值时才开启配置。具体操作是通过其两个属性name以及havingValue来实现的，其中name用来从application.properties中读取某个属性值，如果该值为空，则返回false;如果值不为空，则将该值与havingValue指定的值进行比较，如果一样则返回true;否则返回false。如果返回值为false，则该configuration不生效；为true则生效。<br>@ConditionalOnExpression 当SpEL表达式为true时开启配置<br>@ConditionalOnJava 当运行的Java JVM在指定版本范围才开启配置<br>@ConditionalOnResource 当类路径下有指定资源时开启配置<br>@ConditionalOnJndi 当指定JNDI存在时开启配置<br>@ConditionalOnPlatform 当指定的云平台激活时开启配置<br>@ConditionalOnSingleCandidate 当指定的class在容器中只有一个Bean，或者有多个但是为@Primary首选时开启配置</p></blockquote></li><li>@ConfigurationProperties 将自定义的properties文件映射到实体Bean中</li><li>@EnableConfigurationProperties 当@EnableConfigurationProperties注解应用到你的@Configuration时，任何被@ConfigurationProperties注解的beans将自动被Environment属性配置</li><li>@AutoConfigureAfter ，在自动配置类上，表明该自动配置类需要在另外指定的自动配置类配置完成时执行。如Mybatis自动配置需要在数据源自动配置类完成之后</li><li>@AutoConfigureBefore 与上相反</li><li>@AutoConfigureOrder 指定配置类的加载优先级</li></ol></blockquote><h2 id="SpringMVC注解"><a href="#SpringMVC注解" class="headerlink" title="SpringMVC注解"></a>SpringMVC注解</h2><p>@Controller层主要注解</p><blockquote><h3 id="RequestMapping"><a href="#RequestMapping" class="headerlink" title="@RequestMapping"></a>@RequestMapping</h3><p>属性：<br>value：用于指定请求的 URL。它和 path 属性的作用是一样的。<br>method：用于指定请求的方式。<br>params：用于指定限制请求参数的条件。它支持简单的表达式。要求请求参数的 key 和 value 必须和<br>配置的一模一样。<br>例如：<br>params = {“accountName”}，表示请求参数必须有 accountName<br>params = {“moeny!100”}，表示请求参数中 money 不能是 100。<br>headers：用于指定限制请求消息头的条件。</p></blockquote><blockquote><h3 id="RequestParam"><a href="#RequestParam" class="headerlink" title="@RequestParam"></a>@RequestParam</h3><p>作用：<br>把请求中指定名称的参数给控制器中的形参赋值。<br>属性：<br>value：请求参数中的名称。<br>required：请求参数中是否必须提供此参数。默认值：true。表示必须提供，如果不提供将报错。</p></blockquote><blockquote><h3 id="RequestBody"><a href="#RequestBody" class="headerlink" title="@RequestBody"></a>@RequestBody</h3><p>作用：<br>用于获取请求体内容。直接使用得到是 key=value&amp;key=value…结构的数据。<br>get 请求方式不适用。<br>属性：<br>required：是否必须有请求体。默认值是:true。当取值为 true 时,get 请求方式会报错。如果取值<br>为 false，get 请求得到是 null。</p></blockquote><blockquote><h3 id="ResponseBody"><a href="#ResponseBody" class="headerlink" title="@ResponseBody"></a>@ResponseBody</h3><p>作用：<br>该注解用于将Controller的方法返回的对象，通过适当的HttpMessageConverter转换为指定格式后，写入到Response对象的body数据区。</p></blockquote><blockquote><h3 id="PathVariable"><a href="#PathVariable" class="headerlink" title="@PathVariable"></a>@PathVariable</h3><p>作用：<br>用于绑定 url 中的占位符。例如：请求 url 中 /delete/{id}，这个{id}就是 url 占位符。<br>url 支持占位符是 spring3.0 之后加入的。是 springmvc 支持 rest 风格 URL 的一个重要标志。<br>属性：<br>value：用于指定 url 中占位符名称。<br>required：是否必须提供占位符。</p></blockquote><blockquote><h3 id="CookieValue"><a href="#CookieValue" class="headerlink" title="@CookieValue"></a>@CookieValue</h3><p>作用：<br>用于把指定 cookie 名称的值传入控制器方法参数。<br>属性：<br>value：指定 cookie 的名称。<br>required：是否必须有此 cookie。</p></blockquote><blockquote><h3 id="ModelAttribute"><a href="#ModelAttribute" class="headerlink" title="@ModelAttribute"></a>@ModelAttribute</h3><p>作用：<br>该注解是 SpringMVC4.3 版本以后新加入的。它可以用于修饰方法和参数。<br>出现在方法上，表示当前方法会在控制器的方法执行之前，先执行。它可以修饰没有返回值的方法，也可<br>以修饰有具体返回值的方法。<br>出现在参数上，获取指定的数据给参数赋值。<br>属性：<br>value：用于获取数据的 key。key 可以是 POJO 的属性名称，也可以是 map 结构的 key。<br>应用场景：<br>当表单提交数据不是完整的实体类数据时，保证没有提交数据的字段使用数据库对象原来的数据。<br>例如：<br>我们在编辑一个用户时，用户有一个创建信息字段，该字段的值是不允许被修改的。在提交表单数<br>据是肯定没有此字段的内容，一旦更新会把该字段内容置为 null，此时就可以使用此注解解决问题。</p></blockquote><blockquote><h3 id="SessionAttribute"><a href="#SessionAttribute" class="headerlink" title="@SessionAttribute"></a>@SessionAttribute</h3><p>作用：<br>用于多次执行控制器方法间的参数共享。<br>属性：<br>value：用于指定存入的属性名称<br>type：用于指定存入的数据类型。</p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Spring-Boot的四大神器&quot;&gt;&lt;a href=&quot;#Spring-Boot的四大神器&quot; class=&quot;headerlink&quot; title=&quot;Spring Boot的四大神器&quot;&gt;&lt;/a&gt;Spring Boot的四大神器&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;auto-configuration 自动配置&lt;/li&gt;
+&lt;li&gt;starter pom更易管理，减少手动添加依赖项的数量&lt;/li&gt;
+&lt;li&gt;cli 通过命令行添加参数，运行groovy&lt;/li&gt;
+&lt;li&gt;actuator 应用系统的监控和管理的集成功能，可以查看应用配置的详细信息，例如自动化配置信息、创建的Spring beans信息、系统环境变量的配置信以及Web请求的详细信息等&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="Spring" scheme="http://beixichen.xyz/categories/Spring/"/>
+    
+    
+      <category term="Spring" scheme="http://beixichen.xyz/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Java】深入理解各种锁、synchronized、CAS</title>
+    <link href="http://beixichen.xyz/2019/10/16/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-%E9%94%81/"/>
+    <id>http://beixichen.xyz/2019/10/16/Java基本知识/Java-锁/</id>
+    <published>2019-10-16T13:20:32.000Z</published>
+    <updated>2019-10-17T15:43:45.495Z</updated>
+    
+    <content type="html"><![CDATA[<p>本文主要介绍了锁的基本概念，synchronized，CAS，ReentrantLock，ReentrantReadWriteLock和Condition。<a id="more"></a></p><h2 id="锁的基本概念"><a href="#锁的基本概念" class="headerlink" title="锁的基本概念"></a>锁的基本概念</h2><blockquote><ol><li>公平锁：先到的线程先得到这个锁</li><li>非公平锁：若释放锁的时候没有新线程进入，非公平锁等于公平锁，若释放锁的时候有新线程进入，新线程优先执行，为非公平锁</li><li>排他锁(独占锁)：在同一时刻仅有一个线程可以进行访问</li><li>共享锁：同一时刻能够被多个线程同时持有</li><li>可重入锁： 一个线程可以多次访问</li><li>自旋锁：让线程等待一段时间，不会挂起。JDK1.6默认为10次。减少了线程切换带来的开销，占用了处理器的时间</li><li>自适应自旋锁：自旋的次数不是固定的，由上一次在同一个锁上的自旋时间及锁拥有者的状态决定。如果自旋成功了，下次自旋次数会增加，反之减少。</li><li>锁消除：JVM检测到不存在共享数据竞争，对同步锁进行消除。</li><li>锁粗化：将多个连续的加锁、解锁操作扩展成一个范围更大的锁。若锁之间比较独立还是需要尽可能细化，尽量在共享数据实际作用时同步。<br>10.偏向锁：在无多线程竞争的情况下，尽量减少不必要的轻量级锁执行路径（减少CAS操作，性能开销，上下文切换）。 </li><li>轻量级锁：在激烈的多线程竞争的前提下，减少传统的重量级锁使用操作系统互斥量产生的性能消耗。若有激烈的多线程并发竞争，轻量级锁更慢。</li><li>重量级锁：通过对象内部的监视器(monitor)实现，本质是依赖于底层操作系统Mutex lock实现，操作系统进行用户态和内核态切换，成本非常高。</li></ol></blockquote><h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><p>用的锁存储在Java对象头中，包括两部分：Mark Word(标记字段)和Klass Pointer(类型指针)。类型指针来确定对象是哪个类的实例。标记字段来存储自身运行时的数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳等等，主要来控制synchronized的膨胀。</p><p>一个类中有同步方法A和普通方法B，两个线程如果有该对象的同一实例那么他们就不能同时执行同步方法A，如果两个线程拥有该对象的不同实例，就可以同时执行同步方法A</p><blockquote><ol><li>同步普通方法，在方法声明中加入synchronized关键字（对象锁）。同一时刻对于每一个类实例，至多只有一个处于可执行状态，避免类成员变量的访问冲突</li><li>同步方法块，修饰代码块。锁为括号里面的对象（对象锁）。线程进入synchronized方法的时候获取该对象的锁，当然如果已经有线程获取了这个对象的锁，那么当前线程会等待；synchronized方法正常返回或者抛异常而终止，JVM会自动释放对象锁。</li><li>同步静态方法，修饰静态的方法或代码块（类锁）。由于一个class不论被实例化多少次，其中的静态方法和静态变量在内存中都只有一份。所以，一旦一个静态的方法被申明为synchronized，此类所有的实例化对象在调用此方法，共用同一把锁，我们称之为类锁。类锁是概念上的，不是真实存在，因为它其实就是特殊的对象锁，但是static方法被类的所有对象共用。<br>若是实例对象被锁，则实例对象的所有同步方法被锁<br>若是类对象被锁，则类对象的所有同步方法被锁</li></ol></blockquote><hr><blockquote><p>synchronized锁膨胀过程：synchronized 同步锁一共具有四种状态：无锁、偏向锁、轻量级锁、重量级锁，他们会随着竞争情况逐渐升级，此过程为不可逆。所以 synchronized 锁膨胀过程其实就是无锁 → 偏向锁 → 轻量级锁 → 重量级锁的一个过程</p></blockquote><h2 id="CAS（CompareAndSwap）"><a href="#CAS（CompareAndSwap）" class="headerlink" title="CAS（CompareAndSwap）"></a>CAS（CompareAndSwap）</h2><p>比较并交换，CAS中有三个参数：内存值V、旧的预期值A、要更新的值B，当且仅当内存值V的值等于旧的预期值A时才会将内存值V的值修改为B，否则什么都不干。</p><p>存在问题：</p><blockquote><ol><li>循环时间太长，如果CAS长时间不成功，会给CPU带来非常大开销</li><li>只能保证一个共享变量的原子操作。解决：多个变量需要进行封装</li><li>ABA问题，原来为A，改为B，又改为A。看似没有改变，实际发生了改变。解决：使用一个版本标识(时间戳)。</li></ol></blockquote><h2 id="CAS和synchronized效率分析"><a href="#CAS和synchronized效率分析" class="headerlink" title="CAS和synchronized效率分析"></a>CAS和synchronized效率分析</h2><blockquote><p>1、对于资源竞争较少的情况，使用synchronized同步锁进行线程阻塞和唤醒切换以及用户态内核态间的切换操作额外浪费消耗cpu资源；而CAS基于硬件实现，不需要进入内核，不需要切换线程，操作自旋几率较少，因此可以获得更高的性能。<br>2、对于资源竞争严重的情况，CAS自旋的概率会比较大，从而浪费更多的CPU资源，效率低于synchronized。<br>PS. synchronized在jdk1.6之后，已经改进优化。synchronized的底层实现主要依靠Lock-Free的队列，基本思路是自旋后阻塞，竞争切换后继续竞争锁，稍微牺牲了公平性，但获得了高吞吐量。在线程冲突较少的情况下，可以获得和CAS类似的性能；而线程冲突严重的情况下，性能远高于CAS。</p></blockquote><h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><blockquote><p>ReentrantLock(重入锁)，一种递归无阻塞的同步机制，可选择公平锁还是非公平锁（默认非公平），更强大的锁机制，可减少死锁发生</p></blockquote><h2 id="syncronized和ReentrantLock"><a href="#syncronized和ReentrantLock" class="headerlink" title="syncronized和ReentrantLock"></a>syncronized和ReentrantLock</h2><blockquote><ol><li>与synchronized相比，ReentrantLock提供了更多，更加全面的功能，具备更强的扩展性。例如：时间锁等候，可中断锁等候，锁投票。</li><li>ReentrantLock还提供了条件Condition，对线程的等待、唤醒操作更加详细和灵活，所以在多个条件变量和高度竞争锁的地方，ReentrantLock更加适合（以后会阐述Condition）。</li><li>ReentrantLock提供了可轮询的锁请求。它会尝试着去获取锁，如果成功则继续，否则可以等到下次运行时处理，而synchronized则一旦进入锁请求要么成功要么阻塞，所以相比synchronized而言，ReentrantLock会不容易产生死锁些。</li><li>ReentrantLock支持更加灵活的同步代码块，但是使用synchronized时，只能在同一个synchronized块结构中获取和释放。注：ReentrantLock的锁释放一定要在finally中处理，否则可能会产生严重的后果。</li><li>ReentrantLock支持中断处理，且性能较synchronized会好些。</li></ol></blockquote><h2 id="ReentrantReadWriteLock"><a href="#ReentrantReadWriteLock" class="headerlink" title="ReentrantReadWriteLock"></a>ReentrantReadWriteLock</h2><blockquote><p>通过分离读锁和写锁，提高并发量。<br>公平性：支持公平性和非公平性。<br>重入性：支持重入。读写锁最多支持65535个递归写入锁和65535个递归读取锁。<br>锁降级：遵循获取写锁、获取读锁在释放写锁的次序，写锁能够降级成为读锁<br>读锁是一个共享锁，在同一时间可以允许多个读线程同时访问，但是在写线程访问时，所有读线程和写线程都会被阻塞。<br>写锁是一个支持重入的排它锁</p></blockquote><h2 id="Condition"><a href="#Condition" class="headerlink" title="Condition"></a>Condition</h2><blockquote><p>广义上的一种条件队列，为线程提供更为灵活的等待通知模式，线程在调用await()方法挂起，知道线程等待某个条件为真时被signal()唤醒。必须要配合锁一起使用，因为对共享状态变量访问发生在多线程环境，一般为Lock的内部newCondition()实现。</p></blockquote><p>参考链接：<br><a href="https://youzhixueyuan.com/detailed-implementation-of-synchronized.html" target="_blank" rel="noopener">深入详解Synchronized同步锁的底层实现</a><br><a href="https://cloud.tencent.com/developer/article/1501912" target="_blank" rel="noopener">Java对象锁和类锁全面解析（多线程synchronized关键字）</a><br><a href="https://blog.csdn.net/luoweifu/article/details/46613015" target="_blank" rel="noopener">Java中Synchronized的用法</a><br><a href="http://cmsblogs.com/?p=5812" target="_blank" rel="noopener">synchronized的锁膨胀过程</a><br><a href="https://www.zhihu.com/question/53826114" target="_blank" rel="noopener">偏向锁，轻量级锁与重量级锁为什么会相互膨胀?</a><br><a href="http://cmsblogs.com/?p=2210" target="_blank" rel="noopener">J.U.C之重入锁</a><br><a href="http://cmsblogs.com/?p=2213" target="_blank" rel="noopener">J.U.C之读写锁</a><br><a href="http://cmsblogs.com/?p=2222" target="_blank" rel="noopener">J.U.C之Condition</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本文主要介绍了锁的基本概念，synchronized，CAS，ReentrantLock，ReentrantReadWriteLock和Condition。
+    
+    </summary>
+    
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>【Java】类加载机制，全盘负责，双亲委派，类初始化过程</title>
