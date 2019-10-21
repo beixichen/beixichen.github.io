@@ -62,7 +62,7 @@
 <meta property="og:description" content="Java容器本文主要对Java中的容器进行介绍，主要分为普通容器，同步容器和并发容器">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://beixichen.xyz/images/1570411257098.png">
-<meta property="og:updated_time" content="2019-10-21T01:24:19.580Z">
+<meta property="og:updated_time" content="2019-10-21T11:31:54.163Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java】普通容器，同步容器和并发容器">
 <meta name="twitter:description" content="Java容器本文主要对Java中的容器进行介绍，主要分为普通容器，同步容器和并发容器">
@@ -300,7 +300,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-21 09:24:19" itemprop="dateModified" datetime="2019-10-21T09:24:19+08:00">2019-10-21</time>
+                <time title="修改时间：2019-10-21 19:31:54" itemprop="dateModified" datetime="2019-10-21T19:31:54+08:00">2019-10-21</time>
               </span>
             
           
@@ -344,19 +344,33 @@
 </li>
 <li><h4 id="遍历删除"><a href="#遍历删除" class="headerlink" title="遍历删除"></a>遍历删除</h4>  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//list</span></span><br><span class="line">Iterator&lt;String&gt; it = list.iterator();</span><br><span class="line"> <span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">  String x = it.next();</span><br><span class="line">  <span class="keyword">if</span>(x.equals(<span class="string">"del"</span>))&#123;</span><br><span class="line">    it.remove();</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//map</span></span><br><span class="line">Iterator&lt;Map.Entry&lt;Integer, String&gt;&gt; it = map.entrySet().iterator();</span><br><span class="line">  <span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">    Map.Entry&lt;Integer, String&gt; entry = it.next();</span><br><span class="line">    Integer key = entry.getKey();</span><br><span class="line">    <span class="keyword">if</span>(key % <span class="number">2</span> == <span class="number">0</span>)&#123;</span><br><span class="line">       System.out.println(<span class="string">"To delete key "</span> + key);</span><br><span class="line">       it.remove();  </span><br><span class="line">       System.out.println(<span class="string">"The key "</span> + + key + <span class="string">" was deleted"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>Map相关<br>  HashMap:内部结构是哈希表+红黑树，键和值都可以是空对象，不保证映射的顺序，多次访问，映射元素的顺序可能不同，非线程安全。<br>  LinkedHashMap:可按put顺序遍历输出。<br>  WeakHashMap:当某个键不再正常使用时，垃圾收集器会移除它，即便有映射关系存在，非线程安全。<br>  SortedMap:键按升序排序，所有键必须实现Comparable接口。<br>  TreeMap:内部为红黑树实现，不同步，可对Map集合中的键进行排序。</p>
+</li>
+<li><p>Set相关<br>一个不允许重复元素的Collection，可以有一个空元素，不可随机访问包含的元素，只能用Iterator实现单向遍历，Set不同步。下面接口实现都是非安全的。<br>HashSet: 内部数据结构是哈希表（HashMap），元素是无序的，迭代访问元素的顺序和加入的顺序不同 .多次迭代访问，元素的顺序可能不同。<br>LinkedHashSet: 基于HashMap和链表的Set实现，迭代访问元素的顺序和加入的顺序相同，多次迭代访问，元素的顺序不变。<br>SortedSet: 加入SortedSet的所有元素必须实现Comparable接口，元素是有序的。<br>TreeSet: 基于TreeMap实现的SortedSet，可以对Set集合中的元素进行排序，排序后按升序排列元素。</p>
+</li>
+<li>如何比较两个List是否相等<br>设定一个标记数组，标记是否找到过  </li>
+<li>如何比较两个Set元素是否相等<br>Set不重复，先判断数量是否相等，再做一次嵌套循环，比较A中元素是否在B中</li>
 </ul>
 <h3 id="同步容器"><a href="#同步容器" class="headerlink" title="同步容器"></a>同步容器</h3><ul>
 <li>Vector </li>
-<li>Stack</li>
-<li>HashTable</li>
+<li>Stack 继承自Vector，先进后出</li>
+<li>HashTable 其中都是使用synchronized进行修饰，保证同一个变量只能由一个线程访问</li>
+<li>如何保证ArrayList的安全<ol>
+<li>使用Collections里面的SynchronizedList的方法，全部读写都加锁，效率不高</li>
+<li>使用CopyOnWriteArrayList，适合读多写少的情况，读写分离，读操作不加锁，写操作使用ReentrantLock重入锁，读操作支持随机访问O(1)，保证最终一致性，不保证强一致性。在List发生变化时(增删)O(n)，都会调用Arrays.copyOf()对原数组进行复制，造成内存损耗。</li>
+</ol>
+</li>
+<li>如何保证Set的安全性<ol>
+<li>使用Collections里面的newSetFromMap，将ConcurrentHashMap转换为Set</li>
+<li>使用CopyOnWriteArraySet：内部通过CopyOnWriteArrayList实现，有序，并发安全，读写分离，通过AddIfAbsent()方法保证元素不重复</li>
+</ol>
+</li>
 </ul>
-<p>其中都是使用synchronized进行修饰，保证同一个变量只能由一个线程访问</p>
 <h3 id="并发容器"><a href="#并发容器" class="headerlink" title="并发容器"></a>并发容器</h3><ul>
 <li>ConcurrentHashMap 和Hashmap的存储方式一样，但是通过对数组进行加锁synchronized和使用CAS(Compare And Swap)进行并发控制</li>
 <li>CopyOnWriteArrayList - 线程安全的 ArrayList</li>
-<li>CopyOnWriteArraySet - 线程安全的 Set，它内部包含了一个 </li>
-<li>CopyOnWriteArrayList，因此本质上是由 CopyOnWriteArrayList 实现</li>
-<li>ConcurrentSkipListSet - 相当于线程安全的 TreeSet。它是有序的 Set。它由 ConcurrentSkipListMap 实现。</li>
+<li>CopyOnWriteArraySet - 线程安全的 Set，它内部包含了一个                         CopyOnWriteArrayList，因此本质上是由 CopyOnWriteArrayList 实现</li>
+<li>ConcurrentSkipListSet - 相当于线程安全的 TreeSet。它是有序的 Set。它由         ConcurrentSkipListMap 实现。</li>
 <li>ConcurrentHashMap - 线程安全的 HashMap。采用分段锁实现高效并发。</li>
 <li>ConcurrentSkipListMap - 线程安全的有序 Map。使用跳表实现高效并发。</li>
 <li>ConcurrentLinkedQueue - 线程安全的无界队列。底层采用单链表。支持 FIFO。</li>
