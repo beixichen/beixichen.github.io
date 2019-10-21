@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://beixichen.xyz/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/</loc>
+    
+    <lastmod>2019-10-21T01:25:17.450Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://beixichen.xyz/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/</loc>
+    
+    <lastmod>2019-10-21T01:24:19.580Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://beixichen.xyz/2019/10/15/%E6%95%B0%E6%8D%AE%E5%BA%93/redis-study1/</loc>
+    
+    <lastmod>2019-10-21T01:21:34.476Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://beixichen.xyz/2019/10/16/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-%E9%94%81/</loc>
     
     <lastmod>2019-10-17T15:43:45.495Z</lastmod>
@@ -26,20 +47,6 @@
     <loc>http://beixichen.xyz/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/</loc>
     
     <lastmod>2019-10-16T02:14:12.665Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://beixichen.xyz/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/</loc>
-    
-    <lastmod>2019-10-16T02:14:05.986Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://beixichen.xyz/2019/10/15/%E6%95%B0%E6%8D%AE%E5%BA%93/redis-study1/</loc>
-    
-    <lastmod>2019-10-16T02:11:09.197Z</lastmod>
     
   </url>
   
@@ -96,13 +103,6 @@
     <loc>http://beixichen.xyz/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadLocal/</loc>
     
     <lastmod>2019-10-12T10:40:22.186Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://beixichen.xyz/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/</loc>
-    
-    <lastmod>2019-10-12T08:38:57.763Z</lastmod>
     
   </url>
   

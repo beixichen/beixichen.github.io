@@ -61,7 +61,7 @@
 <meta property="og:site_name" content="贝西晨的Blog呀">
 <meta property="og:description" content="Redis性能好，对一些结果变化不频繁的结果，存入缓存，加快请求响应高并发进行削峰，减少同一时间对数据库的请求数量，防止数据库崩溃">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-16T02:11:09.197Z">
+<meta property="og:updated_time" content="2019-10-21T01:21:34.476Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Redis】内存淘汰机制、缓存问题及解决、持久化方案">
 <meta name="twitter:description" content="Redis性能好，对一些结果变化不频繁的结果，存入缓存，加快请求响应高并发进行削峰，减少同一时间对数据库的请求数量，防止数据库崩溃">
@@ -298,7 +298,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-16 10:11:09" itemprop="dateModified" datetime="2019-10-16T10:11:09+08:00">2019-10-16</time>
+                <time title="修改时间：2019-10-21 09:21:34" itemprop="dateModified" datetime="2019-10-21T09:21:34+08:00">2019-10-21</time>
               </span>
             
           
@@ -380,7 +380,7 @@
 </ol>
 </blockquote>
 <h3 id="缓存穿透问题"><a href="#缓存穿透问题" class="headerlink" title="缓存穿透问题"></a>缓存穿透问题</h3><blockquote>
-<p>缓存j穿透，即黑客故意去请求缓存中不存在的数据，导致所有的请求都怼到数据库上，从而数据库连接异常。<br>解决方案:</p>
+<p>缓存穿透，即黑客故意去请求缓存中不存在的数据，导致所有的请求都怼到数据库上，从而数据库连接异常。<br>解决方案:</p>
 <ol>
 <li>利用互斥锁，缓存失效的时候，先去获得锁，得到锁了，再去请求数据库。没得到锁，则休眠一段时间重试</li>
 <li>采用异步更新策略，无论key是否取到值，都直接返回。value值中维护一个缓存失效时间，缓存如果过期，异步起一个线程去读数据库，更新缓存。需要做缓存预热(项目启动前，先加载缓存)操作。</li>
