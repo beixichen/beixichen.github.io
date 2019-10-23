@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://beixichen.xyz/about/index.html</loc>
+    
+    <lastmod>2019-10-23T09:49:24.464Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://beixichen.xyz/2019/10/20/%E6%95%B0%E6%8D%AE%E5%BA%93/redis-study1/</loc>
     
-    <lastmod>2019-10-23T03:00:26.038Z</lastmod>
+    <lastmod>2019-10-23T09:49:10.594Z</lastmod>
     
   </url>
   
@@ -110,13 +117,6 @@
     <loc>http://beixichen.xyz/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadLocal/</loc>
     
     <lastmod>2019-10-12T10:40:22.186Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://beixichen.xyz/about/index.html</loc>
-    
-    <lastmod>2019-10-11T03:20:25.694Z</lastmod>
     
   </url>
   
