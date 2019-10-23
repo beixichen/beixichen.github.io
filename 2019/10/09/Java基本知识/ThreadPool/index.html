@@ -62,7 +62,7 @@
 <meta property="og:description" content="线程池作用：减少对线程的创建和销毁，方便对线程进行管理好处： 降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁进行的资源消耗 提高响应速度。当任务到达时，不用创建新的线程就能直接从线程池取出线程进行执行 提高线程的可管理性。可对线程进行统一分配、调优和监控">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://beixichen.xyz/images/1570707345530.png">
-<meta property="og:updated_time" content="2019-10-11T09:53:51.555Z">
+<meta property="og:updated_time" content="2019-10-23T01:42:16.711Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java】ThreadPool">
 <meta name="twitter:description" content="线程池作用：减少对线程的创建和销毁，方便对线程进行管理好处： 降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁进行的资源消耗 提高响应速度。当任务到达时，不用创建新的线程就能直接从线程池取出线程进行执行 提高线程的可管理性。可对线程进行统一分配、调优和监控">
@@ -300,7 +300,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-11 17:53:51" itemprop="dateModified" datetime="2019-10-11T17:53:51+08:00">2019-10-11</time>
+                <time title="修改时间：2019-10-23 09:42:16" itemprop="dateModified" datetime="2019-10-23T09:42:16+08:00">2019-10-23</time>
               </span>
             
           
@@ -390,7 +390,17 @@
 </li>
 </ol>
 <h2 id="ScheduledThreadPoolExecutor-延时和周期的线程池"><a href="#ScheduledThreadPoolExecutor-延时和周期的线程池" class="headerlink" title="ScheduledThreadPoolExecutor 延时和周期的线程池"></a>ScheduledThreadPoolExecutor 延时和周期的线程池</h2><p>ScheduledThreadPoolExecutor，继承ThreadPoolExecutor且实现了ScheduledExecutorService接口，它就相当于提供了“延迟”和“周期执行”功能的ThreadPoolExecutor。在JDK API中是这样定义它的：ThreadPoolExecutor，它可另行安排在给定的延迟后运行命令，或者定期执行命令。需要多个辅助线程时，或者要求 ThreadPoolExecutor 具有额外的灵活性或功能时，此类要优于 Timer。 一旦启用已延迟的任务就执行它，但是有关何时启用，启用后何时执行则没有任何实时保证。按照提交的先进先出 (FIFO) 顺序来启用那些被安排在同一执行时间的任务。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(corePoolSize, Integer.MAX_VALUE, <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">          <span class="keyword">new</span> DelayedWorkQueue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                        ThreadFactory threadFactory)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(corePoolSize, Integer.MAX_VALUE, <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">          <span class="keyword">new</span> DelayedWorkQueue(), threadFactory);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                   RejectedExecutionHandler handler)</span></span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(corePoolSize, Integer.MAX_VALUE, <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">          <span class="keyword">new</span> DelayedWorkQueue(), handler);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                                   ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                             RejectedExecutionHandler handler)</span></span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(corePoolSize, Integer.MAX_VALUE, <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">          <span class="keyword">new</span> DelayedWorkQueue(), threadFactory, handler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>参考：<br><a href="https://cloud.tencent.com/developer/article/1497458" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1497458</a><br><a href="http://cmsblogs.com/?p=2448" target="_blank" rel="noopener">http://cmsblogs.com/?p=2448</a></p>
+<h2 id="如何将一个线程加入到线程池中"><a href="#如何将一个线程加入到线程池中" class="headerlink" title="如何将一个线程加入到线程池中"></a>如何将一个线程加入到线程池中</h2><ol>
+<li>execute()，无返回值，不知道是否执行成功</li>
+<li>submit()，返回值为Future，根据Future对象可判断线程池的状态</li>
+<li>invokeAny()，方法阻塞，提交多个任务，如果任务有一个完成就返回List\<future>，其他任务中断</future></li>
+<li>invokeAll()，方法阻塞，提交多个任务，当任务全部执行完才返回，可设置超时时间，超时返回</li>
+</ol>
+<h2 id="如何关闭线程池"><a href="#如何关闭线程池" class="headerlink" title="如何关闭线程池"></a>如何关闭线程池</h2><ol>
+<li>shutdown()，一旦在线程池上调用 shutdown 方法之后，线程池便不能再接受新的任务；如果此时还向线程池提交任务，那么将会抛出 RejectedExecutionException 异常。之后线程池不会立刻关闭，直到之前已经提交到线程池中的所有任务（包括正在运行的任务和在队列中等待的任务）都已经处理完成，才会关闭。</li>
+<li>shutdownNow()，立即关闭线程， 当前在线程池中运行的任务会全部被取消，然后返回线程池中所有正在等待的任务。</li>
+</ol>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><p><a href="https://cloud.tencent.com/developer/article/1497458" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1497458</a><br><a href="http://cmsblogs.com/?p=2448" target="_blank" rel="noopener">http://cmsblogs.com/?p=2448</a></p>
 
     </div>
 
@@ -477,7 +487,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadPool的参数"><span class="nav-number">1.</span> <span class="nav-text">ThreadPool的参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程池的处理流程"><span class="nav-number">2.</span> <span class="nav-text">线程池的处理流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Executor框架提供了三种线程池"><span class="nav-number">3.</span> <span class="nav-text">Executor框架提供了三种线程池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ScheduledThreadPoolExecutor-延时和周期的线程池"><span class="nav-number">4.</span> <span class="nav-text">ScheduledThreadPoolExecutor 延时和周期的线程池</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadPool的参数"><span class="nav-number">1.</span> <span class="nav-text">ThreadPool的参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程池的处理流程"><span class="nav-number">2.</span> <span class="nav-text">线程池的处理流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Executor框架提供了三种线程池"><span class="nav-number">3.</span> <span class="nav-text">Executor框架提供了三种线程池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ScheduledThreadPoolExecutor-延时和周期的线程池"><span class="nav-number">4.</span> <span class="nav-text">ScheduledThreadPoolExecutor 延时和周期的线程池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何将一个线程加入到线程池中"><span class="nav-number">5.</span> <span class="nav-text">如何将一个线程加入到线程池中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何关闭线程池"><span class="nav-number">6.</span> <span class="nav-text">如何关闭线程池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考："><span class="nav-number">7.</span> <span class="nav-text">参考：</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->

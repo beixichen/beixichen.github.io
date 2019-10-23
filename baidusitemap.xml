@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://beixichen.xyz/2019/10/15/%E6%95%B0%E6%8D%AE%E5%BA%93/redis-study1/</loc>
-    <lastmod>2019-10-21</lastmod>
+    <loc>http://beixichen.xyz/2019/10/20/%E6%95%B0%E6%8D%AE%E5%BA%93/redis-study1/</loc>
+    <lastmod>2019-10-23</lastmod>
+  </url>  <url>
+    <loc>http://beixichen.xyz/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadPool/</loc>
+    <lastmod>2019-10-23</lastmod>
   </url>  <url>
     <loc>http://beixichen.xyz/2019/10/10/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%AE%B9%E5%99%A8/</loc>
     <lastmod>2019-10-21</lastmod>
@@ -39,9 +42,6 @@
   </url>  <url>
     <loc>http://beixichen.xyz/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadLocal/</loc>
     <lastmod>2019-10-12</lastmod>
-  </url>  <url>
-    <loc>http://beixichen.xyz/2019/10/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadPool/</loc>
-    <lastmod>2019-10-11</lastmod>
   </url>  <url>
     <loc>http://beixichen.xyz/2019/10/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-Serializable/</loc>
     <lastmod>2019-10-10</lastmod>
