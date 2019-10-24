@@ -1,9 +1,9 @@
+http://beixichen.xyz/2019/10/23/Java基本知识/Java并发工具类/
+http://beixichen.xyz/2019/10/22/Spring学习笔记/spring-transactional/
+http://beixichen.xyz/2019/10/21/Java基本知识/Java并发容器/
 http://beixichen.xyz/2019/10/20/数据库/redis-study1/
+http://beixichen.xyz/2019/10/20/中间件/rabbitmq1/
+http://beixichen.xyz/2019/10/20/Spring学习笔记/Mybatis分页/
 http://beixichen.xyz/2019/10/16/Spring学习笔记/springboot/
 http://beixichen.xyz/2019/10/16/Java基本知识/Java-锁/
 http://beixichen.xyz/2019/10/15/Java基本知识/JavaClassLoader/
-http://beixichen.xyz/2019/10/15/Java基本知识/volatile/
-http://beixichen.xyz/2019/10/11/Java基本知识/AQS/
-http://beixichen.xyz/2019/10/10/Java基本知识/Java容器/
-http://beixichen.xyz/2019/10/09/Java基本知识/ThreadPool/
-http://beixichen.xyz/2019/10/09/Java基本知识/ThreadLocal/

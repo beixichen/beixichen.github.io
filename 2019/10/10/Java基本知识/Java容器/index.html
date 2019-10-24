@@ -62,7 +62,7 @@
 <meta property="og:description" content="Java容器本文主要对Java中的容器进行介绍，主要分为普通容器，同步容器和并发容器">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://beixichen.xyz/images/1570411257098.png">
-<meta property="og:updated_time" content="2019-10-21T11:31:54.163Z">
+<meta property="og:updated_time" content="2019-10-24T09:54:30.773Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java】普通容器，同步容器和并发容器">
 <meta name="twitter:description" content="Java容器本文主要对Java中的容器进行介绍，主要分为普通容器，同步容器和并发容器">
@@ -300,7 +300,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-21 19:31:54" itemprop="dateModified" datetime="2019-10-21T19:31:54+08:00">2019-10-21</time>
+                <time title="修改时间：2019-10-24 17:54:30" itemprop="dateModified" datetime="2019-10-24T17:54:30+08:00">2019-10-24</time>
               </span>
             
           
@@ -344,7 +344,7 @@
 </li>
 <li><h4 id="遍历删除"><a href="#遍历删除" class="headerlink" title="遍历删除"></a>遍历删除</h4>  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//list</span></span><br><span class="line">Iterator&lt;String&gt; it = list.iterator();</span><br><span class="line"> <span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">  String x = it.next();</span><br><span class="line">  <span class="keyword">if</span>(x.equals(<span class="string">"del"</span>))&#123;</span><br><span class="line">    it.remove();</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//map</span></span><br><span class="line">Iterator&lt;Map.Entry&lt;Integer, String&gt;&gt; it = map.entrySet().iterator();</span><br><span class="line">  <span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">    Map.Entry&lt;Integer, String&gt; entry = it.next();</span><br><span class="line">    Integer key = entry.getKey();</span><br><span class="line">    <span class="keyword">if</span>(key % <span class="number">2</span> == <span class="number">0</span>)&#123;</span><br><span class="line">       System.out.println(<span class="string">"To delete key "</span> + key);</span><br><span class="line">       it.remove();  </span><br><span class="line">       System.out.println(<span class="string">"The key "</span> + + key + <span class="string">" was deleted"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>Map相关<br>  HashMap:内部结构是哈希表+红黑树，键和值都可以是空对象，不保证映射的顺序，多次访问，映射元素的顺序可能不同，非线程安全。<br>  LinkedHashMap:可按put顺序遍历输出。<br>  WeakHashMap:当某个键不再正常使用时，垃圾收集器会移除它，即便有映射关系存在，非线程安全。<br>  SortedMap:键按升序排序，所有键必须实现Comparable接口。<br>  TreeMap:内部为红黑树实现，不同步，可对Map集合中的键进行排序。</p>
+<li><p>Map相关<br>  HashMap:内部结构是哈希表+红黑树，键和值都可以是空对象，不保证映射的顺序，多次访问，映射元素的顺序可能不同，非线程安全。<br>  LinkedHashMap:可按put顺序遍历输出。<br>  WeakHashMap:主要用来实现缓存，被WeakHashMap关联的对象在下一次JVM垃圾回收时会被回收，非线程安全。<br>  SortedMap:键按升序排序，所有键必须实现Comparable接口。<br>  TreeMap:内部为红黑树实现，不同步，可对Map集合中的键进行排序。</p>
 </li>
 <li><p>Set相关<br>一个不允许重复元素的Collection，可以有一个空元素，不可随机访问包含的元素，只能用Iterator实现单向遍历，Set不同步。下面接口实现都是非安全的。<br>HashSet: 内部数据结构是哈希表（HashMap），元素是无序的，迭代访问元素的顺序和加入的顺序不同 .多次迭代访问，元素的顺序可能不同。<br>LinkedHashSet: 基于HashMap和链表的Set实现，迭代访问元素的顺序和加入的顺序相同，多次迭代访问，元素的顺序不变。<br>SortedSet: 加入SortedSet的所有元素必须实现Comparable接口，元素是有序的。<br>TreeSet: 基于TreeMap实现的SortedSet，可以对Set集合中的元素进行排序，排序后按升序排列元素。</p>
 </li>
@@ -369,8 +369,8 @@
 <h3 id="并发容器"><a href="#并发容器" class="headerlink" title="并发容器"></a>并发容器</h3><ul>
 <li>ConcurrentHashMap 和Hashmap的存储方式一样，但是通过对数组进行加锁synchronized和使用CAS(Compare And Swap)进行并发控制</li>
 <li>CopyOnWriteArrayList - 线程安全的 ArrayList</li>
-<li>CopyOnWriteArraySet - 线程安全的 Set，它内部包含了一个                         CopyOnWriteArrayList，因此本质上是由 CopyOnWriteArrayList 实现</li>
-<li>ConcurrentSkipListSet - 相当于线程安全的 TreeSet。它是有序的 Set。它由         ConcurrentSkipListMap 实现。</li>
+<li>CopyOnWriteArraySet - 线程安全的 Set，它内部包含了一个CopyOnWriteArrayList，因此本质上是由 CopyOnWriteArrayList 实现</li>
+<li>ConcurrentSkipListSet - 相当于线程安全的 TreeSet。它是有序的 Set。它由ConcurrentSkipListMap 实现。</li>
 <li>ConcurrentHashMap - 线程安全的 HashMap。采用分段锁实现高效并发。</li>
 <li>ConcurrentSkipListMap - 线程安全的有序 Map。使用跳表实现高效并发。</li>
 <li>ConcurrentLinkedQueue - 线程安全的无界队列。底层采用单链表。支持 FIFO。</li>
@@ -379,6 +379,10 @@
 <li>LinkedBlockingQueue - 链表实现的阻塞队列。</li>
 <li>LinkedBlockingDeque - 双向链表实现的双端阻塞队列。</li>
 </ul>
+<p>##集合注意点</p>
+<ol>
+<li>能用isEmpty不用size()，size()一般需要进行遍历</li>
+</ol>
 
     </div>
 
@@ -404,8 +408,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/10/09/Java基本知识/ThreadPool/" rel="next" title="【Java】ThreadPool">
-                  <i class="fa fa-chevron-left"></i> 【Java】ThreadPool
+                <a href="/2019/10/09/Java基本知识/ThreadPool/" rel="next" title="【Java】ThreadPool的一点一滴">
+                  <i class="fa fa-chevron-left"></i> 【Java】ThreadPool的一点一滴
                 </a>
               
             </div>
@@ -483,7 +487,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -509,7 +513,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>

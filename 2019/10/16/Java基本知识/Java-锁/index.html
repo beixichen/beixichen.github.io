@@ -61,7 +61,7 @@
 <meta property="og:site_name" content="贝西晨的Blog呀">
 <meta property="og:description" content="本文主要介绍了锁的基本概念，synchronized，CAS，ReentrantLock，ReentrantReadWriteLock和Condition。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-17T15:43:45.495Z">
+<meta property="og:updated_time" content="2019-10-23T11:19:27.621Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java】深入理解各种锁、synchronized、CAS">
 <meta name="twitter:description" content="本文主要介绍了锁的基本概念，synchronized，CAS，ReentrantLock，ReentrantReadWriteLock和Condition。">
@@ -298,7 +298,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-17 23:43:45" itemprop="dateModified" datetime="2019-10-17T23:43:45+08:00">2019-10-17</time>
+                <time title="修改时间：2019-10-23 19:19:27" itemprop="dateModified" datetime="2019-10-23T19:19:27+08:00">2019-10-23</time>
               </span>
             
           
@@ -367,6 +367,9 @@
 </blockquote>
 <h2 id="CAS和synchronized效率分析"><a href="#CAS和synchronized效率分析" class="headerlink" title="CAS和synchronized效率分析"></a>CAS和synchronized效率分析</h2><blockquote>
 <p>1、对于资源竞争较少的情况，使用synchronized同步锁进行线程阻塞和唤醒切换以及用户态内核态间的切换操作额外浪费消耗cpu资源；而CAS基于硬件实现，不需要进入内核，不需要切换线程，操作自旋几率较少，因此可以获得更高的性能。<br>2、对于资源竞争严重的情况，CAS自旋的概率会比较大，从而浪费更多的CPU资源，效率低于synchronized。<br>PS. synchronized在jdk1.6之后，已经改进优化。synchronized的底层实现主要依靠Lock-Free的队列，基本思路是自旋后阻塞，竞争切换后继续竞争锁，稍微牺牲了公平性，但获得了高吞吐量。在线程冲突较少的情况下，可以获得和CAS类似的性能；而线程冲突严重的情况下，性能远高于CAS。</p>
+</blockquote>
+<h2 id="synchronized和Lock"><a href="#synchronized和Lock" class="headerlink" title="synchronized和Lock"></a>synchronized和Lock</h2><blockquote>
+<p>synchronized是Java内置关键字；Lock是一个接口，必须放在try-catch里面，一般在finally里面进行锁的释放<br>synchronized在发生异常时会自动释放线程占有的锁，不会导致死锁；Lock必须要自己进行unLock进行锁的释放<br>synchronized不能够被中断，等待的线程会一直等待；Lock可以使用interrupt进行中断<br>synchronized不保证公平性；Lock可以实现公平锁，在竞争资源激烈情况下，Lock要更好</p>
 </blockquote>
 <h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><blockquote>
 <p>ReentrantLock(重入锁)，一种递归无阻塞的同步机制，可选择公平锁还是非公平锁（默认非公平），更强大的锁机制，可减少死锁发生</p>
@@ -473,7 +476,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁的基本概念"><span class="nav-number">1.</span> <span class="nav-text">锁的基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized"><span class="nav-number">2.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS（CompareAndSwap）"><span class="nav-number">3.</span> <span class="nav-text">CAS（CompareAndSwap）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS和synchronized效率分析"><span class="nav-number">4.</span> <span class="nav-text">CAS和synchronized效率分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">5.</span> <span class="nav-text">ReentrantLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#syncronized和ReentrantLock"><span class="nav-number">6.</span> <span class="nav-text">syncronized和ReentrantLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantReadWriteLock"><span class="nav-number">7.</span> <span class="nav-text">ReentrantReadWriteLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Condition"><span class="nav-number">8.</span> <span class="nav-text">Condition</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁的基本概念"><span class="nav-number">1.</span> <span class="nav-text">锁的基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized"><span class="nav-number">2.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS（CompareAndSwap）"><span class="nav-number">3.</span> <span class="nav-text">CAS（CompareAndSwap）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS和synchronized效率分析"><span class="nav-number">4.</span> <span class="nav-text">CAS和synchronized效率分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized和Lock"><span class="nav-number">5.</span> <span class="nav-text">synchronized和Lock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">6.</span> <span class="nav-text">ReentrantLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#syncronized和ReentrantLock"><span class="nav-number">7.</span> <span class="nav-text">syncronized和ReentrantLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantReadWriteLock"><span class="nav-number">8.</span> <span class="nav-text">ReentrantReadWriteLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Condition"><span class="nav-number">9.</span> <span class="nav-text">Condition</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -491,7 +494,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -517,7 +520,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
