@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://beixichen.xyz/about/index.html</loc>
+    
+    <lastmod>2019-10-24T14:31:20.350Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://beixichen.xyz/2019/10/20/%E4%B8%AD%E9%97%B4%E4%BB%B6/rabbitmq1/</loc>
     
     <lastmod>2019-10-24T14:14:05.780Z</lastmod>
@@ -68,13 +75,6 @@
     <loc>http://beixichen.xyz/2019/10/16/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-%E9%94%81/</loc>
     
     <lastmod>2019-10-23T11:19:27.621Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://beixichen.xyz/about/index.html</loc>
-    
-    <lastmod>2019-10-23T09:49:24.464Z</lastmod>
     
   </url>
   
