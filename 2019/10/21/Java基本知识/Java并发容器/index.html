@@ -61,7 +61,7 @@
 <meta property="og:site_name" content="贝西晨的Blog呀">
 <meta property="og:description" content="ConcurrentHashMapHashMap线程不安全，多线程put可能会产生死循环HashTable，Collections.synchronizedMap(hashMap)，通过synchronized进行加锁，独占式，一个线程读其他线程必须等待，效率低ConcurrentHashMap，使用CAS和synchronized进行并发安全，底层使用hash表(数组+链表)+红黑树存储，不允许">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-24T14:10:27.599Z">
+<meta property="og:updated_time" content="2019-10-26T07:28:54.562Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java】并发容器ConcurrentHashMap、ConcurrentLinkedQueue、ConcurrentSkipListMap">
 <meta name="twitter:description" content="ConcurrentHashMapHashMap线程不安全，多线程put可能会产生死循环HashTable，Collections.synchronizedMap(hashMap)，通过synchronized进行加锁，独占式，一个线程读其他线程必须等待，效率低ConcurrentHashMap，使用CAS和synchronized进行并发安全，底层使用hash表(数组+链表)+红黑树存储，不允许">
@@ -298,7 +298,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-24 22:10:27" itemprop="dateModified" datetime="2019-10-24T22:10:27+08:00">2019-10-24</time>
+                <time title="修改时间：2019-10-26 15:28:54" itemprop="dateModified" datetime="2019-10-26T15:28:54+08:00">2019-10-26</time>
               </span>
             
           
@@ -352,9 +352,6 @@
 <li>所有节点复制完成后，则将table指向nextTable，同时更新sizeCtl = nextTable的0.75倍，完成扩容过程</li>
 </ol>
 <p>多线程环境下，ConcurrentHashMap用两点来保证正确性：ForwardingNode和synchronized。当一个线程遍历到的节点如果是ForwardingNode，则继续往后遍历，如果不是，则将该节点加锁，防止其他线程进入，完成后设置ForwardingNode节点，其他线程看到该节点已经处理过了，就遍历下一个节点，如此交叉进行，高效而又安全。</p>
-<h2 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h2><p>采用CAS进行实现，可能会产生head和tail更新滞后(head和tail不总指向第一个元素和最后一个元素)</p>
-<p>当一个线程A入队，必须获取tail节点，此时另一个线程B也要入队，此时tail节点还没有发生变化，tail更新滞后，线程B会插入失败，然后将线程A新插入的节点改为tail节点，但是在死循环里，下一次会插入成功<br>出队时类似</p>
-<p>主要方法：<br>offer()：入队<br>poll(): 出队</p>
 <h2 id="ConcurrentSkipListMap"><a href="#ConcurrentSkipListMap" class="headerlink" title="ConcurrentSkipListMap"></a>ConcurrentSkipListMap</h2><p>内部主要采用跳表skipList数据结构实现，链表结构主要包含：Node，Index，HeadIndex。Node为最底层的链表节点，Index表示基于Node的索引层，HeadIndex表示索引的层级<br>不支持key或value为null<br>插入查找效率为O(log(n))<br>put方法</p>
 <ol>
 <li>首先通过findPredecessor()方法找到父亲节点Node</li>
@@ -363,6 +360,13 @@
 <li>最后，将新建的Item链表插入到SkipList结构中。</li>
 </ol>
 <p>get：获取节点<br>remove：删除节点</p>
+<h2 id="ConcurrentSkipListSet"><a href="#ConcurrentSkipListSet" class="headerlink" title="ConcurrentSkipListSet"></a>ConcurrentSkipListSet</h2><p>内部还是使用ConcurrentSkipListMap，通过Map的key来存储数据保证唯一性，包含一个ConcurrentNavigableMap对象m，而m对象实际上是ConcurrentNavigableMap的实现类ConcurrentSkipListMap的实例</p>
+<h2 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h2><p>采用CAS进行实现，可能会产生head和tail更新滞后(head和tail不总指向第一个元素和最后一个元素)</p>
+<p>单向链表，当一个线程A入队，必须获取tail节点，此时另一个线程B也要入队，此时tail节点还没有发生变化，tail更新滞后，线程B会插入失败，然后将线程A新插入的节点改为tail节点，但是在自旋死循环里，下一次会插入成功<br>出队时类似</p>
+<p>主要方法：<br>offer()：入队<br>poll(): 出队</p>
+<h2 id="ConcurrentLinkedDeque"><a href="#ConcurrentLinkedDeque" class="headerlink" title="ConcurrentLinkedDeque"></a>ConcurrentLinkedDeque</h2><p>对ConcurrentLinkedQueue增强，双向链表</p>
+<h2 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h2><p>通过数组实现，线程安全的ArrayList，通过ReentrantLock保证线程安全<br>每次对数组进行修改时，都复制一份新数组进行修改，修改之后再替换老数组<br>写操作阻塞，读操作不阻塞</p>
+<h2 id="CopyOnWriteArraySet"><a href="#CopyOnWriteArraySet" class="headerlink" title="CopyOnWriteArraySet"></a>CopyOnWriteArraySet</h2><p>内部使用CopyOnWriteArrayList，通过addIfAbsent()方法来保证元素不重复</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://cmsblogs.com/?p=2283" target="_blank" rel="noopener">死磕Java并发容器</a><br><a href="https://blog.csdn.net/u010723709/article/details/48007881" target="_blank" rel="noopener">ConcurrentHashMap源码分析（JDK8版本）</a></p>
 
     </div>
@@ -450,7 +454,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">1.</span> <span class="nav-text">ConcurrentHashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要属性"><span class="nav-number">1.1.</span> <span class="nav-text">主要属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#put方法"><span class="nav-number">1.2.</span> <span class="nav-text">put方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩容过程"><span class="nav-number">1.3.</span> <span class="nav-text">扩容过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentLinkedQueue"><span class="nav-number">2.</span> <span class="nav-text">ConcurrentLinkedQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentSkipListMap"><span class="nav-number">3.</span> <span class="nav-text">ConcurrentSkipListMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">1.</span> <span class="nav-text">ConcurrentHashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要属性"><span class="nav-number">1.1.</span> <span class="nav-text">主要属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#put方法"><span class="nav-number">1.2.</span> <span class="nav-text">put方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩容过程"><span class="nav-number">1.3.</span> <span class="nav-text">扩容过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentSkipListMap"><span class="nav-number">2.</span> <span class="nav-text">ConcurrentSkipListMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentSkipListSet"><span class="nav-number">3.</span> <span class="nav-text">ConcurrentSkipListSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentLinkedQueue"><span class="nav-number">4.</span> <span class="nav-text">ConcurrentLinkedQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentLinkedDeque"><span class="nav-number">5.</span> <span class="nav-text">ConcurrentLinkedDeque</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CopyOnWriteArrayList"><span class="nav-number">6.</span> <span class="nav-text">CopyOnWriteArrayList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CopyOnWriteArraySet"><span class="nav-number">7.</span> <span class="nav-text">CopyOnWriteArraySet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">8.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
