@@ -62,7 +62,7 @@
 <meta property="og:description" content="各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制   操作 抛出异常 返回特殊值null 阻塞等待 超时返回false     入队 add(E e) offer(E e) put(E e) offer(E e,long timeout ,TimeUnit unit)   出队 remove(obj) poll() take() poll(lon">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://beixichen.xyz/images/BlockingQueue.png">
-<meta property="og:updated_time" content="2019-10-26T06:39:19.141Z">
+<meta property="og:updated_time" content="2019-10-26T07:48:52.246Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java】解析各种阻塞队列">
 <meta name="twitter:description" content="各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制   操作 抛出异常 返回特殊值null 阻塞等待 超时返回false     入队 add(E e) offer(E e) put(E e) offer(E e,long timeout ,TimeUnit unit)   出队 remove(obj) poll() take() poll(lon">
@@ -300,7 +300,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-26 14:39:19" itemprop="dateModified" datetime="2019-10-26T14:39:19+08:00">2019-10-26</time>
+                <time title="修改时间：2019-10-26 15:48:52" itemprop="dateModified" datetime="2019-10-26T15:48:52+08:00">2019-10-26</time>
               </span>
             
           
@@ -365,7 +365,7 @@
 <h2 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h2><p>支持延时获取元素的无界阻塞队列<br>内部使用PriorityQueue优先队列，控制过期时间优先级，最先过期的优先级最高在队头<br>通过重入锁，和Condition控制阻塞，通过Thead leader对象来判断当前线程是否被占用<br>主要可使用在：清除过期缓存，超时任务处理</p>
 <h2 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h2><p>不存储元素的BlockingQueue，每个put操作必须等待一个take，否则阻塞<br>可设置公平性，默认非公平，公平模式使用TransferQueue，非公平使用TransferStack<br>适合进行数据的转移</p>
 <h2 id="LinkedTransferQueue"><a href="#LinkedTransferQueue" class="headerlink" title="LinkedTransferQueue"></a>LinkedTransferQueue</h2><p>入队时如果有消费者等待，就立即交出，如果没有就将元素添加到队尾<br>出队时如果队列中有元素就直接取出，如果没有就一直在这个位置等待直到拿到数据或者超时中断，此时tryTransfer()自旋若有新元素就不会进入队列，直接出队被消费者消费，不进行阻塞</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://yq.aliyun.com/articles/577859" target="_blank" rel="noopener">java并发编程笔记–PriorityBlockingQueue实现</a><br><a href="http://cmsblogs.com/?p=2413" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之阻塞队列</a><br><a href="https://cloud.tencent.com/developer/article/1395130" target="_blank" rel="noopener">Java 优先队列 PriorityQueue PriorityBlockingQueue 源码分析</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>Java并发编程艺术 方腾飞<br>Java并发编程实战  Brian Goetz / Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea<br><a href="https://yq.aliyun.com/articles/577859" target="_blank" rel="noopener">java并发编程笔记–PriorityBlockingQueue实现</a><br><a href="http://cmsblogs.com/?p=2413" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之阻塞队列</a><br><a href="https://cloud.tencent.com/developer/article/1395130" target="_blank" rel="noopener">Java 优先队列 PriorityQueue PriorityBlockingQueue 源码分析</a></p>
 
     </div>
 

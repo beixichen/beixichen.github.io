@@ -61,7 +61,7 @@
 <meta property="og:site_name" content="贝西晨的Blog呀">
 <meta property="og:description" content="本文主要介绍了锁的基本概念，synchronized，CAS，ReentrantLock，ReentrantReadWriteLock和Condition。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-23T11:19:27.621Z">
+<meta property="og:updated_time" content="2019-10-26T07:49:12.161Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java】深入理解各种锁、synchronized、CAS">
 <meta name="twitter:description" content="本文主要介绍了锁的基本概念，synchronized，CAS，ReentrantLock，ReentrantReadWriteLock和Condition。">
@@ -298,7 +298,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-23 19:19:27" itemprop="dateModified" datetime="2019-10-23T19:19:27+08:00">2019-10-23</time>
+                <time title="修改时间：2019-10-26 15:49:12" itemprop="dateModified" datetime="2019-10-26T15:49:12+08:00">2019-10-26</time>
               </span>
             
           
@@ -389,7 +389,8 @@
 <h2 id="Condition"><a href="#Condition" class="headerlink" title="Condition"></a>Condition</h2><blockquote>
 <p>广义上的一种条件队列，为线程提供更为灵活的等待通知模式，线程在调用await()方法挂起，知道线程等待某个条件为真时被signal()唤醒。必须要配合锁一起使用，因为对共享状态变量访问发生在多线程环境，一般为Lock的内部newCondition()实现。</p>
 </blockquote>
-<p>参考链接：<br><a href="https://youzhixueyuan.com/detailed-implementation-of-synchronized.html" target="_blank" rel="noopener">深入详解Synchronized同步锁的底层实现</a><br><a href="https://cloud.tencent.com/developer/article/1501912" target="_blank" rel="noopener">Java对象锁和类锁全面解析（多线程synchronized关键字）</a><br><a href="https://blog.csdn.net/luoweifu/article/details/46613015" target="_blank" rel="noopener">Java中Synchronized的用法</a><br><a href="http://cmsblogs.com/?p=5812" target="_blank" rel="noopener">synchronized的锁膨胀过程</a><br><a href="https://www.zhihu.com/question/53826114" target="_blank" rel="noopener">偏向锁，轻量级锁与重量级锁为什么会相互膨胀?</a><br><a href="http://cmsblogs.com/?p=2210" target="_blank" rel="noopener">J.U.C之重入锁</a><br><a href="http://cmsblogs.com/?p=2213" target="_blank" rel="noopener">J.U.C之读写锁</a><br><a href="http://cmsblogs.com/?p=2222" target="_blank" rel="noopener">J.U.C之Condition</a></p>
+<p>参考链接：</p>
+<p>Java并发编程艺术 方腾飞<br>Java并发编程实战  Brian Goetz / Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea<br><a href="https://youzhixueyuan.com/detailed-implementation-of-synchronized.html" target="_blank" rel="noopener">深入详解Synchronized同步锁的底层实现</a><br><a href="https://cloud.tencent.com/developer/article/1501912" target="_blank" rel="noopener">Java对象锁和类锁全面解析（多线程synchronized关键字）</a><br><a href="https://blog.csdn.net/luoweifu/article/details/46613015" target="_blank" rel="noopener">Java中Synchronized的用法</a><br><a href="http://cmsblogs.com/?p=5812" target="_blank" rel="noopener">synchronized的锁膨胀过程</a><br><a href="https://www.zhihu.com/question/53826114" target="_blank" rel="noopener">偏向锁，轻量级锁与重量级锁为什么会相互膨胀?</a><br><a href="http://cmsblogs.com/?p=2210" target="_blank" rel="noopener">J.U.C之重入锁</a><br><a href="http://cmsblogs.com/?p=2213" target="_blank" rel="noopener">J.U.C之读写锁</a><br><a href="http://cmsblogs.com/?p=2222" target="_blank" rel="noopener">J.U.C之Condition</a></p>
 
     </div>
 
