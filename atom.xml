@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://beixichen.xyz/"/>
-  <updated>2019-10-24T11:46:44.477Z</updated>
+  <updated>2019-10-26T02:38:10.686Z</updated>
   <id>http://beixichen.xyz/</id>
   
   <author>
@@ -15,6 +15,54 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【Java】解析各种阻塞队列</title>
+    <link href="http://beixichen.xyz/2019/10/24/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/"/>
+    <id>http://beixichen.xyz/2019/10/24/Java基本知识/Java阻塞队列/</id>
+    <published>2019-10-24T12:19:06.000Z</published>
+    <updated>2019-10-26T02:38:10.686Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a><p><img src="/images/BlockingQueue.png" alt="BlockingQueue"></p><p>各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制</p><table><thead><tr><th>操作</th><th>抛出异常</th><th>返回特殊值null</th><th>阻塞等待</th><th>超时返回false</th></tr></thead><tbody><tr><td>入队</td><td>add(E e)</td><td>offer(E e)</td><td>put(E e)</td><td>offer(E e,long timeout ,TimeUnit unit)</td></tr><tr><td>出队</td><td>remove(obj)</td><td>poll()</td><td>take()</td><td>poll(long timeout ,TimeUnit unit)</td></tr></tbody></table><a id="more"></a><h2 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h2><p>由数组实现的有界阻塞队列<br>大小构造函数确定，不能动态修改大小<br>默认非公平，可设置公平性</p><h2 id="LinkedblockingQueue"><a href="#LinkedblockingQueue" class="headerlink" title="LinkedblockingQueue"></a>LinkedblockingQueue</h2><p>由链表组成的双向阻塞队列，可从尾部和头部进行插入和删除操作<br>容量可选默认为Integer.MAX_VALUE，可设置大小防止过度膨胀<br>使用putFirst、putLast、pollFirst、pollLast内部又调用linkFirst、linkLast、unlinkFirst、unlinkLast方法进行队列的操作</p><h2 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h2><p>由二叉堆实现的可设置优先级的无界阻塞队列，但不可保证同优先级元素的顺序<br>默认升序，可设置comparator<br>默认容量11，最大容量Integer.MAX_VALUE<br>扩容方式：  int newCap = oldCap + ((oldCap &lt; 64) ? (oldCap + 2) :  (oldCap &gt;&gt; 1));<br>         // 容量小于64，则每次容量+2，否则增加一倍</p><h2 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h2><p>支持延时获取元素的无界阻塞队列<br>内部使用PriorityQueue优先队列，控制过期时间优先级，最先过期的优先级最高在队头<br>通过重入锁，和Condition控制阻塞，通过Thead leader对象来判断当前线程是否被占用<br>主要可使用在：清除过期缓存，超时任务处理</p><h2 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h2><p>不存储元素的BlockingQueue，每个put操作必须等待一个take，否则阻塞<br>可设置公平性，默认非公平<br>适合进行数据的转移</p><h2 id="LinkedTransferQueue"><a href="#LinkedTransferQueue" class="headerlink" title="LinkedTransferQueue"></a>LinkedTransferQueue</h2><p>入队时如果有消费者等待，就立即交出，如果没有就将元素添加到队尾<br>出队时如果队列中有元素就直接取出，如果没有就一直在这个位置等待直到拿到数据或者超时中断，此时tryTransfer()自旋若有新元素就不会进入队列，直接出队被消费者消费，不进行阻塞</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://yq.aliyun.com/articles/577859" target="_blank" rel="noopener">java并发编程笔记–PriorityBlockingQueue实现</a><br><a href="http://cmsblogs.com/?p=2413" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之阻塞队列</a><br><a href="https://cloud.tencent.com/developer/article/1395130" target="_blank" rel="noopener">Java 优先队列 PriorityQueue PriorityBlockingQueue 源码分析</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;p&gt;&lt;img src=&quot;/images/BlockingQueue.png&quot; alt=&quot;BlockingQueue&quot;&gt;&lt;/p&gt;&lt;p&gt;各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制&lt;/p&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;操作&lt;/th&gt;
+&lt;th&gt;抛出异常&lt;/th&gt;
+&lt;th&gt;返回特殊值null&lt;/th&gt;
+&lt;th&gt;阻塞等待&lt;/th&gt;
+&lt;th&gt;超时返回false&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;入队&lt;/td&gt;
+&lt;td&gt;add(E e)&lt;/td&gt;
+&lt;td&gt;offer(E e)&lt;/td&gt;
+&lt;td&gt;put(E e)&lt;/td&gt;
+&lt;td&gt;offer(E e,long timeout ,TimeUnit unit)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;出队&lt;/td&gt;
+&lt;td&gt;remove(obj)&lt;/td&gt;
+&lt;td&gt;poll()&lt;/td&gt;
+&lt;td&gt;take()&lt;/td&gt;
+&lt;td&gt;poll(long timeout ,TimeUnit unit)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+    
+    </summary>
+    
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>【Java】并发工具类CyclicBarrier、CountDownLatch、Semaphore、Exchange</title>
@@ -435,32 +483,6 @@
     <summary type="html">
     
       &lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;scope&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;  &lt;span class=&quot;attr&quot;&gt;init-method&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;destroy-method&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;property&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;  &lt;span class=&quot;attr&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt; | &lt;span class=&quot;attr&quot;&gt;ref&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;property&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;bean&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-    
-    </summary>
-    
-      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
-    
-      <category term="Spring" scheme="http://beixichen.xyz/categories/Java/Spring/"/>
-    
-    
-      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
-    
-      <category term="Spring" scheme="http://beixichen.xyz/tags/Spring/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【Spring学习笔记1】IOC的创建和Bean的管理</title>
-    <link href="http://beixichen.xyz/2019/10/02/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study1/"/>
-    <id>http://beixichen.xyz/2019/10/02/Spring学习笔记/Spring-study1/</id>
-    <published>2019-10-02T11:19:16.000Z</published>
-    <updated>2019-10-21T01:25:17.450Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="Spring-是什么"><a href="#Spring-是什么" class="headerlink" title="Spring 是什么"></a>Spring 是什么</h2><p>分层的轻量型开源框架，以 IoC（Inverse Of Control：反转控制）和 AOP（Aspect Oriented Programming：面向切面编程）为内核</p><a id="more"></a><h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><ol><li>方便解耦，简化开发<br>通过 Spring提供的 IoC容器，可以将对象间的依赖关系交由 Spring进行控制，避免硬编码所造成的过度程序耦合。用户也不必再为单例模式类、属性文件解析等这些很底层的需求编写代码，可以更专注于上层的应用。</li><li>AOP 编程的支持<br>通过 Spring的 AOP 功能，方便进行面向切面的编程，许多不容易用传统OOP 实现的功能可以通过 AOP 轻松应付。</li><li>声明式事务的支持<br>可以将我们从单调烦闷的事务管理代码中解脱出来，通过声明式方式灵活的进行事务的管理，<br>提高开发效率和质量。</li><li>方便集成各种优秀框架<br>Spring可以降低各种框架的使用难度， 提供了对各种优秀框架 （Struts、 Hibernate、 Hessian、 Quartz<br>等）的直接支持。</li></ol><h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><p>控制反转，将主动创建对象的权利交给Spring框架来管理<br>(在当前类需要用到其他类的对象，由Spring创建，只需要在配置文件中声明依赖关系的维护，不用考虑对象是如何创建出来的)<br>目的：降低耦合<br>内部通过工厂模式进行Bean的创建，通过一个Map进行Bean的管理</p><h2 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h2><p>能注入的数据：有三类</p><blockquote><p>基本类型和String<br>其他bean类型（在配置文件中或者注解配置过的bean）<br>复杂类型/集合类型</p></blockquote><p>注入的方式：有三种</p><blockquote><p>第一种：使用构造函数提供<br>第二种：set方法注入<br>第三种：使用接口注入</p></blockquote><h3 id="构造函数注入"><a href="#构造函数注入" class="headerlink" title="构造函数注入"></a>构造函数注入</h3><blockquote><p>使用的标签:constructor-arg<br>标签中的属性<br>type：用于指定要注入的数据的数据类型，该数据类型也是构造函数中某个或某些参数的类型<br>index：用于指定要注入的数据给构造函数中指定索引位置的参数赋值。索引的位置是从0开始<br>name：用于指定给构造函数中指定名称的参数赋值                                        常用的<br> =============以上三个用于指定给构造函数中哪个参数赋值<br>value：用于提供基本类型和String类型的数据<br>ref：用于指定其他的bean类型数据。它指的就是在spring的Ioc核心容器中出现过的bean对象<br>优势：<br>在获取bean对象时，注入数据是必须的操作，否则对象无法创建成功。<br>弊端：<br>改变了bean对象的实例化方式，使我们在创建对象时，如果用不到这些数据，也必须提供。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">""</span>&gt;</span><span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">name</span>=<span class="string">"birthday"</span> <span class="attr">ref</span>=<span class="string">"now"</span>&gt;</span><span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- 配置一个日期对象 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"now"</span> <span class="attr">class</span>=<span class="string">"java.util.Date"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p></blockquote><h3 id="Set方法注入"><a href="#Set方法注入" class="headerlink" title="Set方法注入"></a>Set方法注入</h3><blockquote><p>标签：property<br>出现的位置：bean标签的内部<br>标签的属性<br> name：用于指定注入时所调用的set方法名称<br> value：用于提供基本类型和String类型的数据<br> ref：用于指定其他的bean类型数据。它指的就是在spring的Ioc核心容器中出现过的bean对象<br>优势：<br>   创建对象时没有明确的限制，可以直接使用默认构造函数<br>弊端：<br>   如果有某个成员必须有值，则获取对象是有可能set方法没有执行。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">""</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--用于给List结构集合注入的标签：</span></span><br><span class="line"><span class="comment">        list array set</span></span><br><span class="line"><span class="comment">用于给Map结构集合注入的标签:</span></span><br><span class="line"><span class="comment">   map  props</span></span><br><span class="line"><span class="comment">结构相同，标签可以互换--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"myList"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">value</span>&gt;</span>AAA<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">value</span>&gt;</span>BBB<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">value</span>&gt;</span>CCC<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p></blockquote><h3 id="接口注入"><a href="#接口注入" class="headerlink" title="接口注入"></a>接口注入</h3><h2 id="ApplicationContext的三个常用实现类"><a href="#ApplicationContext的三个常用实现类" class="headerlink" title="ApplicationContext的三个常用实现类"></a>ApplicationContext的三个常用实现类</h2><p> ClassPathXmlApplicationContext：它可以加载类路径下的配置文件，要求配置文件必须在类路径     下。不在的话，加载不了。(更常用)<br> FileSystemXmlApplicationContext：它可以加载磁盘任意路径下的配置文件(必须有访问权限）<br> AnnotationConfigApplicationContext：它是用于读取注解创建容器的</p><h2 id="ApplicationContext和BeanFactory的区别"><a href="#ApplicationContext和BeanFactory的区别" class="headerlink" title="ApplicationContext和BeanFactory的区别"></a>ApplicationContext和BeanFactory的区别</h2><ul><li><p>BeanFactory：<br>  Spring最底层的接口，各种Bean的定义，配置初始化，实例化，控制bean的生命周期<br>  使用延迟加载，读取配置文件时不会创建对象，使用时才会创建</p></li><li><p>ApplicationContext：<br>  BeanFactory的派生，可进行更多的扩展，继承messagesource 支持国际化，统一资源文件访      问，同时加载多个配置文件，载入多个上下文使每个上下文专注特定层次容器启动时，读取配          置文件后一次性创建所有的Bean，有利于发现配置错误，但占用过多的内存空间</p></li><li><p>区别：<br>BeanFactory 通常以编程方式创建，ApplicationContext 以声明方式创建<br>BeanFactory 延迟加载(创建多例对象使用)，ApplicationContext 立即加载(创建单例对象使用)</p><p>都支持BeanPostProcessor、BeanFactoryPostProcess，BeanFactory需要手动注册，applicationContext自动注册</p></li></ul><h2 id="Spring对Bean的管理细节"><a href="#Spring对Bean的管理细节" class="headerlink" title="Spring对Bean的管理细节"></a>Spring对Bean的管理细节</h2><p>创建Bean的三种方式：</p><ol><li><p>使用默认构造函数创建，在Spring的配置文件中使用bean标签，配以id和class属性之后，且没有其他属性和标签时,采用的就是默认构造函数创建bean对象.此时如果类中没有默认构造函数，则对象无法创建。</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">""</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></li><li><p>使用普通工厂中的方法创建对象（使用某个类中的方法创建对象，并存入spring容器）</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">factory-bean</span>=<span class="string">""</span> <span class="attr">factory-method</span>=<span class="string">""</span> &gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></li><li><p>使用工厂中的静态方法创建对象（使用某个类中的静态方法创建对象，并存入spring容器)</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">""</span> <span class="attr">factory-method</span>=<span class="string">""</span> &gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></li></ol><hr><div class="note info">            <p>bean标签的scope属性：<br>  作用：用于指定bean的作用范围<br>  取值： 常用的就是单例的和多例的</p><blockquote><p>singleton：单例的（默认值）<br>prototype：多例的<br>request：作用于web应用的请求范围<br>session：作用于web应用的会话范围<br>global-session：作用于集群环境的会话范围（全局会话范围），当不是集群环境时，它就是session</p></blockquote>          </div><div class="note info">            <p><strong>bean对象的生命周期</strong><br>单例对象</p><blockquote><p>出生：当容器创建时对象出生（解析完配置文件，立即创建）<br>活着：只要容器还在，对象一直活着<br>死亡：容器销毁，对象消亡<br>总结：单例对象的生命周期和容器相同</p></blockquote><p>多例对象</p><blockquote><p>出生：当我们使用对象时spring框架为我们创建（使用时创建，延迟创建）<br>活着：对象只要是在使用过程中就一直活着。<br>死亡：当对象长时间不用，且没有别的对象引用时，由Java的垃圾回收器回收</p></blockquote>          </div><h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>将与业务逻辑无关的代码如日志，权限控制分离，减少系统重复代码，降低耦合，便于扩展和维护</p><p>基于动态代理，如果代理对象实现了某个接口，则使用JDK的动态代理创建代理对象</p><p>如果代理对象没有实现接口的对象，就使用CGlib动态代理生成一个被代理对象的子类作为代理</p><h3 id="Spring-AOP和AspectJ-AOP"><a href="#Spring-AOP和AspectJ-AOP" class="headerlink" title="Spring AOP和AspectJ AOP"></a>Spring AOP和AspectJ AOP</h3><table><thead><tr><th>SpringAOP</th><th>运行时增强</th><th>AspectJ</th><th>编译时增强</th></tr></thead><tbody><tr><td></td><td>基于代理</td><td></td><td>基于字节码操作</td></tr><tr><td></td><td>性能一般</td><td></td><td>性能更好</td></tr></tbody></table><p>PS.<br>解耦的思路：<br>    第一步：使用反射来创建对象，而避免使用new关键字。<br>    第二步：通过读取配置文件来获取要创建的对象全限定类名。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;Spring-是什么&quot;&gt;&lt;a href=&quot;#Spring-是什么&quot; class=&quot;headerlink&quot; title=&quot;Spring 是什么&quot;&gt;&lt;/a&gt;Spring 是什么&lt;/h2&gt;&lt;p&gt;分层的轻量型开源框架，以 IoC（Inverse Of Control：反转控制）和 AOP（Aspect Oriented Programming：面向切面编程）为内核&lt;/p&gt;
     
     </summary>
     
