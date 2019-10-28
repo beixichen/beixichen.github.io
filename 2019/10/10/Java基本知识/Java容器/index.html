@@ -62,7 +62,7 @@
 <meta property="og:description" content="Java容器本文主要对Java中的容器进行介绍，主要分为普通容器，同步容器和并发容器">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://beixichen.xyz/images/1570411257098.png">
-<meta property="og:updated_time" content="2019-10-26T07:48:53.788Z">
+<meta property="og:updated_time" content="2019-10-28T06:28:53.701Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java】普通容器，同步容器和并发容器">
 <meta name="twitter:description" content="Java容器本文主要对Java中的容器进行介绍，主要分为普通容器，同步容器和并发容器">
@@ -300,7 +300,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-26 15:48:53" itemprop="dateModified" datetime="2019-10-26T15:48:53+08:00">2019-10-26</time>
+                <time title="修改时间：2019-10-28 14:28:53" itemprop="dateModified" datetime="2019-10-28T14:28:53+08:00">2019-10-28</time>
               </span>
             
           
@@ -348,7 +348,7 @@
 <ul>
 <li><p>Map相关<br>  HashMap:内部结构是哈希表+红黑树，键和值都可以是空对象，不保证映射的顺序，多次访问，映射元素的顺序可能不同，非线程安全。<br>  LinkedHashMap:可按put顺序遍历输出。<br>  WeakHashMap:主要用来实现缓存，被WeakHashMap关联的对象在下一次JVM垃圾回收时会被回收，非线程安全。<br>  SortedMap:键按升序排序，所有键必须实现Comparable接口。<br>  TreeMap:内部为红黑树实现，不同步，可对Map集合中的键进行排序。</p>
 </li>
-<li><p>Set相关<br>一个不允许重复元素的Collection，可以有一个空元素，不可随机访问包含的元素，只能用Iterator实现单向遍历，Set不同步。下面接口实现都是非安全的。<br>HashSet: 内部数据结构是HashMap，使用HashMap的key存储元素，value全是一样的虚拟元素PRESENT，由于HashMap的特性所以HashSet元素是唯一的，元素是无序的，允许有一个null，迭代访问元素的顺序和加入的顺序不同，多次迭代访问，元素的顺序可能不同。<br>LinkedHashSet: 基于LinkedHashMap实现，迭代访问元素的顺序和加入的顺序相同，多次迭代访问，元素的顺序不变，与LinkedHashMap访问区别：不支持按访问顺序排序，只能按插入顺序排序。<br>SortedSet: 加入SortedSet的所有元素必须实现Comparable接口，元素是有序的。<br>TreeSet: 基于TreeMap实现，存在NavigableMap接口的一个对象m，实际上为其实现类TreeMap的实例，可以看做是NavigableMap组合TreeMap，可以对Set集合中的元素进行排序，排序后按自然升序排列元素，可传入自定义的Comparator。</p>
+<li><p>Set相关<br>一个不允许重复元素的Collection，可以有一个空元素，不可随机访问包含的元素，只能用Iterator实现单向遍历，Set不同步。下面接口实现都是非安全的。<br>HashSet: 内部数据结构是HashMap，使用HashMap的key存储元素，value全是一样的虚拟元素PRESENT，由于HashMap的特性所以HashSet元素是唯一的，元素是无序的，允许有一个null，迭代访问元素的顺序和加入的顺序不同，多次迭代访问，元素的顺序可能不同。<br>LinkedHashSet: 基于LinkedHashMap实现，迭代访问元素的顺序和加入的顺序相同，多次迭代访问，元素的顺序不变，与LinkedHashMap访问区别：不支持按访问顺序排序，只能按插入顺序排序。<br>TreeSet: 基于TreeMap实现，存在NavigableMap接口的一个对象m，实际上为其实现类TreeMap的实例，可以看做是NavigableMap组合TreeMap，可以对Set集合中的元素进行排序，排序后按自然升序排列元素，可传入自定义的Comparator。</p>
 </li>
 <li><p>如何比较两个List是否相等<br>设定一个标记数组，标记是否找到过  </p>
 </li>
@@ -397,8 +397,7 @@
 <li>LinkedBlockingQueue - 单链表实现的阻塞队列。</li>
 <li>LinkedBlockingDeque - 双向链表实现的双端阻塞队列。</li>
 </ul>
-<p>##集合注意点</p>
-<ol>
+<h2 id="集合注意点"><a href="#集合注意点" class="headerlink" title="集合注意点"></a>集合注意点</h2><ol>
 <li>能用isEmpty不用size()，size()一般需要进行遍历</li>
 </ol>
 
@@ -487,7 +486,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java容器"><span class="nav-number">1.</span> <span class="nav-text">Java容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通容器"><span class="nav-number">1.1.</span> <span class="nav-text">普通容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#遍历删除"><span class="nav-number">1.1.1.</span> <span class="nav-text">遍历删除</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步容器"><span class="nav-number">1.2.</span> <span class="nav-text">同步容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发容器"><span class="nav-number">1.3.</span> <span class="nav-text">并发容器</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java容器"><span class="nav-number">1.</span> <span class="nav-text">Java容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通容器"><span class="nav-number">1.1.</span> <span class="nav-text">普通容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#遍历删除"><span class="nav-number">1.1.1.</span> <span class="nav-text">遍历删除</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步容器"><span class="nav-number">1.2.</span> <span class="nav-text">同步容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发容器"><span class="nav-number">1.3.</span> <span class="nav-text">并发容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集合注意点"><span class="nav-number">2.</span> <span class="nav-text">集合注意点</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
