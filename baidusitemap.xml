@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://beixichen.xyz/2019/10/21/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/</loc>
+    <lastmod>2019-10-28</lastmod>
+  </url>  <url>
+    <loc>http://beixichen.xyz/2019/10/23/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E7%B1%BB/</loc>
+    <lastmod>2019-10-28</lastmod>
+  </url>  <url>
     <loc>http://beixichen.xyz/2019/07/05/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring-study2/</loc>
     <lastmod>2019-10-28</lastmod>
   </url>  <url>
@@ -26,12 +32,6 @@
     <lastmod>2019-10-28</lastmod>
   </url>  <url>
     <loc>http://beixichen.xyz/2019/05/15/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/JavaClassLoader/</loc>
-    <lastmod>2019-10-28</lastmod>
-  </url>  <url>
-    <loc>http://beixichen.xyz/2019/02/25/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/</loc>
-    <lastmod>2019-10-28</lastmod>
-  </url>  <url>
-    <loc>http://beixichen.xyz/2019/02/23/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E7%B1%BB/</loc>
     <lastmod>2019-10-28</lastmod>
   </url>  <url>
     <loc>http://beixichen.xyz/2019/02/11/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8/</loc>

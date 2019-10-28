@@ -53,19 +53,21 @@
   };
 </script>
 
-  <meta name="description" content="AQS(AbstractQueuedSynchronizer抽象队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
+  <meta name="description" content="各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制   操作 抛出异常 返回特殊值null 阻塞等待 超时返回false     入队 add(E e) offer(E e) put(E e) offer(E e,long timeout ,TimeUnit unit)   出队 remove(obj) poll() take() poll(lon">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【Java】AQS(AbstractQueuedSynchronizer)抽象队列同步器">
-<meta property="og:url" content="http://beixichen.xyz/2019/03/11/Java基本知识/AQS/index.html">
+<meta property="og:title" content="【Java】解析各种阻塞队列">
+<meta property="og:url" content="http://beixichen.xyz/2019/10/21/Java基本知识/Java阻塞队列/index.html">
 <meta property="og:site_name" content="贝西晨的Blog呀">
-<meta property="og:description" content="AQS(AbstractQueuedSynchronizer抽象队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
+<meta property="og:description" content="各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制   操作 抛出异常 返回特殊值null 阻塞等待 超时返回false     入队 add(E e) offer(E e) put(E e) offer(E e,long timeout ,TimeUnit unit)   出队 remove(obj) poll() take() poll(lon">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-28T12:07:24.981Z">
+<meta property="og:image" content="http://beixichen.xyz/images/BlockingQueue.png">
+<meta property="og:updated_time" content="2019-10-28T12:34:29.632Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【Java】AQS(AbstractQueuedSynchronizer)抽象队列同步器">
-<meta name="twitter:description" content="AQS(AbstractQueuedSynchronizer抽象队列同步器)JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。">
-  <link rel="canonical" href="http://beixichen.xyz/2019/03/11/Java基本知识/AQS/">
+<meta name="twitter:title" content="【Java】解析各种阻塞队列">
+<meta name="twitter:description" content="各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制   操作 抛出异常 返回特殊值null 阻塞等待 超时返回false     入队 add(E e) offer(E e) put(E e) offer(E e,long timeout ,TimeUnit unit)   出队 remove(obj) poll() take() poll(lon">
+<meta name="twitter:image" content="http://beixichen.xyz/images/BlockingQueue.png">
+  <link rel="canonical" href="http://beixichen.xyz/2019/10/21/Java基本知识/Java阻塞队列/">
 
 
 <script id="page-configurations">
@@ -79,7 +81,7 @@
   };
 </script>
 
-  <title>【Java】AQS(AbstractQueuedSynchronizer)抽象队列同步器 | 贝西晨的Blog呀</title>
+  <title>【Java】解析各种阻塞队列 | 贝西晨的Blog呀</title>
   
 
 
@@ -259,7 +261,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="http://beixichen.xyz/2019/03/11/Java基本知识/AQS/">
+    <link itemprop="mainEntityOfPage" href="http://beixichen.xyz/2019/10/21/Java基本知识/Java阻塞队列/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beixichen">
@@ -271,7 +273,7 @@
       <meta itemprop="name" content="贝西晨的Blog呀">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">【Java】AQS(AbstractQueuedSynchronizer)抽象队列同步器
+        <h1 class="post-title" itemprop="name headline">【Java】解析各种阻塞队列
 
           
         </h1>
@@ -287,7 +289,7 @@
                 
               
 
-              <time title="创建时间：2019-03-11 18:11:45" itemprop="dateCreated datePublished" datetime="2019-03-11T18:11:45+08:00">2019-03-11</time>
+              <time title="创建时间：2019-10-21 20:19:06" itemprop="dateCreated datePublished" datetime="2019-10-21T20:19:06+08:00">2019-10-21</time>
             </span>
           
             
@@ -298,7 +300,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-28 20:07:24" itemprop="dateModified" datetime="2019-10-28T20:07:24+08:00">2019-10-28</time>
+                <time title="修改时间：2019-10-28 20:34:29" itemprop="dateModified" datetime="2019-10-28T20:34:29+08:00">2019-10-28</time>
               </span>
             
           
@@ -327,11 +329,43 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="AQS-AbstractQueuedSynchronizer抽象队列同步器"><a href="#AQS-AbstractQueuedSynchronizer抽象队列同步器" class="headerlink" title="AQS(AbstractQueuedSynchronizer抽象队列同步器)"></a>AQS(AbstractQueuedSynchronizer抽象队列同步器)</h2><p>JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。</p><a id="more"></a>
-<p>状态控制：<br>`private volatile int state;<br>使用int类型的成员变量state来表示同步状态，当state&gt;0时表示已经获取了锁，当state = 0时表示释放了锁。<br>getState()：返回同步状态的当前值；<br>setState(int newState)：设置当前同步状态；<br>compareAndSetState(int expect, int update)：使用CAS设置当前状态，该方法能够保证状态设置的原子性；</p>
-<h3 id="AQS内的CLH同步队列"><a href="#AQS内的CLH同步队列" class="headerlink" title="AQS内的CLH同步队列"></a>AQS内的CLH同步队列</h3><p>对同步状态的获取和释放<br>FIFO的双向队列，AQS依赖它来完成同步状态的管理，当前线程如果获取同步状态失败时，AQS则会将当前线程已经等待状态等信息构造成一个节点（Node）并将其加入到CLH同步队列，同时会阻塞当前线程，当同步状态释放时，会把首节点唤醒（公平锁），使其再次尝试获取同步状态。</p>
-<h3 id="AQS使用的LockSupport"><a href="#AQS使用的LockSupport" class="headerlink" title="AQS使用的LockSupport"></a>AQS使用的LockSupport</h3><p>对线程的阻塞和唤醒<br>LockSupport 不可重入，一个线程连续两次调用park()，将会产生死锁，一直阻塞<br>park()：阻塞线程，<br>unpark()：唤醒线程</p>
-<p>参考链接<br><a href="http://cmsblogs.com/?p=2174" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之AQS</a><br><a href="http://cmsblogs.com/?p=2197" target="_blank" rel="noopener">J.U.C之AQS：同步状态的获取与释放</a><br><a href="https://blog.csdn.net/aitangyong/article/details/38373137?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">LockSupport的park和unpark的基本使用,以及对线程中断的响应性</a></p>
+        <a id="more"></a><p><img src="/images/BlockingQueue.png" alt="BlockingQueue"></p><p>各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制</p><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>抛出异常</th>
+<th>返回特殊值null</th>
+<th>阻塞等待</th>
+<th>超时返回false</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入队</td>
+<td>add(E e)</td>
+<td>offer(E e)</td>
+<td>put(E e)</td>
+<td>offer(E e,long timeout ,TimeUnit unit)</td>
+</tr>
+<tr>
+<td>出队</td>
+<td>remove(obj)</td>
+<td>poll()</td>
+<td>take()</td>
+<td>poll(long timeout ,TimeUnit unit)</td>
+</tr>
+</tbody>
+</table><a id="more"></a>
+
+
+
+<h2 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h2><p>由数组实现的有界阻塞队列<br>大小构造函数确定，不能动态修改大小<br>默认非公平，可设置公平性</p>
+<h2 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h2><p>由链表组成的有界阻塞队列，可从尾部和头部进行插入和删除操作<br>容量可选默认为Integer.MAX_VALUE，可设置大小防止过度膨胀<br>使用putFirst、putLast、pollFirst、pollLast内部又调用linkFirst、linkLast、unlinkFirst、unlinkLast方法进行队列的操作</p>
+<h2 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h2><p>由二叉堆(小顶堆)实现的可设置优先级的无界阻塞队列，但不可保证同优先级元素的顺序<br>默认升序，可设置comparator<br>默认容量11，最大容量Integer.MAX_VALUE<br>扩容方式：  int newCap = oldCap + ((oldCap &lt; 64) ? (oldCap + 2) :  (oldCap &gt;&gt; 1));<br>                    // 容量小于64，则每次容量+2，否则变为1.5倍大小</p>
+<h2 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h2><p>支持延时获取元素的无界阻塞队列<br>内部使用PriorityQueue优先队列，控制过期时间优先级，最先过期的优先级最高在队头<br>通过重入锁，和Condition控制阻塞，通过Thead leader对象来判断当前线程是否被占用<br>主要可使用在：清除过期缓存，超时任务处理</p>
+<h2 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h2><p>不存储元素的BlockingQueue，每个put操作必须等待一个take，否则阻塞<br>可设置公平性，默认非公平，公平模式使用TransferQueue，非公平使用TransferStack<br>适合进行数据的转移</p>
+<h2 id="LinkedTransferQueue"><a href="#LinkedTransferQueue" class="headerlink" title="LinkedTransferQueue"></a>LinkedTransferQueue</h2><p>入队时如果有消费者等待，就立即交出，如果没有就将元素添加到队尾<br>出队时如果队列中有元素就直接取出，如果没有就一直在这个位置等待直到拿到数据或者超时中断，此时tryTransfer()自旋若有新元素就不会进入队列，直接出队被消费者消费，不进行阻塞</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>Java并发编程艺术 方腾飞<br>Java并发编程实战  Brian Goetz / Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea<br><a href="https://yq.aliyun.com/articles/577859" target="_blank" rel="noopener">java并发编程笔记–PriorityBlockingQueue实现</a><br><a href="http://cmsblogs.com/?p=2413" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之阻塞队列</a><br><a href="https://cloud.tencent.com/developer/article/1395130" target="_blank" rel="noopener">Java 优先队列 PriorityQueue PriorityBlockingQueue 源码分析</a></p>
 
     </div>
 
@@ -357,8 +391,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/02/11/Java基本知识/Java并发容器/" rel="next" title="【Java】并发容器ConcurrentHashMap、ConcurrentLinkedQueue、ConcurrentSkipListMap">
-                  <i class="fa fa-chevron-left"></i> 【Java】并发容器ConcurrentHashMap、ConcurrentLinkedQueue、ConcurrentSkipListMap
+                <a href="/2019/09/13/Spring学习笔记/proxy-study/" rel="next" title="【Spring学习笔记3】Spring动态代理JDK和cglib及ApsectJ">
+                  <i class="fa fa-chevron-left"></i> 【Spring学习笔记3】Spring动态代理JDK和cglib及ApsectJ
                 </a>
               
             </div>
@@ -367,8 +401,8 @@
 
             <div class="post-nav-prev post-nav-item">
               
-                <a href="/2019/03/15/Java基本知识/volatile/" rel="prev" title="【Java】volatile关键字解析">
-                  【Java】volatile关键字解析 <i class="fa fa-chevron-right"></i>
+                <a href="/2019/10/22/Spring学习笔记/spring-transactional/" rel="prev" title="【Spring】Sring中的事务的属性、隔离级别、传播机制">
+                  【Spring】Sring中的事务的属性、隔离级别、传播机制 <i class="fa fa-chevron-right"></i>
                 </a>
               
             </div>
@@ -418,7 +452,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AQS-AbstractQueuedSynchronizer抽象队列同步器"><span class="nav-number">1.</span> <span class="nav-text">AQS(AbstractQueuedSynchronizer抽象队列同步器)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS内的CLH同步队列"><span class="nav-number">1.1.</span> <span class="nav-text">AQS内的CLH同步队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS使用的LockSupport"><span class="nav-number">1.2.</span> <span class="nav-text">AQS使用的LockSupport</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayBlockingQueue"><span class="nav-number">1.</span> <span class="nav-text">ArrayBlockingQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedBlockingQueue"><span class="nav-number">2.</span> <span class="nav-text">LinkedBlockingQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PriorityBlockingQueue"><span class="nav-number">3.</span> <span class="nav-text">PriorityBlockingQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DelayQueue"><span class="nav-number">4.</span> <span class="nav-text">DelayQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SynchronousQueue"><span class="nav-number">5.</span> <span class="nav-text">SynchronousQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedTransferQueue"><span class="nav-number">6.</span> <span class="nav-text">LinkedTransferQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->

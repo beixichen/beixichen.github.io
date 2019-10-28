@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://beixichen.xyz/"/>
-  <updated>2019-10-28T06:26:43.048Z</updated>
+  <updated>2019-10-28T12:34:23.121Z</updated>
   <id>http://beixichen.xyz/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【Java】并发工具类CyclicBarrier、CountDownLatch、Semaphore、Exchange、Phaser</title>
+    <link href="http://beixichen.xyz/2019/10/23/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E7%B1%BB/"/>
+    <id>http://beixichen.xyz/2019/10/23/Java基本知识/Java并发工具类/</id>
+    <published>2019-10-23T08:46:03.000Z</published>
+    <updated>2019-10-28T12:34:23.121Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a><h2 id="CyclicBarrier，循环栅栏"><a href="#CyclicBarrier，循环栅栏" class="headerlink" title="CyclicBarrier，循环栅栏"></a>CyclicBarrier，循环栅栏</h2><p>允许让一组线程进行相互等待await()，直到达到公共屏障点，才会将阻塞的这些线程释放并通过先调用barrierAction，然后让他们一起继续工作，在释放线程之后可以重用。</p><a id="more"></a><p>内部主要使用重入锁ReentrantLock和Condition实现<br>构造方法：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CyclicBarrier</span><span class="params">(<span class="keyword">int</span> parties, Runnable barrierAction)</span> </span>&#123;</span><br><span class="line"><span class="comment">//通过传入Runnable，当达到屏障时先执行barrierAction</span></span><br><span class="line"><span class="keyword">if</span> (parties &lt;= <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">    <span class="keyword">this</span>.parties = parties;</span><br><span class="line">    <span class="keyword">this</span>.count = parties;</span><br><span class="line">    <span class="keyword">this</span>.barrierCommand = barrierAction;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CyclicBarrier</span><span class="params">(<span class="keyword">int</span> parties)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(parties, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>主要方法：<br>//等到所有的线程都到达指定的临界点<br>await() throws InterruptedException, BrokenBarrierException </p><p>//与上面的await方法功能基本一致，只不过这里有超时限制，阻塞等待直至到达超时时间为止<br>await(long timeout, TimeUnit unit) throws InterruptedException,<br>BrokenBarrierException, TimeoutException </p><p>//获取当前有多少个线程阻塞等待在临界点上<br>int getNumberWaiting()</p><p>//用于查询阻塞等待的线程是否被中断<br>boolean isBroken()</p><p>//将屏障重置为初始状态。如果当前有线程正在临界点等待的话，将抛出BrokenBarrierException。<br>void reset()</p><p>当出现异常时使用breakBarrier()终止所有线程</p><h2 id="CountDownLatch，倒计时器"><a href="#CountDownLatch，倒计时器" class="headerlink" title="CountDownLatch，倒计时器"></a>CountDownLatch，倒计时器</h2><p>让一个或多个线程等待其他若干个线程执行完，当计数器为0时，所有等待的线程才可以继续执行，无法被重置</p><p>通过共享锁Sync实现，需要传入一个int参数，指定要多少线程执行完，才让等待的线程执行</p><p>构造函数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CountDownLatch</span><span class="params">(<span class="keyword">int</span> count)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (count &lt; <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"count &lt; 0"</span>);</span><br><span class="line">    <span class="keyword">this</span>.sync = <span class="keyword">new</span> Sync(count);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>内部方法：</p><ol><li>await() throws InterruptedException：调用该方法的线程等到构造方法传入的N减到0的时候，才能继续往下执行；</li><li>await(long timeout, TimeUnit unit)：与上面的await方法功能一致，只不过这里有了时间限制，调用该方法的线程等到指定的timeout时间后，不管N是否减至为0，都会继续往下执行；</li><li>countDown()：使CountDownLatch初始值N减1；</li><li>long getCount()：获取当前CountDownLatch维护的值；</li></ol><h2 id="Semaphore，信号量"><a href="#Semaphore，信号量" class="headerlink" title="Semaphore，信号量"></a>Semaphore，信号量</h2><p>限制可以访问某些资源的线程数目<br>默认为非公平锁，可通过构造函数指定公平性，当semaphore=1，可以当做是一个互斥锁使用<br>=1，其他线程可以获取<br>=0，排他，其他线程阻塞<br>构造函数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Semaphore</span><span class="params">(<span class="keyword">int</span> permits)</span> </span>&#123;</span><br><span class="line">sync = <span class="keyword">new</span> NonfairSync(permits);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Semaphore</span><span class="params">(<span class="keyword">int</span> permits, <span class="keyword">boolean</span> fair)</span> </span>&#123;</span><br><span class="line">sync = fair ? <span class="keyword">new</span> FairSync(permits) : <span class="keyword">new</span> NonfairSync(permits);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>内部主要方法：<br>acquire(); 获取许可，信号量-1；当信号量&gt;0，可以获取，若信号量=0，阻塞<br>release(); 释放许可，信号量+1</p><h2 id="Exchanger，交换器"><a href="#Exchanger，交换器" class="headerlink" title="Exchanger，交换器"></a>Exchanger，交换器</h2><p>允许在并发任务之间交换数据。<br>通过定义两个线程之间的同步点，当两个线程都达到同步点时，交换数据<br>在Exchanger中，如果一个线程已经到达了exchanger节点时，对于它的伙伴节点的情况有三种：</p><ol><li>如果它的伙伴节点在该线程到达之前已经调用了exchanger方法，则它会唤醒它的伙伴然后进行数据交换，得到各自数据返回。</li><li>如果它的伙伴节点还没有到达交换点，则该线程将会被挂起，等待它的伙伴节点到达被唤醒，完成数据交换。</li><li>如果当前线程被中断了则抛出异常，或者等待超时了，则抛出超时异常。</li></ol><h2 id="Phaser，阶段器"><a href="#Phaser，阶段器" class="headerlink" title="Phaser，阶段器"></a>Phaser，阶段器</h2><p>进行并发阶段任务运行，一个任务分为多个阶段，每个阶段完成之后才能进行下一阶段的运行<br>phase就是阶段，初值为0，当所有的线程执行完当前阶段任务已结束，进入到下一阶段任务，phase的值自动加1。<br>parties就是线程， parties=4就意味着Phaser对象当前管理着4个线程。</p><p>主要方法：<br>register()，动态的添加一个或多个线程<br>int arriveAndAwaitAdvance()，相当于await()方法，记录到达线程数，阻塞等待其他线程到达同步点后再继续执行。<br>arriveAndDeregister()，动态的撤销线程的注册，该线程已结束，不再参与后续的阶段<br>boolean onAdvance(int phase,int register)，当每一阶段结束调用该方法，  默认是所有线程都撤销注册为止，return true，阶段停止，可重写该方法设置自定义阶段响应。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">onAdvance</span><span class="params">(<span class="keyword">int</span> phase, <span class="keyword">int</span> registeredParties)</span> </span>&#123;</span><br><span class="line"><span class="keyword">return</span> registeredParties == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>Java并发编程艺术 方腾飞<br>Java并发编程实战  Brian Goetz / Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea</p><p><a href="https://juejin.im/post/5aeec3ebf265da0ba76fa327" target="_blank" rel="noopener">大白话说java并发工具类-CountDownLatch，CyclicBarrier</a><br><a href="http://cmsblogs.com/?p=2263" target="_blank" rel="noopener">死磕Java并发</a><br><a href="https://blog.csdn.net/zhm1563550235/article/details/84453906" target="_blank" rel="noopener">Java并发——Phaser “阶段器”</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;h2 id=&quot;CyclicBarrier，循环栅栏&quot;&gt;&lt;a href=&quot;#CyclicBarrier，循环栅栏&quot; class=&quot;headerlink&quot; title=&quot;CyclicBarrier，循环栅栏&quot;&gt;&lt;/a&gt;CyclicBarrier，循环栅栏&lt;/h2&gt;&lt;p&gt;允许让一组线程进行相互等待await()，直到达到公共屏障点，才会将阻塞的这些线程释放并通过先调用barrierAction，然后让他们一起继续工作，在释放线程之后可以重用。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>【Spring】Sring中的事务的属性、隔离级别、传播机制</title>
@@ -35,6 +57,54 @@
     
     
       <category term="Spring" scheme="http://beixichen.xyz/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Java】解析各种阻塞队列</title>
+    <link href="http://beixichen.xyz/2019/10/21/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/"/>
+    <id>http://beixichen.xyz/2019/10/21/Java基本知识/Java阻塞队列/</id>
+    <published>2019-10-21T12:19:06.000Z</published>
+    <updated>2019-10-28T12:34:29.632Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a><p><img src="/images/BlockingQueue.png" alt="BlockingQueue"></p><p>各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制</p><table><thead><tr><th>操作</th><th>抛出异常</th><th>返回特殊值null</th><th>阻塞等待</th><th>超时返回false</th></tr></thead><tbody><tr><td>入队</td><td>add(E e)</td><td>offer(E e)</td><td>put(E e)</td><td>offer(E e,long timeout ,TimeUnit unit)</td></tr><tr><td>出队</td><td>remove(obj)</td><td>poll()</td><td>take()</td><td>poll(long timeout ,TimeUnit unit)</td></tr></tbody></table><a id="more"></a><h2 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h2><p>由数组实现的有界阻塞队列<br>大小构造函数确定，不能动态修改大小<br>默认非公平，可设置公平性</p><h2 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h2><p>由链表组成的有界阻塞队列，可从尾部和头部进行插入和删除操作<br>容量可选默认为Integer.MAX_VALUE，可设置大小防止过度膨胀<br>使用putFirst、putLast、pollFirst、pollLast内部又调用linkFirst、linkLast、unlinkFirst、unlinkLast方法进行队列的操作</p><h2 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h2><p>由二叉堆(小顶堆)实现的可设置优先级的无界阻塞队列，但不可保证同优先级元素的顺序<br>默认升序，可设置comparator<br>默认容量11，最大容量Integer.MAX_VALUE<br>扩容方式：  int newCap = oldCap + ((oldCap &lt; 64) ? (oldCap + 2) :  (oldCap &gt;&gt; 1));<br>                    // 容量小于64，则每次容量+2，否则变为1.5倍大小</p><h2 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h2><p>支持延时获取元素的无界阻塞队列<br>内部使用PriorityQueue优先队列，控制过期时间优先级，最先过期的优先级最高在队头<br>通过重入锁，和Condition控制阻塞，通过Thead leader对象来判断当前线程是否被占用<br>主要可使用在：清除过期缓存，超时任务处理</p><h2 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h2><p>不存储元素的BlockingQueue，每个put操作必须等待一个take，否则阻塞<br>可设置公平性，默认非公平，公平模式使用TransferQueue，非公平使用TransferStack<br>适合进行数据的转移</p><h2 id="LinkedTransferQueue"><a href="#LinkedTransferQueue" class="headerlink" title="LinkedTransferQueue"></a>LinkedTransferQueue</h2><p>入队时如果有消费者等待，就立即交出，如果没有就将元素添加到队尾<br>出队时如果队列中有元素就直接取出，如果没有就一直在这个位置等待直到拿到数据或者超时中断，此时tryTransfer()自旋若有新元素就不会进入队列，直接出队被消费者消费，不进行阻塞</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>Java并发编程艺术 方腾飞<br>Java并发编程实战  Brian Goetz / Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea<br><a href="https://yq.aliyun.com/articles/577859" target="_blank" rel="noopener">java并发编程笔记–PriorityBlockingQueue实现</a><br><a href="http://cmsblogs.com/?p=2413" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之阻塞队列</a><br><a href="https://cloud.tencent.com/developer/article/1395130" target="_blank" rel="noopener">Java 优先队列 PriorityQueue PriorityBlockingQueue 源码分析</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;p&gt;&lt;img src=&quot;/images/BlockingQueue.png&quot; alt=&quot;BlockingQueue&quot;&gt;&lt;/p&gt;&lt;p&gt;各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制&lt;/p&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;操作&lt;/th&gt;
+&lt;th&gt;抛出异常&lt;/th&gt;
+&lt;th&gt;返回特殊值null&lt;/th&gt;
+&lt;th&gt;阻塞等待&lt;/th&gt;
+&lt;th&gt;超时返回false&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;入队&lt;/td&gt;
+&lt;td&gt;add(E e)&lt;/td&gt;
+&lt;td&gt;offer(E e)&lt;/td&gt;
+&lt;td&gt;put(E e)&lt;/td&gt;
+&lt;td&gt;offer(E e,long timeout ,TimeUnit unit)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;出队&lt;/td&gt;
+&lt;td&gt;remove(obj)&lt;/td&gt;
+&lt;td&gt;poll()&lt;/td&gt;
+&lt;td&gt;take()&lt;/td&gt;
+&lt;td&gt;poll(long timeout ,TimeUnit unit)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+    
+    </summary>
+    
+      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
     
   </entry>
   
@@ -331,76 +401,6 @@
     <summary type="html">
     
       &lt;h2 id=&quot;AQS-AbstractQueuedSynchronizer抽象队列同步器&quot;&gt;&lt;a href=&quot;#AQS-AbstractQueuedSynchronizer抽象队列同步器&quot; class=&quot;headerlink&quot; title=&quot;AQS(AbstractQueuedSynchronizer抽象队列同步器)&quot;&gt;&lt;/a&gt;AQS(AbstractQueuedSynchronizer抽象队列同步器)&lt;/h2&gt;&lt;p&gt;JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【Java】解析各种阻塞队列</title>
-    <link href="http://beixichen.xyz/2019/02/25/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/"/>
-    <id>http://beixichen.xyz/2019/02/25/Java基本知识/Java阻塞队列/</id>
-    <published>2019-02-25T12:19:06.000Z</published>
-    <updated>2019-10-28T12:18:06.022Z</updated>
-    
-    <content type="html"><![CDATA[<a id="more"></a><p><img src="/images/BlockingQueue.png" alt="BlockingQueue"></p><p>各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制</p><table><thead><tr><th>操作</th><th>抛出异常</th><th>返回特殊值null</th><th>阻塞等待</th><th>超时返回false</th></tr></thead><tbody><tr><td>入队</td><td>add(E e)</td><td>offer(E e)</td><td>put(E e)</td><td>offer(E e,long timeout ,TimeUnit unit)</td></tr><tr><td>出队</td><td>remove(obj)</td><td>poll()</td><td>take()</td><td>poll(long timeout ,TimeUnit unit)</td></tr></tbody></table><a id="more"></a><h2 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h2><p>由数组实现的有界阻塞队列<br>大小构造函数确定，不能动态修改大小<br>默认非公平，可设置公平性</p><h2 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h2><p>由链表组成的有界阻塞队列，可从尾部和头部进行插入和删除操作<br>容量可选默认为Integer.MAX_VALUE，可设置大小防止过度膨胀<br>使用putFirst、putLast、pollFirst、pollLast内部又调用linkFirst、linkLast、unlinkFirst、unlinkLast方法进行队列的操作</p><h2 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h2><p>由二叉堆(小顶堆)实现的可设置优先级的无界阻塞队列，但不可保证同优先级元素的顺序<br>默认升序，可设置comparator<br>默认容量11，最大容量Integer.MAX_VALUE<br>扩容方式：  int newCap = oldCap + ((oldCap &lt; 64) ? (oldCap + 2) :  (oldCap &gt;&gt; 1));<br>                    // 容量小于64，则每次容量+2，否则变为1.5倍大小</p><h2 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h2><p>支持延时获取元素的无界阻塞队列<br>内部使用PriorityQueue优先队列，控制过期时间优先级，最先过期的优先级最高在队头<br>通过重入锁，和Condition控制阻塞，通过Thead leader对象来判断当前线程是否被占用<br>主要可使用在：清除过期缓存，超时任务处理</p><h2 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h2><p>不存储元素的BlockingQueue，每个put操作必须等待一个take，否则阻塞<br>可设置公平性，默认非公平，公平模式使用TransferQueue，非公平使用TransferStack<br>适合进行数据的转移</p><h2 id="LinkedTransferQueue"><a href="#LinkedTransferQueue" class="headerlink" title="LinkedTransferQueue"></a>LinkedTransferQueue</h2><p>入队时如果有消费者等待，就立即交出，如果没有就将元素添加到队尾<br>出队时如果队列中有元素就直接取出，如果没有就一直在这个位置等待直到拿到数据或者超时中断，此时tryTransfer()自旋若有新元素就不会进入队列，直接出队被消费者消费，不进行阻塞</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>Java并发编程艺术 方腾飞<br>Java并发编程实战  Brian Goetz / Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea<br><a href="https://yq.aliyun.com/articles/577859" target="_blank" rel="noopener">java并发编程笔记–PriorityBlockingQueue实现</a><br><a href="http://cmsblogs.com/?p=2413" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之阻塞队列</a><br><a href="https://cloud.tencent.com/developer/article/1395130" target="_blank" rel="noopener">Java 优先队列 PriorityQueue PriorityBlockingQueue 源码分析</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;p&gt;&lt;img src=&quot;/images/BlockingQueue.png&quot; alt=&quot;BlockingQueue&quot;&gt;&lt;/p&gt;&lt;p&gt;各种队列的基本操作，内部大都使用ReentrantLock和Condition进行入队出队的阻塞控制&lt;/p&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;操作&lt;/th&gt;
-&lt;th&gt;抛出异常&lt;/th&gt;
-&lt;th&gt;返回特殊值null&lt;/th&gt;
-&lt;th&gt;阻塞等待&lt;/th&gt;
-&lt;th&gt;超时返回false&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;入队&lt;/td&gt;
-&lt;td&gt;add(E e)&lt;/td&gt;
-&lt;td&gt;offer(E e)&lt;/td&gt;
-&lt;td&gt;put(E e)&lt;/td&gt;
-&lt;td&gt;offer(E e,long timeout ,TimeUnit unit)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;出队&lt;/td&gt;
-&lt;td&gt;remove(obj)&lt;/td&gt;
-&lt;td&gt;poll()&lt;/td&gt;
-&lt;td&gt;take()&lt;/td&gt;
-&lt;td&gt;poll(long timeout ,TimeUnit unit)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-    
-    </summary>
-    
-      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【Java】并发工具类CyclicBarrier、CountDownLatch、Semaphore、Exchange、Phaser</title>
-    <link href="http://beixichen.xyz/2019/02/23/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E7%B1%BB/"/>
-    <id>http://beixichen.xyz/2019/02/23/Java基本知识/Java并发工具类/</id>
-    <published>2019-02-23T08:46:03.000Z</published>
-    <updated>2019-10-28T12:17:55.321Z</updated>
-    
-    <content type="html"><![CDATA[<a id="more"></a><h2 id="CyclicBarrier，循环栅栏"><a href="#CyclicBarrier，循环栅栏" class="headerlink" title="CyclicBarrier，循环栅栏"></a>CyclicBarrier，循环栅栏</h2><p>允许让一组线程进行相互等待await()，直到达到公共屏障点，才会将阻塞的这些线程释放并通过先调用barrierAction，然后让他们一起继续工作，在释放线程之后可以重用。</p><a id="more"></a><p>内部主要使用重入锁ReentrantLock和Condition实现<br>构造方法：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CyclicBarrier</span><span class="params">(<span class="keyword">int</span> parties, Runnable barrierAction)</span> </span>&#123;</span><br><span class="line"><span class="comment">//通过传入Runnable，当达到屏障时先执行barrierAction</span></span><br><span class="line"><span class="keyword">if</span> (parties &lt;= <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">    <span class="keyword">this</span>.parties = parties;</span><br><span class="line">    <span class="keyword">this</span>.count = parties;</span><br><span class="line">    <span class="keyword">this</span>.barrierCommand = barrierAction;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CyclicBarrier</span><span class="params">(<span class="keyword">int</span> parties)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(parties, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>主要方法：<br>//等到所有的线程都到达指定的临界点<br>await() throws InterruptedException, BrokenBarrierException </p><p>//与上面的await方法功能基本一致，只不过这里有超时限制，阻塞等待直至到达超时时间为止<br>await(long timeout, TimeUnit unit) throws InterruptedException,<br>BrokenBarrierException, TimeoutException </p><p>//获取当前有多少个线程阻塞等待在临界点上<br>int getNumberWaiting()</p><p>//用于查询阻塞等待的线程是否被中断<br>boolean isBroken()</p><p>//将屏障重置为初始状态。如果当前有线程正在临界点等待的话，将抛出BrokenBarrierException。<br>void reset()</p><p>当出现异常时使用breakBarrier()终止所有线程</p><h2 id="CountDownLatch，倒计时器"><a href="#CountDownLatch，倒计时器" class="headerlink" title="CountDownLatch，倒计时器"></a>CountDownLatch，倒计时器</h2><p>让一个或多个线程等待其他若干个线程执行完，当计数器为0时，所有等待的线程才可以继续执行，无法被重置</p><p>通过共享锁Sync实现，需要传入一个int参数，指定要多少线程执行完，才让等待的线程执行</p><p>构造函数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CountDownLatch</span><span class="params">(<span class="keyword">int</span> count)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (count &lt; <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"count &lt; 0"</span>);</span><br><span class="line">    <span class="keyword">this</span>.sync = <span class="keyword">new</span> Sync(count);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>内部方法：</p><ol><li>await() throws InterruptedException：调用该方法的线程等到构造方法传入的N减到0的时候，才能继续往下执行；</li><li>await(long timeout, TimeUnit unit)：与上面的await方法功能一致，只不过这里有了时间限制，调用该方法的线程等到指定的timeout时间后，不管N是否减至为0，都会继续往下执行；</li><li>countDown()：使CountDownLatch初始值N减1；</li><li>long getCount()：获取当前CountDownLatch维护的值；</li></ol><h2 id="Semaphore，信号量"><a href="#Semaphore，信号量" class="headerlink" title="Semaphore，信号量"></a>Semaphore，信号量</h2><p>限制可以访问某些资源的线程数目<br>默认为非公平锁，可通过构造函数指定公平性，当semaphore=1，可以当做是一个互斥锁使用<br>=1，其他线程可以获取<br>=0，排他，其他线程阻塞<br>构造函数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Semaphore</span><span class="params">(<span class="keyword">int</span> permits)</span> </span>&#123;</span><br><span class="line">sync = <span class="keyword">new</span> NonfairSync(permits);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Semaphore</span><span class="params">(<span class="keyword">int</span> permits, <span class="keyword">boolean</span> fair)</span> </span>&#123;</span><br><span class="line">sync = fair ? <span class="keyword">new</span> FairSync(permits) : <span class="keyword">new</span> NonfairSync(permits);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>内部主要方法：<br>acquire(); 获取许可，信号量-1；当信号量&gt;0，可以获取，若信号量=0，阻塞<br>release(); 释放许可，信号量+1</p><h2 id="Exchanger，交换器"><a href="#Exchanger，交换器" class="headerlink" title="Exchanger，交换器"></a>Exchanger，交换器</h2><p>允许在并发任务之间交换数据。<br>通过定义两个线程之间的同步点，当两个线程都达到同步点时，交换数据<br>在Exchanger中，如果一个线程已经到达了exchanger节点时，对于它的伙伴节点的情况有三种：</p><ol><li>如果它的伙伴节点在该线程到达之前已经调用了exchanger方法，则它会唤醒它的伙伴然后进行数据交换，得到各自数据返回。</li><li>如果它的伙伴节点还没有到达交换点，则该线程将会被挂起，等待它的伙伴节点到达被唤醒，完成数据交换。</li><li>如果当前线程被中断了则抛出异常，或者等待超时了，则抛出超时异常。</li></ol><h2 id="Phaser，阶段器"><a href="#Phaser，阶段器" class="headerlink" title="Phaser，阶段器"></a>Phaser，阶段器</h2><p>进行并发阶段任务运行，一个任务分为多个阶段，每个阶段完成之后才能进行下一阶段的运行<br>phase就是阶段，初值为0，当所有的线程执行完当前阶段任务已结束，进入到下一阶段任务，phase的值自动加1。<br>parties就是线程， parties=4就意味着Phaser对象当前管理着4个线程。</p><p>主要方法：<br>register()，动态的添加一个或多个线程<br>int arriveAndAwaitAdvance()，相当于await()方法，记录到达线程数，阻塞等待其他线程到达同步点后再继续执行。<br>arriveAndDeregister()，动态的撤销线程的注册，该线程已结束，不再参与后续的阶段<br>boolean onAdvance(int phase,int register)，当每一阶段结束调用该方法，  默认是所有线程都撤销注册为止，return true，阶段停止，可重写该方法设置自定义阶段响应。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">onAdvance</span><span class="params">(<span class="keyword">int</span> phase, <span class="keyword">int</span> registeredParties)</span> </span>&#123;</span><br><span class="line"><span class="keyword">return</span> registeredParties == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>Java并发编程艺术 方腾飞<br>Java并发编程实战  Brian Goetz / Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea</p><p><a href="https://juejin.im/post/5aeec3ebf265da0ba76fa327" target="_blank" rel="noopener">大白话说java并发工具类-CountDownLatch，CyclicBarrier</a><br><a href="http://cmsblogs.com/?p=2263" target="_blank" rel="noopener">死磕Java并发</a><br><a href="https://blog.csdn.net/zhm1563550235/article/details/84453906" target="_blank" rel="noopener">Java并发——Phaser “阶段器”</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;h2 id=&quot;CyclicBarrier，循环栅栏&quot;&gt;&lt;a href=&quot;#CyclicBarrier，循环栅栏&quot; class=&quot;headerlink&quot; title=&quot;CyclicBarrier，循环栅栏&quot;&gt;&lt;/a&gt;CyclicBarrier，循环栅栏&lt;/h2&gt;&lt;p&gt;允许让一组线程进行相互等待await()，直到达到公共屏障点，才会将阻塞的这些线程释放并通过先调用barrierAction，然后让他们一起继续工作，在释放线程之后可以重用。&lt;/p&gt;
     
     </summary>
     

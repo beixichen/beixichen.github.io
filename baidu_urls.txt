@@ -1,9 +1,9 @@
+http://beixichen.xyz/2019/10/23/Java基本知识/Java并发工具类/
 http://beixichen.xyz/2019/10/22/Spring学习笔记/spring-transactional/
+http://beixichen.xyz/2019/10/21/Java基本知识/Java阻塞队列/
 http://beixichen.xyz/2019/09/13/Spring学习笔记/proxy-study/
 http://beixichen.xyz/2019/07/05/Spring学习笔记/Spring-study2/
 http://beixichen.xyz/2019/07/02/Spring学习笔记/Spring-study1/
 http://beixichen.xyz/2019/06/28/Spring学习笔记/Spring七大模块/
 http://beixichen.xyz/2019/06/09/Java基本知识/ThreadPool/
 http://beixichen.xyz/2019/05/20/中间件/rabbitmq1/
-http://beixichen.xyz/2019/05/15/Java基本知识/JavaClassLoader/
-http://beixichen.xyz/2019/04/20/Spring学习笔记/Mybatis分页/
