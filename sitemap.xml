@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://beixichen.xyz/2019/10/22/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/spring-transactional/</loc>
+    
+    <lastmod>2019-11-01T05:47:04.573Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://beixichen.xyz/2019/10/15/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D/</loc>
     
     <lastmod>2019-11-01T05:41:06.232Z</lastmod>
@@ -47,13 +54,6 @@
     <loc>http://beixichen.xyz/2019/06/09/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/ThreadPool/</loc>
     
     <lastmod>2019-10-29T05:39:54.724Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://beixichen.xyz/2019/10/22/Spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/spring-transactional/</loc>
-    
-    <lastmod>2019-10-29T05:11:39.248Z</lastmod>
     
   </url>
   
