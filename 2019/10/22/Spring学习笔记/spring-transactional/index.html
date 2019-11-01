@@ -62,7 +62,7 @@
 <meta property="og:description" content="Spring的事务管理分为编程式事务和声明式事务两种。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://beixichen.xyz/images/Spring-transaction-mechanism.png">
-<meta property="og:updated_time" content="2019-10-28T06:26:43.048Z">
+<meta property="og:updated_time" content="2019-10-29T05:11:39.248Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Spring】Sring中的事务的属性、隔离级别、传播机制">
 <meta name="twitter:description" content="Spring的事务管理分为编程式事务和声明式事务两种。">
@@ -300,7 +300,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-28 14:26:43" itemprop="dateModified" datetime="2019-10-28T14:26:43+08:00">2019-10-28</time>
+                <time title="修改时间：2019-10-29 13:11:39" itemprop="dateModified" datetime="2019-10-29T13:11:39+08:00">2019-10-29</time>
               </span>
             
           
@@ -446,7 +446,7 @@
 <p>Spring AOP 代理有 CglibAopProxy 和 JdkDynamicAopProxy 两种，以 CglibAopProxy 为例，对于 CglibAopProxy，需要调用其内部类的 DynamicAdvisedInterceptor 的 intercept 方法。对于 JdkDynamicAopProxy，需要调用其 invoke 方法。</p>
 <p>事务管理的框架是由抽象事务管理器 AbstractPlatformTransactionManager 来提供的，而具体的底层事务处理实现，由 PlatformTransactionManager 的具体实现类来实现，如事务管理器 DataSourceTransactionManager。不同的事务管理器管理不同的数据资源 DataSource，比如 DataSourceTransactionManager 管理 JDBC 的 Connection。</p>
 <p><img src="/images/Spring-transaction-mechanism.png" alt="1570411257098"></p>
-<h2 id="Transational-为什么只能使public方法有效"><a href="#Transational-为什么只能使public方法有效" class="headerlink" title="@Transational 为什么只能使public方法有效"></a>@Transational 为什么只能使public方法有效</h2><p>在使用注解@Transactional时，Spring默认使用AOP代理，在代码运行时生成代理对象，通过TransactionInterceptor 在目标方法执行前后进行拦截之前，DynamicAdvisedInterceptor（CglibAopProxy 的内部类）的的 intercept 方法或 JdkDynamicAopProxy 的 invoke 方法会间接调用 AbstractFallbackTransactionAttributeSource（Spring 通过这个类获取@Transactional 注解的事务属性配置属性信息）的 computeTransactionAttribute 方法，这个方法会检查方法是否为public，若不是则不会获取@Transactional的属性配置信息，造成TransactionInterceptor不会去拦截该目标方法进行事务管理。</p>
+<h2 id="Transational-为什么只能使public方法有效"><a href="#Transational-为什么只能使public方法有效" class="headerlink" title="@Transational 为什么只能使public方法有效"></a>@Transational 为什么只能使public方法有效</h2><p>在使用注解@Transactional时，Spring默认使用AOP代理，在代码运行时生成代理对象，通过TransactionInterceptor 在目标方法执行前后进行拦截之前，DynamicAdvisedInterceptor（CglibAopProxy 的内部类）的 intercept 方法或 JdkDynamicAopProxy 的 invoke 方法会间接调用 AbstractFallbackTransactionAttributeSource（Spring 通过这个类获取@Transactional 注解的事务属性配置属性信息）的 computeTransactionAttribute 方法，这个方法会检查方法是否为public，若不是则不会获取@Transactional的属性配置信息，造成TransactionInterceptor不会去拦截该目标方法进行事务管理。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> TransactionAttribute <span class="title">computeTransactionAttribute</span><span class="params">(Method method,Class&lt;?&gt; targetClass)</span> </span>&#123;</span><br><span class="line"><span class="comment">// Don't allow no-public methods as required           </span></span><br><span class="line"><span class="keyword">if</span>(allowPublicMethodsOnly()&amp;&amp;!Modifier.isPublic(method.getModifiers())&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="Spring-事务的自调用问题"><a href="#Spring-事务的自调用问题" class="headerlink" title="Spring 事务的自调用问题"></a>Spring 事务的自调用问题</h2><p>一个没有事务的方法调用一个有事务的方法，事务会被忽略<br>在默认的代理模式下，只有方法被外部调用才能被Spring的事务拦截器拦截，在同一个类的两个方法调用不会被Spring事务拦截器拦截。</p>
 <p>以上两个问题可使用AspectJ代替SpringAOP代理解决。</p>
@@ -555,7 +555,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
