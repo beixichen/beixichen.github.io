@@ -53,15 +53,21 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Gallery">
-<meta property="og:url" content="http://beixichen.xyz/gallery/index.html">
+  <meta name="description" content="控制连接数量max_connections最大连接数，数值大，能接收更多的并发连接请求但会造成更多的缓冲区，开销内存大，数值小，并发连接请求处理能力不足，通常让max_used_connections/max_connections 约为85%">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【MySQL】内部参数设置优化">
+<meta property="og:url" content="http://beixichen.xyz/2019/10/30/数据库/MySQL-优化/index.html">
 <meta property="og:site_name" content="贝西晨的Blog呀">
+<meta property="og:description" content="控制连接数量max_connections最大连接数，数值大，能接收更多的并发连接请求但会造成更多的缓冲区，开销内存大，数值小，并发连接请求处理能力不足，通常让max_used_connections/max_connections 约为85%">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-17T11:34:17.827Z">
+<meta property="og:image" content="http://beixichen.xyz/images/queryCache.png">
+<meta property="og:updated_time" content="2019-11-03T15:13:43.988Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Gallery">
-  <link rel="canonical" href="http://beixichen.xyz/gallery/">
+<meta name="twitter:title" content="【MySQL】内部参数设置优化">
+<meta name="twitter:description" content="控制连接数量max_connections最大连接数，数值大，能接收更多的并发连接请求但会造成更多的缓冲区，开销内存大，数值小，并发连接请求处理能力不足，通常让max_used_connections/max_connections 约为85%">
+<meta name="twitter:image" content="http://beixichen.xyz/images/queryCache.png">
+  <link rel="canonical" href="http://beixichen.xyz/2019/10/30/数据库/MySQL-优化/">
 
 
 <script id="page-configurations">
@@ -69,13 +75,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
-    isPage: true,
+    isPost: true,
+    isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>Gallery | 贝西晨的Blog呀</title>
+  <title>【MySQL】内部参数设置优化 | 贝西晨的Blog呀</title>
   
 
 
@@ -211,24 +217,6 @@
 
     
 
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-  
-
 </nav>
   <div class="site-search">
     <div class="popup search-popup">
@@ -268,28 +256,140 @@
             
 
   <div id="posts" class="posts-expand">
-    
-    
-    
-    <div class="post-block page">
-      
-      
-      
-      
-      <div class="post-body">
-        
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://beixichen.xyz/2019/10/30/数据库/MySQL-优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beixichen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xixi.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="贝西晨的Blog呀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">【MySQL】内部参数设置优化
+
           
-        
-      </div>
-      
-      
-      
-    </div>
-    
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-30 13:59:38" itemprop="dateCreated datePublished" datetime="2019-10-30T13:59:38+08:00">2019-10-30</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-03 23:13:43" itemprop="dateModified" datetime="2019-11-03T23:13:43+08:00">2019-11-03</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
 
     
     
     
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="控制连接数量"><a href="#控制连接数量" class="headerlink" title="控制连接数量"></a>控制连接数量</h2><p>max_connections<br>最大连接数，数值大，能接收更多的并发连接请求但会造成更多的缓冲区，开销内存大，数值小，并发连接请求处理能力不足，通常让max_used_connections/max_connections 约为85%</p><a id="more"></a>
+<p>back_log<br>能够暂存的连接数量，当MySQL连接数量到达max_connections时，会将新的请求暂存值back_log里面，若超过back_log则不会接受连接请求，默认为80</p>
+<p>wait_timeout 关闭一个非交互连接之前需要等待的秒数<br>interative 关闭一个交互连接之前需要等待的秒数</p>
+<p>show processlist 可查看各个连接的状态</p>
+<h2 id="设置缓冲区参数"><a href="#设置缓冲区参数" class="headerlink" title="设置缓冲区参数"></a>设置缓冲区参数</h2><p>设置查询缓冲<br>MySQL会在执行select之前，查询缓冲区是否存在相同的select被执行过，且结果未过期，直接将结果返回，区分SQL大小写<br><img src="/images/queryCache.png" alt="查询缓冲参数"></p>
+<p>query_cache_limit<br>单个查询的缓冲区大小，不能超出<br>query_cache_min_res_unit<br>缓存块的最小值，数值大适合大数据查询，不适合小数据查询，容易造成内存碎片和浪费<br>query_cache_size<br>整体查询缓存区大小<br>query_cache_type<br>=0 禁用查询缓冲<br>=1 默认使用查询缓冲，使用Select SQL_NO_CACHE filed1,filed2 From table 不使用缓冲查询<br>=2 默认不使用缓冲，使用Select SQL_CACHE * FROM table来使用缓冲</p>
+<p>需要实时数据的或者一天查询次数比较少的不要使用查询缓冲</p>
+<p>不能使用查询缓存的情况<br>所有子查询中的外部查询SQL不能被Cache<br>存储过程触发器的query不能缓存<br>每次执行结果可能不一样的不能缓存</p>
+<p>sort_buffer_size<br>为需要排序的分配缓冲区，加速order by和group by</p>
+<p>read_buffer_size<br>顺序读缓冲区的大小，对一个表进行顺序扫描时，MySQL会分配一个顺序读取缓冲区，设置缓冲区的大小，提高性能</p>
+<p>read_rnd_buffer_size<br>设置随机读缓冲区大小，按任意顺序读取行时，分配的随机读取缓冲区</p>
+<p>join_buffer_size<br>每个线程使用连接缓存的大小</p>
+<p>key_buffer_size<br>改变索引缓冲区的长度，决定索引的速度，key_cache_miss_rate=key_reads/key_requests 尽可能的低，只有MYSIAM引擎表有效，Innodb参数为innodb_buffer_pool_size，缓存数据和索引</p>
+<p>thread_cache_size<br>线程缓冲大小，当断开连接时，线程被放到缓存中，来响应下一个请求，不需要重新创建销毁连接</p>
+<p>innodb_thread_concurrency<br>设置线程并发数</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/27/Java基本知识/Java1.8新特性/" rel="next" title="【Java】JDK1.8新特性">
+                  <i class="fa fa-chevron-left"></i> 【Java】JDK1.8新特性
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
   </div>
 
 
@@ -326,6 +426,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#控制连接数量"><span class="nav-number">1.</span> <span class="nav-text">控制连接数量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置缓冲区参数"><span class="nav-number">2.</span> <span class="nav-text">设置缓冲区参数</span></a></li></ol></div>
+        
       </div>
       <!--/noindex-->
 

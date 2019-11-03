@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://beixichen.xyz/"/>
-  <updated>2019-11-01T05:40:19.860Z</updated>
+  <updated>2019-11-03T15:15:11.730Z</updated>
   <id>http://beixichen.xyz/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【MySQL】内部参数设置优化</title>
+    <link href="http://beixichen.xyz/2019/11/01/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-%E4%BC%98%E5%8C%96/"/>
+    <id>http://beixichen.xyz/2019/11/01/数据库/MySQL-优化/</id>
+    <published>2019-11-01T12:59:38.000Z</published>
+    <updated>2019-11-03T15:15:11.730Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="控制连接数量"><a href="#控制连接数量" class="headerlink" title="控制连接数量"></a>控制连接数量</h2><p>max_connections<br>最大连接数，数值大，能接收更多的并发连接请求但会造成更多的缓冲区，开销内存大，数值小，并发连接请求处理能力不足，通常让max_used_connections/max_connections 约为85%</p><a id="more"></a><p>back_log<br>能够暂存的连接数量，当MySQL连接数量到达max_connections时，会将新的请求暂存值back_log里面，若超过back_log则不会接受连接请求，默认为80</p><p>wait_timeout 关闭一个非交互连接之前需要等待的秒数<br>interative 关闭一个交互连接之前需要等待的秒数</p><p>show processlist 可查看各个连接的状态</p><h2 id="设置缓冲区参数"><a href="#设置缓冲区参数" class="headerlink" title="设置缓冲区参数"></a>设置缓冲区参数</h2><p>设置查询缓冲<br>MySQL会在执行select之前，查询缓冲区是否存在相同的select被执行过，且结果未过期，直接将结果返回，区分SQL大小写<br><img src="/images/queryCache.png" alt="查询缓冲参数"></p><p>query_cache_limit<br>单个查询的缓冲区大小，不能超出<br>query_cache_min_res_unit<br>缓存块的最小值，数值大适合大数据查询，不适合小数据查询，容易造成内存碎片和浪费<br>query_cache_size<br>整体查询缓存区大小<br>query_cache_type<br>=0 禁用查询缓冲<br>=1 默认使用查询缓冲，使用Select SQL_NO_CACHE filed1,filed2 From table 不使用缓冲查询<br>=2 默认不使用缓冲，使用Select SQL_CACHE * FROM table来使用缓冲</p><p>需要实时数据的或者一天查询次数比较少的不要使用查询缓冲</p><p>不能使用查询缓存的情况<br>所有子查询中的外部查询SQL不能被Cache<br>存储过程触发器的query不能缓存<br>每次执行结果可能不一样的不能缓存</p><p>sort_buffer_size<br>为需要排序的分配缓冲区，加速order by和group by</p><p>read_buffer_size<br>顺序读缓冲区的大小，对一个表进行顺序扫描时，MySQL会分配一个顺序读取缓冲区，设置缓冲区的大小，提高性能</p><p>read_rnd_buffer_size<br>设置随机读缓冲区大小，按任意顺序读取行时，分配的随机读取缓冲区</p><p>join_buffer_size<br>每个线程使用连接缓存的大小</p><p>key_buffer_size<br>改变索引缓冲区的长度，决定索引的速度，key_cache_miss_rate=key_reads/key_requests 尽可能的低，只有MYSIAM引擎表有效，Innodb参数为innodb_buffer_pool_size，缓存数据和索引</p><p>thread_cache_size<br>线程缓冲大小，当断开连接时，线程被放到缓存中，来响应下一个请求，不需要重新创建销毁连接</p><p>innodb_thread_concurrency<br>设置线程并发数</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;控制连接数量&quot;&gt;&lt;a href=&quot;#控制连接数量&quot; class=&quot;headerlink&quot; title=&quot;控制连接数量&quot;&gt;&lt;/a&gt;控制连接数量&lt;/h2&gt;&lt;p&gt;max_connections&lt;br&gt;最大连接数，数值大，能接收更多的并发连接请求但会造成更多的缓冲区，开销内存大，数值小，并发连接请求处理能力不足，通常让max_used_connections/max_connections 约为85%&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="MySQL" scheme="http://beixichen.xyz/categories/MySQL/"/>
+    
+    
+      <category term="MySQL" scheme="http://beixichen.xyz/tags/MySQL/"/>
+    
+  </entry>
   
   <entry>
     <title>【Java】JDK1.8新特性</title>
@@ -39,11 +61,11 @@
   </entry>
   
   <entry>
-    <title>【Java】并发工具类CyclicBarrier、CountDownLatch、Semaphore、Exchange、Phaser</title>
+    <title>【Java】并发工具类CyclicBarrier、CountDownLatch、Semaphore、Exchanger、Phaser</title>
     <link href="http://beixichen.xyz/2019/10/23/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E7%B1%BB/"/>
     <id>http://beixichen.xyz/2019/10/23/Java基本知识/Java并发工具类/</id>
     <published>2019-10-23T08:46:03.000Z</published>
-    <updated>2019-10-28T12:34:23.121Z</updated>
+    <updated>2019-11-01T05:54:17.808Z</updated>
     
     <content type="html"><![CDATA[<a id="more"></a><h2 id="CyclicBarrier，循环栅栏"><a href="#CyclicBarrier，循环栅栏" class="headerlink" title="CyclicBarrier，循环栅栏"></a>CyclicBarrier，循环栅栏</h2><p>允许让一组线程进行相互等待await()，直到达到公共屏障点，才会将阻塞的这些线程释放并通过先调用barrierAction，然后让他们一起继续工作，在释放线程之后可以重用。</p><a id="more"></a><p>内部主要使用重入锁ReentrantLock和Condition实现<br>构造方法：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CyclicBarrier</span><span class="params">(<span class="keyword">int</span> parties, Runnable barrierAction)</span> </span>&#123;</span><br><span class="line"><span class="comment">//通过传入Runnable，当达到屏障时先执行barrierAction</span></span><br><span class="line"><span class="keyword">if</span> (parties &lt;= <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">    <span class="keyword">this</span>.parties = parties;</span><br><span class="line">    <span class="keyword">this</span>.count = parties;</span><br><span class="line">    <span class="keyword">this</span>.barrierCommand = barrierAction;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CyclicBarrier</span><span class="params">(<span class="keyword">int</span> parties)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(parties, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>主要方法：<br>//等到所有的线程都到达指定的临界点<br>await() throws InterruptedException, BrokenBarrierException </p><p>//与上面的await方法功能基本一致，只不过这里有超时限制，阻塞等待直至到达超时时间为止<br>await(long timeout, TimeUnit unit) throws InterruptedException,<br>BrokenBarrierException, TimeoutException </p><p>//获取当前有多少个线程阻塞等待在临界点上<br>int getNumberWaiting()</p><p>//用于查询阻塞等待的线程是否被中断<br>boolean isBroken()</p><p>//将屏障重置为初始状态。如果当前有线程正在临界点等待的话，将抛出BrokenBarrierException。<br>void reset()</p><p>当出现异常时使用breakBarrier()终止所有线程</p><h2 id="CountDownLatch，倒计时器"><a href="#CountDownLatch，倒计时器" class="headerlink" title="CountDownLatch，倒计时器"></a>CountDownLatch，倒计时器</h2><p>让一个或多个线程等待其他若干个线程执行完，当计数器为0时，所有等待的线程才可以继续执行，无法被重置</p><p>通过共享锁Sync实现，需要传入一个int参数，指定要多少线程执行完，才让等待的线程执行</p><p>构造函数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CountDownLatch</span><span class="params">(<span class="keyword">int</span> count)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (count &lt; <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"count &lt; 0"</span>);</span><br><span class="line">    <span class="keyword">this</span>.sync = <span class="keyword">new</span> Sync(count);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>内部方法：</p><ol><li>await() throws InterruptedException：调用该方法的线程等到构造方法传入的N减到0的时候，才能继续往下执行；</li><li>await(long timeout, TimeUnit unit)：与上面的await方法功能一致，只不过这里有了时间限制，调用该方法的线程等到指定的timeout时间后，不管N是否减至为0，都会继续往下执行；</li><li>countDown()：使CountDownLatch初始值N减1；</li><li>long getCount()：获取当前CountDownLatch维护的值；</li></ol><h2 id="Semaphore，信号量"><a href="#Semaphore，信号量" class="headerlink" title="Semaphore，信号量"></a>Semaphore，信号量</h2><p>限制可以访问某些资源的线程数目<br>默认为非公平锁，可通过构造函数指定公平性，当semaphore=1，可以当做是一个互斥锁使用<br>=1，其他线程可以获取<br>=0，排他，其他线程阻塞<br>构造函数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Semaphore</span><span class="params">(<span class="keyword">int</span> permits)</span> </span>&#123;</span><br><span class="line">sync = <span class="keyword">new</span> NonfairSync(permits);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Semaphore</span><span class="params">(<span class="keyword">int</span> permits, <span class="keyword">boolean</span> fair)</span> </span>&#123;</span><br><span class="line">sync = fair ? <span class="keyword">new</span> FairSync(permits) : <span class="keyword">new</span> NonfairSync(permits);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>内部主要方法：<br>acquire(); 获取许可，信号量-1；当信号量&gt;0，可以获取，若信号量=0，阻塞<br>release(); 释放许可，信号量+1</p><h2 id="Exchanger，交换器"><a href="#Exchanger，交换器" class="headerlink" title="Exchanger，交换器"></a>Exchanger，交换器</h2><p>允许在并发任务之间交换数据。<br>通过定义两个线程之间的同步点，当两个线程都达到同步点时，交换数据<br>在Exchanger中，如果一个线程已经到达了exchanger节点时，对于它的伙伴节点的情况有三种：</p><ol><li>如果它的伙伴节点在该线程到达之前已经调用了exchanger方法，则它会唤醒它的伙伴然后进行数据交换，得到各自数据返回。</li><li>如果它的伙伴节点还没有到达交换点，则该线程将会被挂起，等待它的伙伴节点到达被唤醒，完成数据交换。</li><li>如果当前线程被中断了则抛出异常，或者等待超时了，则抛出超时异常。</li></ol><h2 id="Phaser，阶段器"><a href="#Phaser，阶段器" class="headerlink" title="Phaser，阶段器"></a>Phaser，阶段器</h2><p>进行并发阶段任务运行，一个任务分为多个阶段，每个阶段完成之后才能进行下一阶段的运行<br>phase就是阶段，初值为0，当所有的线程执行完当前阶段任务已结束，进入到下一阶段任务，phase的值自动加1。<br>parties就是线程， parties=4就意味着Phaser对象当前管理着4个线程。</p><p>主要方法：<br>register()，动态的添加一个或多个线程<br>int arriveAndAwaitAdvance()，相当于await()方法，记录到达线程数，阻塞等待其他线程到达同步点后再继续执行。<br>arriveAndDeregister()，动态的撤销线程的注册，该线程已结束，不再参与后续的阶段<br>boolean onAdvance(int phase,int register)，当每一阶段结束调用该方法，  默认是所有线程都撤销注册为止，return true，阶段停止，可重写该方法设置自定义阶段响应。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">onAdvance</span><span class="params">(<span class="keyword">int</span> phase, <span class="keyword">int</span> registeredParties)</span> </span>&#123;</span><br><span class="line"><span class="keyword">return</span> registeredParties == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>Java并发编程艺术 方腾飞<br>Java并发编程实战  Brian Goetz / Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea</p><p><a href="https://juejin.im/post/5aeec3ebf265da0ba76fa327" target="_blank" rel="noopener">大白话说java并发工具类-CountDownLatch，CyclicBarrier</a><br><a href="http://cmsblogs.com/?p=2263" target="_blank" rel="noopener">死磕Java并发</a><br><a href="https://blog.csdn.net/zhm1563550235/article/details/84453906" target="_blank" rel="noopener">Java并发——Phaser “阶段器”</a></p>]]></content>
     
@@ -467,28 +489,6 @@
     <summary type="html">
     
       &lt;p&gt;volatile只能保证多线程中的可见性和有序性，不能保证原子性。
-    
-    </summary>
-    
-      <category term="Java" scheme="http://beixichen.xyz/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="http://beixichen.xyz/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【Java】AQS(AbstractQueuedSynchronizer)抽象队列同步器</title>
-    <link href="http://beixichen.xyz/2019/03/11/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/AQS/"/>
-    <id>http://beixichen.xyz/2019/03/11/Java基本知识/AQS/</id>
-    <published>2019-03-11T10:11:45.000Z</published>
-    <updated>2019-10-28T12:07:24.981Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="AQS-AbstractQueuedSynchronizer抽象队列同步器"><a href="#AQS-AbstractQueuedSynchronizer抽象队列同步器" class="headerlink" title="AQS(AbstractQueuedSynchronizer抽象队列同步器)"></a>AQS(AbstractQueuedSynchronizer抽象队列同步器)</h2><p>JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。</p><a id="more"></a><p>状态控制：<br>`private volatile int state;<br>使用int类型的成员变量state来表示同步状态，当state&gt;0时表示已经获取了锁，当state = 0时表示释放了锁。<br>getState()：返回同步状态的当前值；<br>setState(int newState)：设置当前同步状态；<br>compareAndSetState(int expect, int update)：使用CAS设置当前状态，该方法能够保证状态设置的原子性；</p><h3 id="AQS内的CLH同步队列"><a href="#AQS内的CLH同步队列" class="headerlink" title="AQS内的CLH同步队列"></a>AQS内的CLH同步队列</h3><p>对同步状态的获取和释放<br>FIFO的双向队列，AQS依赖它来完成同步状态的管理，当前线程如果获取同步状态失败时，AQS则会将当前线程已经等待状态等信息构造成一个节点（Node）并将其加入到CLH同步队列，同时会阻塞当前线程，当同步状态释放时，会把首节点唤醒（公平锁），使其再次尝试获取同步状态。</p><h3 id="AQS使用的LockSupport"><a href="#AQS使用的LockSupport" class="headerlink" title="AQS使用的LockSupport"></a>AQS使用的LockSupport</h3><p>对线程的阻塞和唤醒<br>LockSupport 不可重入，一个线程连续两次调用park()，将会产生死锁，一直阻塞<br>park()：阻塞线程，<br>unpark()：唤醒线程</p><p>参考链接<br><a href="http://cmsblogs.com/?p=2174" target="_blank" rel="noopener">【死磕Java并发】—–J.U.C之AQS</a><br><a href="http://cmsblogs.com/?p=2197" target="_blank" rel="noopener">J.U.C之AQS：同步状态的获取与释放</a><br><a href="https://blog.csdn.net/aitangyong/article/details/38373137?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">LockSupport的park和unpark的基本使用,以及对线程中断的响应性</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;AQS-AbstractQueuedSynchronizer抽象队列同步器&quot;&gt;&lt;a href=&quot;#AQS-AbstractQueuedSynchronizer抽象队列同步器&quot; class=&quot;headerlink&quot; title=&quot;AQS(AbstractQueuedSynchronizer抽象队列同步器)&quot;&gt;&lt;/a&gt;AQS(AbstractQueuedSynchronizer抽象队列同步器)&lt;/h2&gt;&lt;p&gt;JUC包里面的类使用继承AQS进行并发实现，子类通过继承同步器抽象方法来管理同步状态，只能在一个时刻发生阻塞，从而降低上下文切换的开销，提高了吞吐量。&lt;/p&gt;
     
     </summary>
     

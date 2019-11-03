@@ -1,3 +1,4 @@
+http://beixichen.xyz/2019/11/01/数据库/MySQL-优化/
 http://beixichen.xyz/2019/10/27/Java基本知识/Java1.8新特性/
 http://beixichen.xyz/2019/10/23/Java基本知识/Java并发工具类/
 http://beixichen.xyz/2019/10/22/Spring学习笔记/spring-transactional/
@@ -6,4 +7,3 @@ http://beixichen.xyz/2019/10/19/Java基本知识/Java-Reflect/
 http://beixichen.xyz/2019/10/15/Java基本知识/深浅拷贝/
 http://beixichen.xyz/2019/09/13/Spring学习笔记/proxy-study/
 http://beixichen.xyz/2019/07/05/Spring学习笔记/Spring-study2/
-http://beixichen.xyz/2019/07/02/Spring学习笔记/Spring-study1/
