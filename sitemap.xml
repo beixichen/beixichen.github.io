@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://beixichen.xyz/2018/09/29/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-1/</loc>
+    
+    <lastmod>2019-11-04T13:02:03.294Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://beixichen.xyz/2019/11/01/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-%E4%BC%98%E5%8C%96/</loc>
     
-    <lastmod>2019-11-03T15:15:11.730Z</lastmod>
+    <lastmod>2019-11-04T13:01:48.387Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://beixichen.xyz/2018/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-index/</loc>
+    
+    <lastmod>2019-11-04T02:40:14.508Z</lastmod>
     
   </url>
   
@@ -40,13 +54,6 @@
     <loc>http://beixichen.xyz/2019/10/19/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/Java-Reflect/</loc>
     
     <lastmod>2019-11-01T05:39:28.064Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://beixichen.xyz/2018/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-index/</loc>
-    
-    <lastmod>2019-11-01T05:38:45.440Z</lastmod>
     
   </url>
   
@@ -173,13 +180,6 @@
     <loc>http://beixichen.xyz/2018/11/05/Java%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B/</loc>
     
     <lastmod>2019-10-28T12:07:12.693Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://beixichen.xyz/2018/09/29/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-1/</loc>
-    
-    <lastmod>2019-10-28T12:05:51.587Z</lastmod>
     
   </url>
   

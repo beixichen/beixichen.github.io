@@ -61,7 +61,7 @@
 <meta property="og:site_name" content="贝西晨的Blog呀">
 <meta property="og:description" content="索引InnoDB默认索引B+树，自适应hash索引（自动创建）除了叶子节点，其他都是索引字段，叶子节点存储真实数据密集索引 ：一个索引项(1001)对应一个数据记录(1001)">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-01T05:38:45.440Z">
+<meta property="og:updated_time" content="2019-11-04T02:40:14.508Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【MySQL】索引，锁，InnoDB特点">
 <meta name="twitter:description" content="索引InnoDB默认索引B+树，自适应hash索引（自动创建）除了叶子节点，其他都是索引字段，叶子节点存储真实数据密集索引 ：一个索引项(1001)对应一个数据记录(1001)">
@@ -298,7 +298,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-01 13:38:45" itemprop="dateModified" datetime="2019-11-01T13:38:45+08:00">2019-11-01</time>
+                <time title="修改时间：2019-11-04 10:40:14" itemprop="dateModified" datetime="2019-11-04T10:40:14+08:00">2019-11-04</time>
               </span>
             
           
@@ -346,6 +346,7 @@
 <li>能用between不使用in，能用distinct不用groupby</li>
 <li>复合索引最常用的放最左边</li>
 <li>对经常进行删除，修改，插入的表尽量少建立索引</li>
+<li>减少使用子查询，尽量使用join代替，子查询会先生成一个临时表</li>
 </ol>
 </blockquote>
 <p>Union All 、Union、Intersect、Minus区别</p>
@@ -397,6 +398,7 @@
 </ol>
 <h2 id="InnoDB和MyIASM区别"><a href="#InnoDB和MyIASM区别" class="headerlink" title="InnoDB和MyIASM区别"></a>InnoDB和MyIASM区别</h2><p>InnoDB支持行锁和表锁，外键，数据缓存， 事务，不支持全文检索，锁的粒度小，适合并发度高的情况，使用聚簇索引，更适合范围查找和排序</p>
 <p>MyIASM支持表锁，全文检索，不支持事务，外键，在写操作是会锁定整张表，使用非聚簇索引</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.cnblogs.com/saneri/p/6656161.html" target="_blank" rel="noopener">MySQL性能优化</a><br><a href="https://cloud.tencent.com/developer/article/1387058" target="_blank" rel="noopener">MySQL优化有理有据</a><br><a href="https://www.cnblogs.com/95lyj/p/9343544.html" target="_blank" rel="noopener">SQL语句优化</a></p>
 
     </div>
 
@@ -483,7 +485,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#索引使用注意"><span class="nav-number">1.1.</span> <span class="nav-text">索引使用注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库事务"><span class="nav-number">2.</span> <span class="nav-text">数据库事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">3.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB特点"><span class="nav-number">4.</span> <span class="nav-text">InnoDB特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自适应hash索引"><span class="nav-number">4.1.</span> <span class="nav-text">自适应hash索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两次写（提高可靠性）："><span class="nav-number">4.2.</span> <span class="nav-text">两次写（提高可靠性）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入缓冲机制-提高写性能"><span class="nav-number">4.3.</span> <span class="nav-text">插入缓冲机制(提高写性能)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB和MyIASM区别"><span class="nav-number">5.</span> <span class="nav-text">InnoDB和MyIASM区别</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#索引使用注意"><span class="nav-number">1.1.</span> <span class="nav-text">索引使用注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库事务"><span class="nav-number">2.</span> <span class="nav-text">数据库事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">3.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB特点"><span class="nav-number">4.</span> <span class="nav-text">InnoDB特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自适应hash索引"><span class="nav-number">4.1.</span> <span class="nav-text">自适应hash索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两次写（提高可靠性）："><span class="nav-number">4.2.</span> <span class="nav-text">两次写（提高可靠性）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入缓冲机制-提高写性能"><span class="nav-number">4.3.</span> <span class="nav-text">插入缓冲机制(提高写性能)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB和MyIASM区别"><span class="nav-number">5.</span> <span class="nav-text">InnoDB和MyIASM区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">6.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->

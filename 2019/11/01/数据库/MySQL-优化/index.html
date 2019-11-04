@@ -62,7 +62,7 @@
 <meta property="og:description" content="控制连接数量max_connections最大连接数，数值大，能接收更多的并发连接请求但会造成更多的缓冲区，开销内存大，数值小，并发连接请求处理能力不足，通常让max_used_connections/max_connections 约为85%">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://beixichen.xyz/images/queryCache.png">
-<meta property="og:updated_time" content="2019-11-03T15:15:11.730Z">
+<meta property="og:updated_time" content="2019-11-04T13:01:48.387Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【MySQL】内部参数设置优化">
 <meta name="twitter:description" content="控制连接数量max_connections最大连接数，数值大，能接收更多的并发连接请求但会造成更多的缓冲区，开销内存大，数值小，并发连接请求处理能力不足，通常让max_used_connections/max_connections 约为85%">
@@ -300,7 +300,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-03 23:15:11" itemprop="dateModified" datetime="2019-11-03T23:15:11+08:00">2019-11-03</time>
+                <time title="修改时间：2019-11-04 21:01:48" itemprop="dateModified" datetime="2019-11-04T21:01:48+08:00">2019-11-04</time>
               </span>
             
           
@@ -344,6 +344,20 @@
 <p>key_buffer_size<br>改变索引缓冲区的长度，决定索引的速度，key_cache_miss_rate=key_reads/key_requests 尽可能的低，只有MYSIAM引擎表有效，Innodb参数为innodb_buffer_pool_size，缓存数据和索引</p>
 <p>thread_cache_size<br>线程缓冲大小，当断开连接时，线程被放到缓存中，来响应下一个请求，不需要重新创建销毁连接</p>
 <p>innodb_thread_concurrency<br>设置线程并发数</p>
+<h2 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h2><p>slow_query_log：是否开启慢查询<br>long_query_time：慢查询阈值，超过这个值时，记录该条查询记录<br>slow_query_log_file：慢查询日志存储地址</p>
+<p>mysqldumpslow<br>慢查询日志分析<br>mysqldumpslow -s r -t 10 slow.log | more<br>-s：可设置按什么排序</p>
+<blockquote>
+<ol>
+<li>c访问计数</li>
+<li>l锁定时间</li>
+<li>r返回记录</li>
+<li>t查询时间</li>
+</ol>
+</blockquote>
+<p>-t：top n，返回前面多少个<br>-g：后面跟正则表达式，大小写不敏感</p>
+<p>通过 | more进行分页显示，防止一页过多</p>
+<h2 id="禁用唯一性检查"><a href="#禁用唯一性检查" class="headerlink" title="禁用唯一性检查"></a>禁用唯一性检查</h2><p>在数据插入时关闭唯一性检查，插入数据完成后开启，因为会创建<br>SET UNIQUE_CHECKS = 0;//=1开启 =0关闭</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://dev.mysql.com/doc/refman/5.7/en/slow-query-log.html" target="_blank" rel="noopener">MySQL慢查询官方文档</a><br><a href="https://zhuanlan.zhihu.com/p/55975068" target="_blank" rel="noopener">MySQL性能优化</a><br><a href="https://www.cnblogs.com/saneri/p/6656161.html" target="_blank" rel="noopener">最全 MySQL 优化方法，从此优化不再难</a></p>
 
     </div>
 
@@ -426,7 +440,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#控制连接数量"><span class="nav-number">1.</span> <span class="nav-text">控制连接数量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置缓冲区参数"><span class="nav-number">2.</span> <span class="nav-text">设置缓冲区参数</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#控制连接数量"><span class="nav-number">1.</span> <span class="nav-text">控制连接数量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置缓冲区参数"><span class="nav-number">2.</span> <span class="nav-text">设置缓冲区参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#慢查询日志"><span class="nav-number">3.</span> <span class="nav-text">慢查询日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#禁用唯一性检查"><span class="nav-number">4.</span> <span class="nav-text">禁用唯一性检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
