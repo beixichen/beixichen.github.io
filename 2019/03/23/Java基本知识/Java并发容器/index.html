@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.6.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.4.0">
+  <link rel="alternate" href="/atom.xml" title="贝西晨的Blog呀" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"hide","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="ConcurrentHashMapHashMap线程不安全，多线程put可能会产生死循环HashTable，Collections.synchronizedMap(hashMap)，通过synchronized进行加锁，独占式，一个线程读其他线程必须等待，效率低ConcurrentHashMap，使用CAS和synchronized进行并发安全，底层使用hash表(数组+链表)+红黑树存储，不允许">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Java】并发容器ConcurrentHashMap、ConcurrentLinkedQueue、ConcurrentSkipListMap">
+<meta property="og:url" content="http://yoursite.com/2019/03/23/Java基本知识/Java并发容器/index.html">
+<meta property="og:site_name" content="贝西晨的Blog呀">
+<meta property="og:description" content="ConcurrentHashMapHashMap线程不安全，多线程put可能会产生死循环HashTable，Collections.synchronizedMap(hashMap)，通过synchronized进行加锁，独占式，一个线程读其他线程必须等待，效率低ConcurrentHashMap，使用CAS和synchronized进行并发安全，底层使用hash表(数组+链表)+红黑树存储，不允许">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-05-22T02:13:33.926Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Java】并发容器ConcurrentHashMap、ConcurrentLinkedQueue、ConcurrentSkipListMap">
+<meta name="twitter:description" content="ConcurrentHashMapHashMap线程不安全，多线程put可能会产生死循环HashTable，Collections.synchronizedMap(hashMap)，通过synchronized进行加锁，独占式，一个线程读其他线程必须等待，效率低ConcurrentHashMap，使用CAS和synchronized进行并发安全，底层使用hash表(数组+链表)+红黑树存储，不允许">
+  <link rel="canonical" href="http://yoursite.com/2019/03/23/Java基本知识/Java并发容器/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>【Java】并发容器ConcurrentHashMap、ConcurrentLinkedQueue、ConcurrentSkipListMap | 贝西晨的Blog呀</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/images/xixi.jpg" alt="贝西晨的Blog呀">
+        </a>
+      </div>
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">贝西晨的Blog呀</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+    
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/23/Java基本知识/Java并发容器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beixichen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xixi.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="贝西晨的Blog呀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">【Java】并发容器ConcurrentHashMap、ConcurrentLinkedQueue、ConcurrentSkipListMap
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-23 16:14:46" itemprop="dateCreated datePublished" datetime="2019-03-23T16:14:46+08:00">2019-03-23</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-22 10:13:33" itemprop="dateModified" datetime="2021-05-22T10:13:33+08:00">2021-05-22</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><p>HashMap线程不安全，多线程put可能会产生死循环<br>HashTable，Collections.synchronizedMap(hashMap)，通过synchronized进行加锁，独占式，一个线程读其他线程必须等待，效率低<br>ConcurrentHashMap，使用CAS和synchronized进行并发安全，底层使用hash表(数组+链表)+红黑树存储，不允许key和value为null</p><a id="more"></a>
+<h3 id="主要属性"><a href="#主要属性" class="headerlink" title="主要属性"></a>主要属性</h3><p>默认初始值：16，private static final int DEFAULT_CAPACITY = 16;<br>每次扩容2的n次幂<br>冲突链表转红黑树阈值：大于等于8，static final int TREEIFY_THRESHOLD = 8;<br>红黑树转链表阀值，小于等于6（tranfer时，lc、hc=0两个计数器分别++记录原bin、新binTreeNode数量，&lt;=UNTREEIFY_THRESHOLD 则untreeify(lo)）<br>static final int UNTREEIFY_THRESHOLD = 6;<br>扩容阈值：max*0.75，超过当前容量的0.75触发扩容</p>
+<h3 id="put方法"><a href="#put方法" class="headerlink" title="put方法"></a>put方法</h3><p>首先根据hash值计算要插入table的位置，如果位置为空则直接插入，否则插入到链表或者树中<br>详细流程：</p>
+<blockquote>
+<ol>
+<li>判空；ConcurrentHashMap的key、value都不允许为null</li>
+<li>计算hash。利用方法计算hash值。<br>static final int spread(int h) {<pre><code>return (h ^ (h &gt;&gt;&gt; 16)) &amp; HASH_BITS;//高16位和低16位进行异或后，在与HASH_BITS进行逻辑与操作
+</code></pre>}</li>
+<li><p>遍历table，进行节点插入操作，过程如下：</p>
+<blockquote>
+<p>如果table为空，则表示ConcurrentHashMap还没有初始化，则进行初始化操作：initTable()<br>根据hash值获取节点的位置i，若该位置为空，则直接插入，这个过程是不需要加锁的。计算f    位置：i=(n - 1) &amp; hash<br>如果检测到fh = f.hash == -1，则f是ForwardingNode节点，表示有其他线程正在进行扩容操      作，则帮助线程一起进行扩容操作<br>如果f.hash &gt;= 0 表示是链表结构，则遍历链表，如果存在当前key节点则替换value，否则插入    到链表尾部。如果f是TreeBin类型节点，则按照红黑树的方法更新或者增加节点<br>若链表长度 &gt; TREEIFY_THRESHOLD(默认是8)，则将链表转换为红黑树结构</p>
+</blockquote>
+</li>
+<li><p>调用addCount方法，ConcurrentHashMap的size + 1</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="扩容过程"><a href="#扩容过程" class="headerlink" title="扩容过程"></a>扩容过程</h3><p>单线程流程：</p>
+<ol>
+<li>为每个内核分任务，并保证其不小于16</li>
+<li>检查nextTable是否为null，如果是，则初始化nextTable，使其容量为table的两倍</li>
+<li>死循环遍历节点，知道finished：节点从table复制到nextTable中，支持并发，请思路如下：<br> 如果节点 f 为null，则插入ForwardingNode（采用Unsafe.compareAndSwapObjectf方法实现），这个是触发并发扩容的关键<br> 如果f为链表的头节点（fh &gt;= 0）,则先构造一个反序链表，然后把他们分别放在nextTable的i和i + n位置，并将ForwardingNode 插入原节点位置，代表已经处理过了<br> 如果f为TreeBin节点，同样也是构造一个反序 ，同时需要判断是否需要进行unTreeify()操作，并把处理的结果分别插入到nextTable的i 和i+n位置，并插入ForwardingNode 节点</li>
+<li>所有节点复制完成后，则将table指向nextTable，同时更新sizeCtl = nextTable的0.75倍，完成扩容过程</li>
+</ol>
+<p>多线程环境下，ConcurrentHashMap用两点来保证正确性：ForwardingNode和synchronized。当一个线程遍历到的节点如果是ForwardingNode，则继续往后遍历，如果不是，则将该节点加锁，防止其他线程进入，完成后设置ForwardingNode节点，其他线程看到该节点已经处理过了，就遍历下一个节点，如此交叉进行，高效而又安全。</p>
+<p>JDK1.8的实现降低锁的粒度，JDK1.7版本锁的粒度是基于Segment的，包含多个HashEntry，而JDK1.8锁的粒度就是HashEntry（首节点）</p>
+<p>JDK1.8版本的数据结构变得更加简单，使得操作也更加清晰流畅，因为已经使用synchronized来进行同步，所以不需要分段锁的概念，也就不需要Segment这种数据结构了，由于粒度的降低，实现的复杂度也增加了</p>
+<p>JDK1.8使用红黑树来优化链表，基于长度很长的链表的遍历是一个很漫长的过程，而红黑树的遍历效率是很快的，代替一定阈值的链表，这样形成一个最佳拍档</p>
+<p>JDK1.8为什么使用内置锁synchronized来代替重入锁ReentrantLock，我觉得有以下几点</p>
+<ol>
+<li>因为粒度降低了，在相对而言的低粒度加锁方式，synchronized并不比ReentrantLock差，在粗粒度加锁中ReentrantLock可能通过Condition来控制各个低粒度的边界，更加的灵活，而在低粒度中，Condition的优势就没有了</li>
+<li>JVM的开发团队从来都没有放弃synchronized，而且基于JVM的synchronized优化空间更大，使用内嵌的关键字比使用API更加自然</li>
+<li>在大量的数据操作下，对于JVM的内存压力，基于API的ReentrantLock会开销更多的内存，虽然不是瓶颈，但是也是一个选择依据</li>
+</ol>
+<h2 id="ConcurrentSkipListMap"><a href="#ConcurrentSkipListMap" class="headerlink" title="ConcurrentSkipListMap"></a>ConcurrentSkipListMap</h2><p>内部主要采用跳表skipList数据结构实现，链表结构主要包含：Node，Index，HeadIndex。Node为最底层的链表节点，Index表示基于Node的索引层，HeadIndex表示索引的层级<br>不支持key或value为null<br>插入查找效率为O(log(n))<br>put方法</p>
+<ol>
+<li>首先通过findPredecessor()方法找到父亲节点Node</li>
+<li>根据返回的父亲节点以及key-value，新建Node节点，同时通过CAS设置next</li>
+<li>设置节点Node，再设置索引节点。采取抛硬币方式决定层次(通过ThreadLocalRandom生成随机数，判断该数与最大层次的大小)，如果大于现存的最大层次，则新增一层，然后新建一个Item链表。否则在相应层次或者小于该数的层次上新增节点。</li>
+<li>最后，将新建的Item链表插入到SkipList结构中。</li>
+</ol>
+<p>get：获取节点<br>remove：删除节点</p>
+<h2 id="ConcurrentSkipListSet"><a href="#ConcurrentSkipListSet" class="headerlink" title="ConcurrentSkipListSet"></a>ConcurrentSkipListSet</h2><p>内部还是使用ConcurrentSkipListMap，通过Map的key来存储数据保证唯一性，包含一个ConcurrentNavigableMap对象m，而m对象实际上是ConcurrentNavigableMap的实现类ConcurrentSkipListMap的实例</p>
+<h2 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h2><p>采用CAS进行实现，可能会产生head和tail更新滞后(head和tail不总指向第一个元素和最后一个元素)</p>
+<p>单向链表，当一个线程A入队，必须获取tail节点，此时另一个线程B也要入队，此时tail节点还没有发生变化，tail更新滞后，线程B会插入失败，然后将线程A新插入的节点改为tail节点，但是在自旋死循环里，下一次会插入成功<br>出队时类似</p>
+<p>主要方法：<br>offer()：入队<br>poll(): 出队</p>
+<h2 id="ConcurrentLinkedDeque"><a href="#ConcurrentLinkedDeque" class="headerlink" title="ConcurrentLinkedDeque"></a>ConcurrentLinkedDeque</h2><p>对ConcurrentLinkedQueue增强，双向链表</p>
+<h2 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h2><p>通过数组实现，线程安全的ArrayList，通过ReentrantLock保证线程安全<br>每次对数组进行修改时，都复制一份新数组进行修改，修改之后再替换老数组<br>写操作阻塞，读操作不阻塞</p>
+<h2 id="CopyOnWriteArraySet"><a href="#CopyOnWriteArraySet" class="headerlink" title="CopyOnWriteArraySet"></a>CopyOnWriteArraySet</h2><p>内部使用CopyOnWriteArrayList，通过addIfAbsent()方法来保证元素不重复</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p>Java并发编程艺术 方腾飞<br>Java并发编程实战  Brian Goetz / Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea<br><a href="http://cmsblogs.com/?p=2283" target="_blank" rel="noopener">死磕Java并发容器</a><br><a href="https://blog.csdn.net/u010723709/article/details/48007881" target="_blank" rel="noopener">ConcurrentHashMap源码分析（JDK8版本）</a></p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Java/" rel="tag"># Java</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/03/16/Java基本知识/Java-锁/" rel="next" title="【Java】深入理解各种锁、synchronized、CAS">
+                  <i class="fa fa-chevron-left"></i> 【Java】深入理解各种锁、synchronized、CAS
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/04/16/Spring学习笔记/springboot/" rel="prev" title="【Spring】Spring注解整体解析">
+                  【Spring】Spring注解整体解析 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">1.</span> <span class="nav-text">ConcurrentHashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要属性"><span class="nav-number">1.1.</span> <span class="nav-text">主要属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#put方法"><span class="nav-number">1.2.</span> <span class="nav-text">put方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩容过程"><span class="nav-number">1.3.</span> <span class="nav-text">扩容过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentSkipListMap"><span class="nav-number">2.</span> <span class="nav-text">ConcurrentSkipListMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentSkipListSet"><span class="nav-number">3.</span> <span class="nav-text">ConcurrentSkipListSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentLinkedQueue"><span class="nav-number">4.</span> <span class="nav-text">ConcurrentLinkedQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentLinkedDeque"><span class="nav-number">5.</span> <span class="nav-text">ConcurrentLinkedDeque</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CopyOnWriteArrayList"><span class="nav-number">6.</span> <span class="nav-text">CopyOnWriteArrayList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CopyOnWriteArraySet"><span class="nav-number">7.</span> <span class="nav-text">CopyOnWriteArraySet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">8.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/xixi.jpg"
+      alt="beixichen">
+  <p class="site-author-name" itemprop="name">beixichen</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/beixichen" title="GitHub &rarr; https://github.com/beixichen" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+  </div>
+
+
+
+      </div>
+	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beixichen</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/muse.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

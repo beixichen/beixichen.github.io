@@ -61,7 +61,7 @@
 <meta property="og:site_name" content="贝西晨的Blog呀">
 <meta property="og:description" content="作用及基本介绍ThreadLocal解决多线程环境成员变量的冲突问题（解决共享冲突），不是解决线程同步问题，与线程同步机制不同，线程同步是多个线程共享同一个变量（用空间换时间），而ThreadLocal是每一个线程创建一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-12T10:40:22.186Z">
+<meta property="og:updated_time" content="2023-08-26T08:58:20.946Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java】ThreadLocal">
 <meta name="twitter:description" content="作用及基本介绍ThreadLocal解决多线程环境成员变量的冲突问题（解决共享冲突），不是解决线程同步问题，与线程同步机制不同，线程同步是多个线程共享同一个变量（用空间换时间），而ThreadLocal是每一个线程创建一个单独的变量副本，每个线程可以独立的改变自己的变量副本，不影响其他线程">
@@ -298,7 +298,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-12 18:40:22" itemprop="dateModified" datetime="2019-10-12T18:40:22+08:00">2019-10-12</time>
+                <time title="修改时间：2023-08-26 16:58:20" itemprop="dateModified" datetime="2023-08-26T16:58:20+08:00">2023-08-26</time>
               </span>
             
           
@@ -336,6 +336,9 @@
 </blockquote>
 <p>ThreadLocalMap 的散列算法</p>
 <p>斐波那契散列法，来保证哈希表的离散度。而它选用的乘数值即是2^32 * 黄金分割比。</p>
+<p>父子线程如何共享变量</p>
+<p>InheritableTableLocal ，每开一个线程就会创建新的ThreadLocalMap和Entry，将父线程的ThreadLocalMap添加到Entry中</p>
+<p>但是使用线程池时，由于线程重复使用，不可使用这种方式，需要另外解决线程池内传递变量的问题</p>
 
     </div>
 
@@ -371,8 +374,8 @@
 
             <div class="post-nav-prev post-nav-item">
               
-                <a href="/2019/10/09/Java基本知识/ThreadPool/" rel="prev" title="【Java】ThreadPool">
-                  【Java】ThreadPool <i class="fa fa-chevron-right"></i>
+                <a href="/2019/10/10/Java基本知识/Java容器/" rel="prev" title="【Java】普通容器，同步容器和并发容器">
+                  【Java】普通容器，同步容器和并发容器 <i class="fa fa-chevron-right"></i>
                 </a>
               
             </div>
@@ -440,7 +443,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -453,7 +456,7 @@
             <a href="/categories/">
           
         
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span>
         </a>
       </div>
@@ -466,7 +469,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
@@ -506,7 +509,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

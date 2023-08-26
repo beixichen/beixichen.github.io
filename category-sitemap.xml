@@ -8,36 +8,57 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/categories/Java/Spring/</loc>
-        <lastmod>2019-10-16T02:14:12.665Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://yoursite.com/categories/Java/</loc>
-        <lastmod>2019-10-16T02:14:12.665Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/categories/Redis/</loc>
-        <lastmod>2019-10-16T02:11:09.197Z</lastmod>
+        <lastmod>2023-08-26T08:59:10.134Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://yoursite.com/categories/MySQL/</loc>
-        <lastmod>2019-10-16T02:10:38.772Z</lastmod>
+        <lastmod>2023-08-26T08:56:10.718Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/categories/Spring/</loc>
+        <lastmod>2023-08-26T08:51:29.364Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/categories/K8s/</loc>
+        <lastmod>2023-08-26T08:41:48.489Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/categories/Java/Spring/</loc>
+        <lastmod>2023-05-17T08:55:52.445Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/categories/Redis/</loc>
+        <lastmod>2023-04-20T15:00:59.630Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://yoursite.com/categories/Web/</loc>
-        <lastmod>2019-10-10T12:22:33.913Z</lastmod>
+        <lastmod>2021-03-25T13:01:59.539Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/categories/Docker/</loc>
+        <lastmod>2020-11-28T08:39:11.658Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.6.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.4.0">
+  <link rel="alternate" href="/atom.xml" title="贝西晨的Blog呀" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"hide","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Spring的事务管理分为编程式事务和声明式事务两种。">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Spring】Spring中的事务的属性、隔离级别、传播机制">
+<meta property="og:url" content="http://yoursite.com/2019/10/22/Spring学习笔记/spring-transactional/index.html">
+<meta property="og:site_name" content="贝西晨的Blog呀">
+<meta property="og:description" content="Spring的事务管理分为编程式事务和声明式事务两种。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/Spring-transaction-mechanism.png">
+<meta property="og:updated_time" content="2023-05-16T15:50:35.823Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Spring】Spring中的事务的属性、隔离级别、传播机制">
+<meta name="twitter:description" content="Spring的事务管理分为编程式事务和声明式事务两种。">
+<meta name="twitter:image" content="http://yoursite.com/images/Spring-transaction-mechanism.png">
+  <link rel="canonical" href="http://yoursite.com/2019/10/22/Spring学习笔记/spring-transactional/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>【Spring】Spring中的事务的属性、隔离级别、传播机制 | 贝西晨的Blog呀</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/images/xixi.jpg" alt="贝西晨的Blog呀">
+        </a>
+      </div>
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">贝西晨的Blog呀</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+    
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/22/Spring学习笔记/spring-transactional/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beixichen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xixi.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="贝西晨的Blog呀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">【Spring】Spring中的事务的属性、隔离级别、传播机制
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-22 20:45:31" itemprop="dateCreated datePublished" datetime="2019-10-22T20:45:31+08:00">2019-10-22</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-16 23:50:35" itemprop="dateModified" datetime="2023-05-16T23:50:35+08:00">2023-05-16</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Spring的事务管理分为编程式事务和声明式事务两种。<a id="more"></a><br>编程式事务：通过编码方式TransactionTemplate或者直接使用底层的PlatformTransactionManager实现事务控制<br>声明式事务：基于AOP，通过XML或注解@Transactional实现，将业务逻辑和事务处理解耦</p>
+<p>Spring的默认事务处理只能进行回滚运行时、未检查的异常或者Error<br>并且默认只能用到public方法(AOP的JDK动态代理问题，下文解释)</p>
+<h2 id="Transactional注解属性说明"><a href="#Transactional注解属性说明" class="headerlink" title="@Transactional注解属性说明"></a>@Transactional注解属性说明</h2><table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>当在配置文件中有多个 TransactionManager , 可以用该属性指定选择哪个事务管理器。</td>
+</tr>
+<tr>
+<td>propagation</td>
+<td>事务的传播行为，默认值为 REQUIRED。</td>
+</tr>
+<tr>
+<td>isolation</td>
+<td>事务的隔离度，默认值采用 DEFAULT。</td>
+</tr>
+<tr>
+<td>timeout</td>
+<td>事务的超时时间，默认值为-1。如果超过该时间限制但事务还没有完成，则自动回滚事务。</td>
+</tr>
+<tr>
+<td>read-only</td>
+<td>指定事务是否为只读事务，默认值为 false；为了忽略那些不需要事务的方法，比如读取数据，可以设置 read-only 为 true。</td>
+</tr>
+<tr>
+<td>rollback-for</td>
+<td>用于指定能够触发事务回滚的异常类型，如果有多个异常类型需要指定，各类型之间可以通过逗号分隔。</td>
+</tr>
+<tr>
+<td>no-rollback- for</td>
+<td>抛出 no-rollback-for 指定的异常类型，不回滚事务。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="propagation属性"><a href="#propagation属性" class="headerlink" title="propagation属性"></a>propagation属性</h3><p>指定事务的传播方式，默认为REQUIRED</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Propagation.REQUIRED</td>
+<td>如果当前存在事务，则加入该事务，如果当前不存在事务，则创建一个新的事务。</td>
+</tr>
+<tr>
+<td>Propagation.NESTED</td>
+<td>和 Propagation.REQUIRED 效果一样。</td>
+</tr>
+<tr>
+<td>Propagation.MANDATORY</td>
+<td>如果当前存在事务，则加入该事务；如果当前不存在事务，则抛出异常。</td>
+</tr>
+<tr>
+<td>Propagation.REQUIRES_NEW</td>
+<td>重新创建一个新的事务，如果当前存在事务，暂停当前的事务。</td>
+</tr>
+<tr>
+<td>Propagation.NOT_SUPPORTED</td>
+<td>以非事务的方式运行，如果当前存在事务，暂停当前的事务。</td>
+</tr>
+<tr>
+<td>Propagation.SUPPORTS</td>
+<td>如果当前存在事务，则加入该事务；如果当前不存在事务，则以非事务的方式继续运行。</td>
+</tr>
+<tr>
+<td>Propagation.NEVER</td>
+<td>以非事务的方式运行，如果当前存在事务，则抛出异常。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="isolation属性"><a href="#isolation属性" class="headerlink" title="isolation属性"></a>isolation属性</h3><p>隔离级别是指若干个并发的事务之间的隔离程度。<br>TransactionDefinition 接口中定义了五个表示隔离级别的常量：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TransactionDefinition.ISOLATION_DEFAULT</td>
+<td>默认值，表示使用底层数据库的默认隔离级别。对大部分数据库而言，通常这值就是ISOLATION_READ_COMMITTED。</td>
+</tr>
+<tr>
+<td>TransactionDefinition.ISOLATION_READ_COMMITTED</td>
+<td>该隔离级别表示一个事务只能读取另一个事务已经提交的数据。该级别可以防止脏读，这也是大多数情况下的推荐值。</td>
+</tr>
+<tr>
+<td>TransactionDefinition.ISOLATION_READ_UNCOMMITTED</td>
+<td>该隔离级别表示一个事务可以读取另一个事务修改但还没有提交的数据。该级别不能防止脏读和不可重复读，因此很少使用该隔离级别。</td>
+</tr>
+<tr>
+<td>TransactionDefinition.ISOLATION_REPEATABLE_READ</td>
+<td>该隔离级别表示一个事务在整个过程中可以多次重复执行某个查询，并且每次返回的记录都相同。即使在多次查询之间有新增的数据满足该查询，这些新增的记录也会被忽略。该级别可以防止脏读和不可重复读。</td>
+</tr>
+<tr>
+<td>TransactionDefinition.ISOLATION_SERIALIZABLE</td>
+<td>串行化，所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，也就是说，该级别可以防止脏读、不可重复读以及幻读。但是这将严重影响程序的性能。通常情况下也不会用到该级别。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rollbackfor属性"><a href="#rollbackfor属性" class="headerlink" title="rollbackfor属性"></a>rollbackfor属性</h3><p>默认情况下，如果在事务中抛出了未检查异常（继承自 RuntimeException 的异常）或者 Error，则 Spring 将回滚事务；除此之外，Spring 不会回滚事务。</p>
+<p>如果在事务中抛出其他类型的异常，并期望 Spring 能够回滚事务，可以指定 rollbackFor。例：<br>@Transactional(propagation= Propagation.REQUIRED,rollbackFor= MyException.class)</p>
+<p>通过分析 Spring 源码可以知道，若在目标方法中抛出的异常是 rollbackFor 指定的异常的子类，事务同样会回滚。</p>
+<h2 id="Spring中事务的实现机制"><a href="#Spring中事务的实现机制" class="headerlink" title="Spring中事务的实现机制"></a>Spring中事务的实现机制</h2><p>当应用系统调用声明了 @Transactional 的目标方法时，Spring Framework 默认使用 AOP 代理，在代码运行时生成一个代理对象，根据 @Transactional 的属性配置信息，这个代理对象决定该声明 @Transactional 的目标方法是否由拦截器 TransactionInterceptor 来使用拦截，在 TransactionInterceptor 拦截时，会在目标方法开始执行之前创建并加入事务，并执行目标方法的逻辑, 最后根据执行情况是否出现异常，利用抽象事务管理器 AbstractPlatformTransactionManager 操作数据源 DataSource 提交或回滚事务。</p>
+<p>Spring AOP 代理有 CglibAopProxy 和 JdkDynamicAopProxy 两种，以 CglibAopProxy 为例，对于 CglibAopProxy，需要调用其内部类的 DynamicAdvisedInterceptor 的 intercept 方法。对于 JdkDynamicAopProxy，需要调用其 invoke 方法。</p>
+<p>事务管理的框架是由抽象事务管理器 AbstractPlatformTransactionManager 来提供的，而具体的底层事务处理实现，由 PlatformTransactionManager 的具体实现类来实现，如事务管理器 DataSourceTransactionManager。不同的事务管理器管理不同的数据资源 DataSource，比如 DataSourceTransactionManager 管理 JDBC 的 Connection。</p>
+<p><img src="/images/Spring-transaction-mechanism.png" alt="1570411257098"></p>
+<h2 id="Transational-为什么只能使public方法有效"><a href="#Transational-为什么只能使public方法有效" class="headerlink" title="@Transational 为什么只能使public方法有效"></a>@Transational 为什么只能使public方法有效</h2><p>在使用注解@Transactional时，Spring默认使用AOP代理，在代码运行时生成代理对象，通过TransactionInterceptor 在目标方法执行前后进行拦截之前，DynamicAdvisedInterceptor（CglibAopProxy 的内部类）的 intercept 方法或 JdkDynamicAopProxy 的 invoke 方法会间接调用 AbstractFallbackTransactionAttributeSource（Spring 通过这个类获取@Transactional 注解的事务属性配置属性信息）的 computeTransactionAttribute 方法，这个方法会检查方法是否为public，若不是则不会获取@Transactional的属性配置信息，造成TransactionInterceptor不会去拦截该目标方法进行事务管理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> TransactionAttribute <span class="title">computeTransactionAttribute</span><span class="params">(Method method,Class&lt;?&gt; targetClass)</span> </span>&#123;</span><br><span class="line"><span class="comment">// Don't allow no-public methods as required           </span></span><br><span class="line"><span class="keyword">if</span>(allowPublicMethodsOnly()&amp;&amp;!Modifier.isPublic(method.getModifiers())&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Transactional-注解失效的情况"><a href="#Transactional-注解失效的情况" class="headerlink" title="Transactional 注解失效的情况"></a>Transactional 注解失效的情况</h2><ol>
+<li><p>非public方法修饰的方法</p>
+<p>原因： 事务是基于AOP动态代理实现的，如果类或者方法的修饰符不是public，@Transactional 注解就不会对Bean或者方法进行代理调用。底层实现会去比较TransactionalAttribute，如果是public 会返回null</p>
+<p>在动态代理对象，进行代理调用时，会获取当前需要执行方法适配的AOP逻辑（DynamicAdvisedInceptor）</p>
+<p>static 修饰的方法也会导致事务失效</p>
+<p>原因： 静态方法是类级别的，调用需要知道类信息，而类信息在编译器就已经知道了，并不支持在运行期的动态绑定。</p>
+</li>
+<li><p>一个没有事务的方法调用一个有事务的方法，事务会被忽略</p>
+<p>原因：在类内部调用类内部的事务方法时并不是通过代理对象来调用的，而是通过this对象来调用方法，所以就绕过了代理对象导致失效</p>
+<p>以上两个问题可使用AspectJ代替SpringAOP代理解决。</p>
+</li>
+<li><p>事务方法内部捕获了异常（try catch）， 没有抛出新的异常，事务失效</p>
+<p>原因：因为事务想要回滚，是在事务invokeWithinTranaction在这里会抛出异常，如果加事务的方法有了try catch，那么异常中途就会被捕捉掉，所以事务失效。，此时应该在try catch 中自己提交或者回滚</p>
+</li>
+<li><p>异常类型错误</p>
+<p>默认回滚的是：RuntimeException非检查异常，如果你想触发其他异常的回滚，需要在注解上配置一下，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span>(rollbackFor = Exception.class)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>—- 3 解释：因为当ServiceB中抛出了一个异常以后，ServiceB标识当前事务需要rollback。但是ServiceA中由于你手动的捕获这个异常并进行处理，ServiceA认为当前事务应该正常commit。此时就出现了前后不一致，也就是因为这样，抛出了前面的UnexpectedRollbackException异常。</p>
+<p>spring的事务是在调用业务方法之前开始的，业务方法执行完毕之后才执行commit or rollback，事务是否执行取决于是否抛出runtime异常。如果抛出runtime exception 并在你的业务方法中没有catch到的话，事务会回滚。</p>
+<p>在业务方法中一般不需要catch异常，如果非要catch一定要抛出throw new RuntimeException()，或者注解中指定抛异常类型@Transactional(rollbackFor=Exception.class)，否则会导致事务失效，数据commit造成数据不一致，所以有些时候try catch反倒会画蛇添足。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.csdn.net/nextyu/article/details/78669997" target="_blank" rel="noopener">Spring Boot 中使用 @Transactional 注解配置事务管理</a><br><a href="https://www.ibm.com/developerworks/cn/java/j-master-spring-transactional-use/index.html" target="_blank" rel="noopener">透彻的掌握 Spring 中@transactional 的使用</a><br><a href="https://docs.spring.io/spring/docs/4.3.13.RELEASE/spring-framework-reference/htmlsingle/#transaction-declarative-annotations" target="_blank" rel="noopener">Spring Framework文档</a><br><a href="https://stackoverflow.com/questions/4396284/does-spring-transactional-attribute-work-on-a-private-method" target="_blank" rel="noopener">stackoverflow-transactional只能使用在public</a><br><a href="https://www.ibm.com/developerworks/cn/education/opensource/os-cn-spring-trans/index.html" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/education/opensource/os-cn-spring-trans/index.html</a></p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/21/Java基本知识/Java阻塞队列/" rel="next" title="【Java】解析各种阻塞队列">
+                  <i class="fa fa-chevron-left"></i> 【Java】解析各种阻塞队列
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/10/23/Java基本知识/Java并发工具类/" rel="prev" title="【Java】并发工具类CyclicBarrier、CountDownLatch、Semaphore、Exchanger、Phaser">
+                  【Java】并发工具类CyclicBarrier、CountDownLatch、Semaphore、Exchanger、Phaser <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Transactional注解属性说明"><span class="nav-number">1.</span> <span class="nav-text">@Transactional注解属性说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#propagation属性"><span class="nav-number">1.1.</span> <span class="nav-text">propagation属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#isolation属性"><span class="nav-number">1.2.</span> <span class="nav-text">isolation属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rollbackfor属性"><span class="nav-number">1.3.</span> <span class="nav-text">rollbackfor属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring中事务的实现机制"><span class="nav-number">2.</span> <span class="nav-text">Spring中事务的实现机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transational-为什么只能使public方法有效"><span class="nav-number">3.</span> <span class="nav-text">@Transational 为什么只能使public方法有效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transactional-注解失效的情况"><span class="nav-number">4.</span> <span class="nav-text">Transactional 注解失效的情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/xixi.jpg"
+      alt="beixichen">
+  <p class="site-author-name" itemprop="name">beixichen</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/beixichen" title="GitHub &rarr; https://github.com/beixichen" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+  </div>
+
+
+
+      </div>
+	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beixichen</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/muse.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

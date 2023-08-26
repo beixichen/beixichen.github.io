@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.6.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.4.0">
+  <link rel="alternate" href="/atom.xml" title="贝西晨的Blog呀" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"hide","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="本文主要介绍了锁的基本概念，synchronized，CAS，ReentrantLock，ReentrantReadWriteLock和Condition。">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Java】深入理解各种锁、synchronized、CAS">
+<meta property="og:url" content="http://yoursite.com/2019/03/16/Java基本知识/Java-锁/index.html">
+<meta property="og:site_name" content="贝西晨的Blog呀">
+<meta property="og:description" content="本文主要介绍了锁的基本概念，synchronized，CAS，ReentrantLock，ReentrantReadWriteLock和Condition。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-03-25T13:18:42.827Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Java】深入理解各种锁、synchronized、CAS">
+<meta name="twitter:description" content="本文主要介绍了锁的基本概念，synchronized，CAS，ReentrantLock，ReentrantReadWriteLock和Condition。">
+  <link rel="canonical" href="http://yoursite.com/2019/03/16/Java基本知识/Java-锁/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>【Java】深入理解各种锁、synchronized、CAS | 贝西晨的Blog呀</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/images/xixi.jpg" alt="贝西晨的Blog呀">
+        </a>
+      </div>
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">贝西晨的Blog呀</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+    
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/16/Java基本知识/Java-锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beixichen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xixi.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="贝西晨的Blog呀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">【Java】深入理解各种锁、synchronized、CAS
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-16 21:20:32" itemprop="dateCreated datePublished" datetime="2019-03-16T21:20:32+08:00">2019-03-16</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-25 21:18:42" itemprop="dateModified" datetime="2021-03-25T21:18:42+08:00">2021-03-25</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文主要介绍了锁的基本概念，synchronized，CAS，ReentrantLock，ReentrantReadWriteLock和Condition。<a id="more"></a></p>
+<h2 id="锁的基本概念"><a href="#锁的基本概念" class="headerlink" title="锁的基本概念"></a>锁的基本概念</h2><blockquote>
+<ol>
+<li>公平锁：先到的线程先得到这个锁</li>
+<li>非公平锁：若释放锁的时候没有新线程进入，非公平锁等于公平锁，若释放锁的时候有新线程进入，新线程优先执行，为非公平锁</li>
+<li>排他锁(独占锁)：在同一时刻仅有一个线程可以进行访问</li>
+<li>共享锁：同一时刻能够被多个线程同时持有</li>
+<li>可重入锁： 一个线程可以多次访问</li>
+<li>自旋锁：让线程等待一段时间，不会挂起。JDK1.6默认为10次。减少了线程切换带来的开销，占用了处理器的时间</li>
+<li>自适应自旋锁：自旋的次数不是固定的，由上一次在同一个锁上的自旋时间及锁拥有者的状态决定。如果自旋成功了，下次自旋次数会增加，反之减少。</li>
+<li>锁消除：JVM检测到不存在共享数据竞争，对同步锁进行消除。</li>
+<li>锁粗化：将多个连续的加锁、解锁操作扩展成一个范围更大的锁。若锁之间比较独立还是需要尽可能细化，尽量在共享数据实际作用时同步。</li>
+<li>偏向锁：在无多线程竞争的情况下，尽量减少不必要的轻量级锁执行路径（减少CAS操作，性能开销，上下文切换）。 </li>
+<li>轻量级锁：在激烈的多线程竞争的前提下，减少传统的重量级锁使用操作系统互斥量产生的性能消耗。若有激烈的多线程并发竞争，轻量级锁更慢。</li>
+<li>重量级锁：通过对象内部的监视器(monitor)实现，本质是依赖于底层操作系统Mutex lock实现，操作系统进行用户态和内核态切换，成本非常高。</li>
+</ol>
+</blockquote>
+<h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><p>用的锁存储在Java对象头中，包括两部分：Mark Word(标记字段)和Klass Pointer(类型指针)。类型指针来确定对象是哪个类的实例。标记字段来存储自身运行时的数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳等等，主要来控制synchronized的膨胀。</p>
+<p>一个类中有同步方法A和普通方法B，两个线程如果有该对象的同一实例那么他们就不能同时执行同步方法A，如果两个线程拥有该对象的不同实例，就可以同时执行同步方法A</p>
+<blockquote>
+<ol>
+<li>同步普通方法，在方法声明中加入synchronized关键字（对象锁）。同一时刻对于每一个类实例，至多只有一个处于可执行状态，避免类成员变量的访问冲突</li>
+<li>同步方法块，修饰代码块。锁为括号里面的对象（对象锁）。线程进入synchronized方法的时候获取该对象的锁，当然如果已经有线程获取了这个对象的锁，那么当前线程会等待；synchronized方法正常返回或者抛异常而终止，JVM会自动释放对象锁。</li>
+<li>同步静态方法，修饰静态的方法或代码块（类锁）。由于一个class不论被实例化多少次，其中的静态方法和静态变量在内存中都只有一份。所以，一旦一个静态的方法被申明为synchronized，此类所有的实例化对象在调用此方法，共用同一把锁，我们称之为类锁。类锁是概念上的，不是真实存在，因为它其实就是特殊的对象锁，但是static方法被类的所有对象共用。<br>若是实例对象被锁，则实例对象的所有同步方法被锁<br>若是类对象被锁，则类对象的所有同步方法被锁</li>
+</ol>
+</blockquote>
+<hr>
+<blockquote>
+<p>synchronized锁膨胀过程：synchronized 同步锁一共具有四种状态：无锁、偏向锁、轻量级锁、重量级锁，他们会随着竞争情况逐渐升级，此过程为不可逆。所以 synchronized 锁膨胀过程其实就是无锁 → 偏向锁 → 轻量级锁 → 重量级锁的一个过程</p>
+</blockquote>
+<h2 id="CAS（CompareAndSwap）"><a href="#CAS（CompareAndSwap）" class="headerlink" title="CAS（CompareAndSwap）"></a>CAS（CompareAndSwap）</h2><p>比较并交换，CAS中有三个参数：内存值V、旧的预期值A、要更新的值B，当且仅当内存值V的值等于旧的预期值A时才会将内存值V的值修改为B，否则什么都不干。</p>
+<p>存在问题：</p>
+<blockquote>
+<ol>
+<li>循环时间太长，如果CAS长时间不成功，会给CPU带来非常大开销</li>
+<li>只能保证一个共享变量的原子操作。解决：多个变量需要进行封装</li>
+<li>ABA问题，原来为A，改为B，又改为A。看似没有改变，实际发生了改变。解决：使用一个版本标识(时间戳)。</li>
+</ol>
+</blockquote>
+<h2 id="CAS和synchronized效率分析"><a href="#CAS和synchronized效率分析" class="headerlink" title="CAS和synchronized效率分析"></a>CAS和synchronized效率分析</h2><blockquote>
+<p>1、对于资源竞争较少的情况，使用synchronized同步锁进行线程阻塞和唤醒切换以及用户态内核态间的切换操作额外浪费消耗cpu资源；而CAS基于硬件实现，不需要进入内核，不需要切换线程，操作自旋几率较少，因此可以获得更高的性能。<br>2、对于资源竞争严重的情况，CAS自旋的概率会比较大，从而浪费更多的CPU资源，效率低于synchronized。<br>PS. synchronized在jdk1.6之后，已经改进优化。synchronized的底层实现主要依靠Lock-Free的队列，基本思路是自旋后阻塞，竞争切换后继续竞争锁，稍微牺牲了公平性，但获得了高吞吐量。在线程冲突较少的情况下，可以获得和CAS类似的性能；而线程冲突严重的情况下，性能远高于CAS。</p>
+</blockquote>
+<h2 id="synchronized和Lock"><a href="#synchronized和Lock" class="headerlink" title="synchronized和Lock"></a>synchronized和Lock</h2><blockquote>
+<p>synchronized是Java内置关键字；Lock是一个接口，必须放在try-catch里面，一般在finally里面进行锁的释放<br>synchronized在发生异常时会自动释放线程占有的锁，不会导致死锁；Lock必须要自己进行unLock进行锁的释放<br>synchronized不能够被中断，等待的线程会一直等待；Lock可以使用interrupt进行中断<br>synchronized不保证公平性；Lock可以实现公平锁，在竞争资源激烈情况下，Lock要更好</p>
+</blockquote>
+<h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><blockquote>
+<p>ReentrantLock(重入锁)，一种递归无阻塞的同步机制，可选择公平锁还是非公平锁（默认非公平），更强大的锁机制，可减少死锁发生</p>
+</blockquote>
+<h2 id="syncronized和ReentrantLock"><a href="#syncronized和ReentrantLock" class="headerlink" title="syncronized和ReentrantLock"></a>syncronized和ReentrantLock</h2><blockquote>
+<ol>
+<li>与synchronized相比，ReentrantLock提供了更多，更加全面的功能，具备更强的扩展性。例如：时间锁等候，可中断锁等候，锁投票。</li>
+<li>ReentrantLock还提供了条件Condition，对线程的等待、唤醒操作更加详细和灵活，所以在多个条件变量和高度竞争锁的地方，ReentrantLock更加适合（以后会阐述Condition）。</li>
+<li>ReentrantLock提供了可轮询的锁请求。它会尝试着去获取锁，如果成功则继续，否则可以等到下次运行时处理，而synchronized则一旦进入锁请求要么成功要么阻塞，所以相比synchronized而言，ReentrantLock会不容易产生死锁些。</li>
+<li>ReentrantLock支持更加灵活的同步代码块，但是使用synchronized时，只能在同一个synchronized块结构中获取和释放。注：ReentrantLock的锁释放一定要在finally中处理，否则可能会产生严重的后果。</li>
+<li>ReentrantLock支持中断处理，且性能较synchronized会好些。</li>
+</ol>
+</blockquote>
+<h2 id="ReentrantReadWriteLock"><a href="#ReentrantReadWriteLock" class="headerlink" title="ReentrantReadWriteLock"></a>ReentrantReadWriteLock</h2><blockquote>
+<p>通过分离读锁和写锁，提高并发量。<br>公平性：支持公平性和非公平性。<br>重入性：支持重入。读写锁最多支持65535个递归写入锁和65535个递归读取锁。<br>锁降级：遵循获取写锁、获取读锁在释放写锁的次序，写锁能够降级成为读锁<br>读锁是一个共享锁，在同一时间可以允许多个读线程同时访问，但是在写线程访问时，所有读线程和写线程都会被阻塞。<br>写锁是一个支持重入的排它锁</p>
+</blockquote>
+<h2 id="Condition"><a href="#Condition" class="headerlink" title="Condition"></a>Condition</h2><blockquote>
+<p>广义上的一种条件队列，为线程提供更为灵活的等待通知模式，线程在调用await()方法挂起，知道线程等待某个条件为真时被signal()唤醒。必须要配合锁一起使用，因为对共享状态变量访问发生在多线程环境，一般为Lock的内部newCondition()实现。</p>
+</blockquote>
+<p>参考链接：</p>
+<p>Java并发编程艺术 方腾飞<br>Java并发编程实战  Brian Goetz / Tim Peierls / Joshua Bloch / Joseph Bowbeer / David Holmes / Doug Lea<br><a href="https://youzhixueyuan.com/detailed-implementation-of-synchronized.html" target="_blank" rel="noopener">深入详解Synchronized同步锁的底层实现</a><br><a href="https://cloud.tencent.com/developer/article/1501912" target="_blank" rel="noopener">Java对象锁和类锁全面解析（多线程synchronized关键字）</a><br><a href="https://blog.csdn.net/luoweifu/article/details/46613015" target="_blank" rel="noopener">Java中Synchronized的用法</a><br><a href="http://cmsblogs.com/?p=5812" target="_blank" rel="noopener">synchronized的锁膨胀过程</a><br><a href="https://www.zhihu.com/question/53826114" target="_blank" rel="noopener">偏向锁，轻量级锁与重量级锁为什么会相互膨胀?</a><br><a href="http://cmsblogs.com/?p=2210" target="_blank" rel="noopener">J.U.C之重入锁</a><br><a href="http://cmsblogs.com/?p=2213" target="_blank" rel="noopener">J.U.C之读写锁</a><br><a href="http://cmsblogs.com/?p=2222" target="_blank" rel="noopener">J.U.C之Condition</a></p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Java/" rel="tag"># Java</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2018/03/23/Hello-Hexo/" rel="next" title="Hello Hexo">
+                  <i class="fa fa-chevron-left"></i> Hello Hexo
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/03/23/Java基本知识/Java并发容器/" rel="prev" title="【Java】并发容器ConcurrentHashMap、ConcurrentLinkedQueue、ConcurrentSkipListMap">
+                  【Java】并发容器ConcurrentHashMap、ConcurrentLinkedQueue、ConcurrentSkipListMap <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁的基本概念"><span class="nav-number">1.</span> <span class="nav-text">锁的基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized"><span class="nav-number">2.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS（CompareAndSwap）"><span class="nav-number">3.</span> <span class="nav-text">CAS（CompareAndSwap）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS和synchronized效率分析"><span class="nav-number">4.</span> <span class="nav-text">CAS和synchronized效率分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized和Lock"><span class="nav-number">5.</span> <span class="nav-text">synchronized和Lock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">6.</span> <span class="nav-text">ReentrantLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#syncronized和ReentrantLock"><span class="nav-number">7.</span> <span class="nav-text">syncronized和ReentrantLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantReadWriteLock"><span class="nav-number">8.</span> <span class="nav-text">ReentrantReadWriteLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Condition"><span class="nav-number">9.</span> <span class="nav-text">Condition</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/xixi.jpg"
+      alt="beixichen">
+  <p class="site-author-name" itemprop="name">beixichen</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/beixichen" title="GitHub &rarr; https://github.com/beixichen" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+  </div>
+
+
+
+      </div>
+	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beixichen</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/muse.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
